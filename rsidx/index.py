@@ -11,7 +11,7 @@ import os
 import rsidx
 import sqlite3
 import sys
-
+import re
 
 def parse_vcf(vcfstream, updateint=1e6):
     threshold = updateint
@@ -20,9 +20,9 @@ def parse_vcf(vcfstream, updateint=1e6):
             continue
         chromstr, posstr, rsids, *values = line.split('\t')
         for rsid in rsids.split(";"):
-            if not rsid.startswith('rs'):
-                continue
-            yield int(rsid[2:]), chromstr, int(posstr)
+            rsid = re.search(r'rs[0-9]+', rsid)
+            if not rsid is None:
+                yield int(rsid.group()[2:]), chromstr, int(posstr)
         if n >= threshold:
             threshold += updateint
             if threshold == updateint * 10:

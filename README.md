@@ -27,9 +27,9 @@ python3 setup.py sdist bdist_wheel
 ### upload
 ```
 twine upload --repository testpypi dist/polygenic-0.0.1*
-twine upload --repository pypi dist/polygenic-0.0.1*
+twine upload --repository pypi dist/polygenic-1.0.0*
 ```
 ### install
 ```
-pip3 install --upgrade --no-deps polygenic==0.0.1
+pip3 install --upgrade --no-deps polygenic==1.0.0
 ```

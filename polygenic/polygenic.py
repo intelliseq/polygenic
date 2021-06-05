@@ -80,7 +80,7 @@ def load_models_when_mapping_absent(directories:Iterable[str], population:str, l
             )
     return model_infos
 
-def process_model(model_description_info:ModelDescriptionInfo, initial_accessor:VcfAccessor, imputed_accessor:VcfAccessor, allele_freq_accessor:AlleleFrequencyAccessor, pop:str, sample_name:str):
+def process_model(model_description_info:ModelDescriptionInfo, initial_accessor:VcfAccessor, imputed_accessor:VcfAccessor, allele_freq_accessor:VcfAccessor, pop:str, sample_name:str):
     package_str = os.path.dirname(model_description_info.model_path)
     if package_str not in sys.path:
         sys.path.insert(0, package_str)
@@ -164,9 +164,10 @@ def main(args = sys.argv[1:]):
 
     # create data accessors
     #initial_accessor = VcfAccessor([expand_path(path) for path in parsed_args.curated_initial_vcfs[0]])
+
     initial_accessor = VcfAccessor(expand_path(parsed_args.curated_initial_vcfs[0]))
     imputed_accessor = VcfAccessor(expand_path(parsed_args.curated_initial_vcfs[0]))
-    allele_accessor = None#AlleleFrequencyAccessor(allele_freq_json_path=allele_freq_path)
+    allele_accessor = VcfAccessor(expand_path(parsed_args.allele_freq_json))#AlleleFrequencyAccessor(allele_freq_json_path=allele_freq_path)
     sample_names = initial_accessor.sample_names
     
     for sample_name in sample_names:
