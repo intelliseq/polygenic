@@ -6,18 +6,12 @@ import setuptools
 from typing import List
 from setuptools import setup, find_packages
 
-PACKAGE_VERSION = '1.0.3'
-
-
-def parse_requirements(path: str = 'requirements.txt') -> List[str]:
-    with open(path) as f:
-        return f.readlines()
-
+PACKAGE_VERSION = '1.2.0'
 
 def write_version_py(filename='polygenic/version.py'):
     cnt = """
 # THIS FILE IS GENERATED FROM SETUP.PY
-version = '{}'
+__version__ = '{}'
 """
     with open(filename, 'w') as f:
         f.write(cnt.format(PACKAGE_VERSION))
@@ -48,7 +42,10 @@ setuptools.setup(
         'Operating System :: MacOS',
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
-    install_requires=[],
+    install_requires=[
+        'namedlist==1.8',
+        'numpy==1.20.3'
+    ],
     python_requires='>=3.6',
     entry_points={
         'console_scripts': [
