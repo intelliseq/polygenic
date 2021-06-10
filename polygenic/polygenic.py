@@ -111,9 +111,9 @@ def main(args = sys.argv[1:]):
     parser = argparse.ArgumentParser(description='')  # todo dodać opis
     parser.add_argument('--vcf', nargs='+', required=True,
                         help='Vcf file with genotypes')
-    parser.add_argument('--log_file', type=str, default='/app_data/log.log')
+    parser.add_argument('--log_file', type=str, default='polygenic.log')
     parser.add_argument('--out_dir', type=str, default="", help='Directory for result jsons.')
-    parser.add_argument('--population', type=str, default='nfe',
+    parser.add_argument('--population', type=str, default='eas',
                         choices=['', 'nfe', 'eas', 'afr', 'amr', 'asj', 'fin', 'oth'],
                         help='''Population code:
         empty - use average allele frequency in all population,

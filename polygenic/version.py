@@ -1,3 +1,3 @@
 
 # THIS FILE IS GENERATED FROM SETUP.PY
-__version__ = '1.2.0'
+__version__ = '1.3.2'

@@ -6,7 +6,7 @@ import setuptools
 from typing import List
 from setuptools import setup, find_packages
 
-PACKAGE_VERSION = '1.2.0'
+PACKAGE_VERSION = '1.3.2'
 
 def write_version_py(filename='polygenic/version.py'):
     cnt = """
