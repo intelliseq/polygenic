@@ -1,13 +1,6 @@
 # polygenic
 
 [![PyPI](https://img.shields.io/pypi/v/polygenic.svg)](https://pypi.python.org/pypi/polygenic)
-[//]: # ![CI](https://github.com/polygenic/polygenic/workflows/CI/badge.svg)
-[//]: # [![readthedocs](https://img.shields.io/badge/docs-latest-brightgreen.svg?style=flat)](https://polygenic.readthedocs.io/en/latest/?badge=latest)
-[//]: # [![License](https://img.shields.io/badge/license-LGPL-blue.svg)](https://en.wikipedia.org/wiki/GNU_Lesser_General_Public_License)
-[//]: # [![Slack](https://img.shields.io/badge/Slack%20channel-%20%20-blue.svg)](https://join.slack.com/t/pygithub-project/shared_invite/zt-duj89xtx-uKFZtgAg209o6Vweqm8xeQ)
-[//]: # [![Open Source Helpers](https://www.codetriage.com/pygithub/pygithub/badges/users.svg)](https://www.codetriage.com/pygithub/pygithub)
-[//]: # [![codecov](https://codecov.io/gh/PyGithub/PyGithub/branch/master/graph/badge.svg)](https://codecov.io/gh/PyGithub/PyGithub)
-[//]: # [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 python package for computation of polygenic scores based for particular sample
 
