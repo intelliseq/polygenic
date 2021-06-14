@@ -41,7 +41,7 @@ def search(rsidlist, dbconn, vcffile, header=False):
         return '{chr:s}:{coord:d}-{coord:d}'.format(chr=row[0], coord=row[1])
     coords = [fmt(result) for result in c.execute(query)]
     if len(coords) == 0:
-        print('[rsidx::search] WARNING: no rsID matches ' + str(rsidlist), file=sys.stderr)
+        #print('[rsidx::search] WARNING: no rsID matches ' + str(rsidlist), file=sys.stderr)
         return
     coords.sort(
         key=lambda x: (x.split(':')[0], int(x.split(':')[1].split('-')[0]))

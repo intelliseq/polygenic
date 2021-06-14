@@ -1,15 +1,34 @@
 from unittest import TestCase
 from polygenic import polygenic
+from polygenic import polygenicmaker
 
-class TestSequery(TestCase):
-    def testCommandLine(self):
-        polygenic.main(["--vcf", "/home/marpiech/data/clustered_204800980122_R01C02.vcf.gz", "--log_file", "/dev/null", "--model", "/home/marpiech/data/breast_cancer_eas_model.py", "--population", "eas", "--out_dir", "/tmp/polygenic"])
+class PolygenicTest(TestCase):
+
+    def test(self):
+        self.assertEqual(1, 1)
+    def testPolygenicCoreWithAf(self):
+        polygenic.main([
+            "--vcf", "test/resources/vcf/my.vcf.gz", 
+            "--log_file", "/dev/null",
+            "--model", "test/resources/model/scaled_eas_model.py", 
+            "--population", "eas", 
+            "--out_dir", "/tmp/",
+            "--af", "test/resources/vcf/af.vcf.gz"])
         self.assertEqual('1', '1')
 
-#class TestSequeryShort(TestCase):
-#    def testCommandLine(self):
-#        polygenic.main(["--version"])
-#        self.assertEqual('1', '1')
+class PolygenicMakerTest(TestCase):
+    def testBiobankukIndex(self):
+        polygenicmaker.main([
+            "biobankuk-index",
+            "--output", "results"
+        ])
+        self.assertEqual('1', '1')
 
-if __name__ == "__main__":
-    unittest.main()
+    def testBiobankukGet(self):
+        polygenicmaker.main([
+            "biobankuk-get",
+            "--index", "results/phenotype_manifest.tsv",
+            "--phenocode", "30600",
+            "--output", "results"
+        ])
+        self.assertEqual('1', '1')

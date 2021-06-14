@@ -43,13 +43,15 @@ setuptools.setup(
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
     install_requires=[
-        'namedlist==1.8',
-        'numpy==1.20.3'
+        'numpy==1.20.3',
+        'progressbar2==3.53.1',
+        'python-utils==2.5.6'
     ],
-    python_requires='>=3.6',
+    python_requires='>=3.8',
     entry_points={
         'console_scripts': [
             'polygenic=polygenic.polygenic:main',
+            'polygenicmaker=polygenic.polygenicmaker:main'
         ],
     },
     test_suite='nose.collector',

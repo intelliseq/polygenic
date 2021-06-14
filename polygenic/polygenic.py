@@ -21,8 +21,8 @@ from polygenic.lib.data_access.data_accessor import VcfAccessor
 from polygenic.lib.output import create_res_representation_for_model
 from polygenic.lib.data_access.allele_frequency_accessor import AlleleFrequencyAccessor
 from polygenic.lib.data_access.data_accessor import VcfAccessor
-from polygenic.lib.model.seqql import PolygenicRiskScore
-from polygenic.lib.model.seqql import Data
+from polygenic.seqql.score import PolygenicRiskScore
+from polygenic.seqql.score import Data
 from polygenic.lib.data_access.dto import ModelDescriptionInfo
 
 logger = logging.getLogger('polygenic')

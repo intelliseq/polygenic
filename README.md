@@ -6,7 +6,7 @@ python package for computation of polygenic scores based for particular sample
 
 ## How to install
 ```
-pip3 install --upgrade polygenic==1.3.1
+pip3 install --upgrade polygenic==1.3.3
 ```
 
 ## How to run
