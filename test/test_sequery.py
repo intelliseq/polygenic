@@ -32,3 +32,13 @@ class PolygenicMakerTest(TestCase):
             "--output", "results"
         ])
         self.assertEqual('1', '1')
+
+    def testBiobankukBuildModel(self):
+        polygenicmaker.main([
+            "biobankuk-build-model",
+            "--data", "results/biomarkers-30600-both_sexes-irnt.tsv",
+            "--output", "results/model",
+            "--anno", "results/full_variant_qc_metrics.txt",
+            "--threshold", "1e-08"
+        ])
+        self.assertEqual('1', '1')
