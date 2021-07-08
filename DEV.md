@@ -5,6 +5,7 @@ grep -r "src.main.python" . | grep ".py" | grep -v "pycache" | cut -d ":" -f 1 |
 ### test
 ```
 python3 setup.py nosetests -s
+pytest -s -k "testPolygenicForGbeModel"
 ```
 ### build
 ```

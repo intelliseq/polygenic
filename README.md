@@ -5,8 +5,26 @@
 python package for computation of polygenic scores based for particular sample
 
 ## How to install
+### Using pip
 ```
-pip3 install --upgrade polygenic==1.3.3
+pip3 install --upgrade polygenic
+```
+### In new conda environment
+```
+docker run -it conda/miniconda3 /bin/bash
+```
+```
+yes | conda create --name py38 python=3.8
+eval "$(conda shell.bash hook)"
+conda activate py38
+### should be 3.8
+python --version
+
+### gcc is missing to build pytabix
+apt -qq update
+apt -y install build-essential
+
+pip install polygenic
 ```
 
 ## How to run

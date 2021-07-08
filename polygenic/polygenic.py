@@ -25,6 +25,7 @@ from polygenic.seqql.score import PolygenicRiskScore
 from polygenic.seqql.score import Data
 from polygenic.lib.data_access.dto import ModelDescriptionInfo
 
+
 logger = logging.getLogger('polygenic')
 
 class Sequery(object):
@@ -86,24 +87,24 @@ def process_model(model_description_info:ModelDescriptionInfo, vcf_accessor:VcfA
         sys.path.insert(0, package_str)
     module = importlib.import_module(model_description_info.model_fname.split('.')[0])
     pop_short = pop.replace('AF', '').lstrip('_')
-    if pop_short != module.trait_was_prepared_for_population:
-        raise ImproperPopulationForModelError(f"You requested data for population {pop_short} while the model was prepared for {module.trait_was_prepared_for_population}")
+    #if pop_short != module.trait_was_prepared_for_population:
+    #    raise ImproperPopulationForModelError(f"You requested data for population {pop_short} while the model was prepared for {module.trait_was_prepared_for_population}")
     model: PolygenicRiskScore = module.model
     data = Data(vcf_accessor, allele_freq_accessor, sample_name, pop, model)
-    return data.compute_model(), module.trait_was_prepared_for_population
+    return data.compute_model()
 
 def parse_model(path: str):
     model_path = expand_path(path)
     model_fname = os.path.basename(model_path)
     description_path = model_path.replace('.py', '.json')
     description = [description_path] if os.path.exists(description_path) else []
-    plot_data_path_str = model_path.replace('_traits/', '_data/').replace('_model.py', '_data.json')
-    plot_data_path = plot_data_path_str if os.path.exists(plot_data_path_str) else None
+    #plot_data_path_str = model_path.replace('_traits/', '_data/').replace('_model.py', '_data.json')
+    #plot_data_path = plot_data_path_str if os.path.exists(plot_data_path_str) else None
     model_info = ModelDescriptionInfo(
         model_fname = model_fname,
         model_path = model_path,
         desc_paths = description,
-        plot_data_path = plot_data_path
+        plot_data_path = None
     )
     return model_info
 
@@ -137,33 +138,25 @@ def main(args = sys.argv[1:]):
 
     parsed_args = parser.parse_args(args)
 
+    ### setup logging ###
     log_directory = os.path.dirname(os.path.abspath(os.path.expanduser(parsed_args.log_file)))
     if log_directory:
         try:
             os.makedirs(log_directory)
         except OSError:
             pass
-
     logger.setLevel(logging.DEBUG)
-    fh = logging.FileHandler(parsed_args.log_file)
-    fh.setLevel(logging.DEBUG)
+    logging_file_handler = logging.FileHandler(parsed_args.log_file)
+    logging_file_handler.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    fh.setFormatter(formatter)
-    logger.addHandler(fh)
+    logging_file_handler.setFormatter(formatter)
+    logger.addHandler(logging_file_handler)
 
+    ###
     out_dir = expand_path(parsed_args.out_dir)
 
     population = 'AF' if not parsed_args.population else 'AF_' + parsed_args.population
-    # allele_freq_path = parsed_args.allele_freq_json or os.path.join(MODULE_PATH, 'src', 'main', 'resources', 'allele_frequencies', 'gnomad.json') #todo sprawdzić
 
-    # mapping file should be available only when we supply this application with models from the outside
-    #if parsed_args.mapping_json and not parsed_args.models_and_descriptions_path:
-    #    raise RuntimeError('You supplied mapping file, but no models')
-
-    # coupling model files with descriptions and plot data
-    #directories = [abspath_to_model_dir_from_repo(trait_dir) for trait_dir in parsed_args.traits_dirs] or []
-    #print(directories)
-    #directories = []
     models_info = {}
     for model in parsed_args.model:
         model_info = parse_model(model)
@@ -172,24 +165,9 @@ def main(args = sys.argv[1:]):
     for model in glob.glob(directory):
         model_info = parse_model(model)
         models_info[model_info.model_path] = model_info
-
-    #print(model_files_info)
-    # if parsed_args.mapping_json:
-    #     with open(expand_path(parsed_args.mapping_json)) as f:
-    #         models_descriptions_mappings = json.load(f)
-    #     model_files_info.update(
-    #         load_models_when_mapping_present(parsed_args.models_and_descriptions_path, models_descriptions_mappings,
-    #                                          logger))
-    # elif parsed_args.models_and_descriptions_path:
-    #     directories.append(parsed_args.models_and_descriptions_path)
-    #directories.append(parsed_args.models_and_descriptions_path)
-    #print(directories)
     
     if not models_info:
         raise RuntimeError("No models loaded. Exiting.")
-
-    # create data accessors
-    #initial_accessor = VcfAccessor([expand_path(path) for path in parsed_args.curated_initial_vcfs[0]])
 
     vcf_accessor = VcfAccessor(expand_path(parsed_args.vcf[0]))
 
@@ -202,8 +180,9 @@ def main(args = sys.argv[1:]):
     for sample_name in sample_names:
          results_representations = {}
          for model_path, model_desc_info in models_info.items():
-             res, pop_in_model = process_model(model_desc_info, vcf_accessor, allele_accessor, population, sample_name)
-             results_representations[model_path] = create_res_representation_for_model(res, model_desc_info, pop_in_model)
+             print("POPULATION " + str(population))
+             res = process_model(model_desc_info, vcf_accessor, allele_accessor, population, sample_name)
+             results_representations[model_path] = create_res_representation_for_model(res, model_desc_info, parsed_args.population)
          with open(os.path.join(out_dir, f'{sample_name}.sample.json'), 'w') as f:
              json.dump(results_representations, f, indent=4)
 

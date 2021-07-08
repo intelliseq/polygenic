@@ -6,7 +6,7 @@ import setuptools
 from typing import List
 from setuptools import setup, find_packages
 
-PACKAGE_VERSION = '1.3.2'
+PACKAGE_VERSION = '1.4.3'
 
 def write_version_py(filename='polygenic/version.py'):
     cnt = """
@@ -45,13 +45,19 @@ setuptools.setup(
     install_requires=[
         'numpy==1.20.3',
         'progressbar2==3.53.1',
-        'python-utils==2.5.6'
+        'python-utils==2.5.6',
+        'pysam==0.16.0.1',
+        'pytabix==0.1',
+        'pandas==1.3.0',
+        'plotly==5.1.0',
+        'kaleido==0.2.1'
     ],
     python_requires='>=3.8',
     entry_points={
         'console_scripts': [
             'polygenic=polygenic.polygenic:main',
-            'polygenicmaker=polygenic.polygenicmaker:main'
+            'polygenicmaker=polygenic.polygenicmaker:main',
+            'vcfstat=polygenic.vcfstat:main'
         ],
     },
     test_suite='nose.collector',

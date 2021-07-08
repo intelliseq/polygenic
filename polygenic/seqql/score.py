@@ -17,6 +17,7 @@ from polygenic.seqql.category import validate_categories_ranges
 from polygenic.seqql.category import QuantitativeCategory
 from polygenic.lib.data_access.data_accessor import VcfAccessor
 from polygenic.lib.data_access.dto import SnpData
+from polygenic.lib.data_access.data_accessor import DataNotPresentError
 
 logger = logging.getLogger('description_language.' + __name__)
 
@@ -151,13 +152,19 @@ class Data(object):
                 self._allele_freq_in_population[rsid] = max(hardy_weinberg_diploid_frequencies(allele_frequencies).items(), key=lambda x: x[1])[0]
                 
             except KeyError:
-                print("keyerror")
+                #print("keyerror")
                 logger.debug(
                     f'Either rsid: {rsid} or population: {self._population} not found in allele frequency data')
                 self._rsids_absent_in_allele_freq_data.add(rsid)
                 continue
             except AttributeError:
-                print("attributeerror")
+                #print("attributeerror")
+                logger.debug(
+                    f'Either rsid: {rsid} or population: {self._population} not found in allele frequency data')
+                self._rsids_absent_in_allele_freq_data.add(rsid)
+                continue
+            except DataNotPresentError:
+                #print("datanotpresenterror")
                 logger.debug(
                     f'Either rsid: {rsid} or population: {self._population} not found in allele frequency data')
                 self._rsids_absent_in_allele_freq_data.add(rsid)
