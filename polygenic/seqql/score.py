@@ -169,6 +169,11 @@ class Data(object):
                     f'Either rsid: {rsid} or population: {self._population} not found in allele frequency data')
                 self._rsids_absent_in_allele_freq_data.add(rsid)
                 continue
+            except WrongAlleleInModelError:
+                logger.debug(
+                    f'Rsid {rsid} has bad effect allele'
+                )
+                continue
 
 
     def compute_model(self) -> PolygenicRiskScoreResult:

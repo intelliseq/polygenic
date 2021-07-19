@@ -13,11 +13,13 @@ class PolygenicTest(TestCase):
         self.assertEqual(1, 1)
     def testPolygenicCoreWithAf(self):
         polygenic.main([
-            "--vcf", "test/resources/vcf/my.vcf.gz", 
-            "--log_file", "/dev/null",
+            "--vcf", "test/resources/vcf/my.vcf.gz",
+            "--sample", "yfyfy", 
+            "--log-file", "/dev/null",
             "--model", "test/resources/model/scaled_eas_model.py", 
             "--population", "eas", 
-            "--out_dir", "/tmp/",
+            "--output-directory", "/tmp/polygenic",
+            "--output-file-name", "bambala.json",
             "--af", "test/resources/vcf/af.vcf.gz"])
         self.assertEqual('1', '1')
     
@@ -100,6 +102,19 @@ class PolygenicMakerTest(TestCase):
         ])
         self.assertEqual('1', '1')
 
+    def testPgsIndex(self):
+        polygenicmaker.main([
+            "pgs-index",
+            "--output", "/tmp/polygenic"
+        ])
+
+    def testPgsGet(self):
+        polygenicmaker.main([
+            "pgs-get",
+            "--code", "BIN1210",
+            "--output", "results"
+        ])
+
 class VcfstatTest(TestCase):
 
     def testBaf(self):
@@ -116,4 +131,19 @@ class VcfstatTest(TestCase):
             "--vcf", "/home/marpiech/data/clustered_204800980122_R01C02.vcf.gz",
             "--output-file", "/tmp/baf/stats.json"
         ])
+        self.assertEqual('1', '1')
+
+class Debug(TestCase):
+
+    def testDebug(self):
+        polygenic.main([
+            "--vcf", "/tmp/clustered_204800980122_R01C02.vcf.gz",
+            "--sample-name", "clustered_204800980122_R01C02",
+            "--log-file", "/dev/null",
+            "--output-name-appendix", "cancer",
+            "--model", "/tmp/py/cancer1002.py",
+            "--model", "/tmp/py/cancer1044.py", 
+            "--population", "eas", 
+            "--output-directory", "/tmp/polygenic/",
+            "--af", "test/resources/vcf/af.vcf.gz"])
         self.assertEqual('1', '1')

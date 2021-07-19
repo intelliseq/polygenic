@@ -110,11 +110,12 @@ def parse_model(path: str):
 
 def main(args = sys.argv[1:]):
     parser = argparse.ArgumentParser(description='')  # todo dodać opis
-    parser.add_argument('--vcf', nargs='+', required=True,
-                        help='Vcf file with genotypes')
-    parser.add_argument('--log_file', type=str, default='polygenic.log')
-    parser.add_argument('--out_dir', type=str, default="", help='Directory for result jsons.')
-    parser.add_argument('--population', type=str, default='eas',
+    parser.add_argument('-i', '--vcf', required=True, help='Vcf file with genotypes')
+    parser.add_argument('-l', '--log-file', type=str, default='/var/logs/polygenic.log')
+    parser.add_argument('-s', '--sample-name', type=str, help='Sample name to calculate')
+    parser.add_argument('-o', '--output-directory', type=str, default="", help='Directory for result jsons.')
+    parser.add_argument('-n', '--output-name-appendix', type=str, default="", help='Output file name appendix.')
+    parser.add_argument('-p', '--population', type=str, default='nfe',
                         choices=['', 'nfe', 'eas', 'afr', 'amr', 'asj', 'fin', 'oth'],
                         help='''Population code:
         empty - use average allele frequency in all population,
@@ -125,13 +126,13 @@ def main(args = sys.argv[1:]):
         'asj' - Ashkenazi Jewish ancestry, 
         'fin' - Finnish ancestry,
         'oth' - Other ancestry''')
-    parser.add_argument('--traits_dirs', nargs='+', type=str, default=[],
-                        help='Directories containing models from the inside of this repo')
+    #parser.add_argument('--traits_dirs', nargs='+', type=str, default=[],
+    #                    help='Directories containing models from the inside of this repo')
     # parser.add_argument('--actionable_dir', type=str, default='',
     #                     help='Directory containing "actionable" models')  # default='vitalleo_actionable'
-    parser.add_argument('--models_path', type=str, default='', help="Path to a directory containing models and corresponding_descriptions")
-    parser.add_argument('--model', action='append', help="Path to model")
-    parser.add_argument('--mapping_json', type=str, default='', help="A file containing mapping between models and descriptions")
+    #parser.add_argument('--models_path', type=str, default='', help="Path to a directory containing models and corresponding_descriptions")
+    parser.add_argument('-m', '--model', action='append', help="Path to model")
+    #parser.add_argument('--mapping_json', type=str, default='', help="A file containing mapping between models and descriptions")
     parser.add_argument('--af', type=str, default='',
                         help="A file containing allele freq data")
     parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__)
@@ -153,7 +154,7 @@ def main(args = sys.argv[1:]):
     logger.addHandler(logging_file_handler)
 
     ###
-    out_dir = expand_path(parsed_args.out_dir)
+    out_dir = expand_path(parsed_args.output_directory)
 
     population = 'AF' if not parsed_args.population else 'AF_' + parsed_args.population
 
@@ -161,30 +162,36 @@ def main(args = sys.argv[1:]):
     for model in parsed_args.model:
         model_info = parse_model(model)
         models_info[model_info.model_path] = model_info
-    directory = str(os.path.join(parsed_args.models_path, '*_{}_model.py'.format(parsed_args.population)))
-    for model in glob.glob(directory):
-        model_info = parse_model(model)
-        models_info[model_info.model_path] = model_info
+    #directory = str(os.path.join(parsed_args.models_path, '*_{}_model.py'.format(parsed_args.population)))
+    #for model in glob.glob(directory):
+    #    model_info = parse_model(model)
+    #    models_info[model_info.model_path] = model_info
     
     if not models_info:
         raise RuntimeError("No models loaded. Exiting.")
 
-    vcf_accessor = VcfAccessor(expand_path(parsed_args.vcf[0]))
+    vcf_accessor = VcfAccessor(expand_path(parsed_args.vcf))
 
     if parsed_args.af == "":
         allele_accessor = None
     else:    
-        allele_accessor = VcfAccessor(expand_path(parsed_args.af))#AlleleFrequencyAccessor(allele_freq_json_path=allele_freq_path)
+        allele_accessor = VcfAccessor(expand_path(parsed_args.af))
     sample_names = vcf_accessor.sample_names
-    
+
+    if "sample_name" in parsed_args:
+        sample_names = [parsed_args.sample_name]
+
     for sample_name in sample_names:
-         results_representations = {}
-         for model_path, model_desc_info in models_info.items():
-             print("POPULATION " + str(population))
-             res = process_model(model_desc_info, vcf_accessor, allele_accessor, population, sample_name)
-             results_representations[model_path] = create_res_representation_for_model(res, model_desc_info, parsed_args.population)
-         with open(os.path.join(out_dir, f'{sample_name}.sample.json'), 'w') as f:
-             json.dump(results_representations, f, indent=4)
+        results_representations = {}
+        for model_path, model_desc_info in models_info.items():
+            res = process_model(model_desc_info, vcf_accessor, allele_accessor, population, sample_name)
+            results_representations[model_path] = create_res_representation_for_model(res, model_desc_info, parsed_args.population)
+        appendix = parsed_args.output_name_appendix
+        if appendix != "": 
+            appendix = "-" + appendix
+
+        with open(os.path.join(out_dir, f'{sample_name}{appendix}.sample.json'), 'w') as f:
+            json.dump(results_representations, f, indent=4)
 
 
 if __name__ == '__main__':

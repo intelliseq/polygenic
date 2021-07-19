@@ -55,12 +55,16 @@ def download(url: str, output_path: str, force: bool=False, progress: bool=False
         response_data = response
     if progress: bar = progressbar.ProgressBar(max_value = file_size).start()
     downloaded = 0
-    with open(output_path, 'w') as outfile:
-        while (bytes := response_data.read(1024)):
-            outfile.write(str(bytes, 'utf-8'))
+    if not os.path.exists(os.path.dirname(output_path)):
+        os.makedirs(os.path.dirname(output_path))
+    bytebuffer = b''
+    while (bytes := response_data.read(1024)):
+            bytebuffer = bytebuffer + bytes
             downloaded = downloaded + 1024
             if not file_size == progressbar.UnknownLength: downloaded = min(downloaded, file_size)
             progress and bar.update(downloaded)
+    with open(output_path, 'w') as outfile:
+        outfile.write(str(bytebuffer, 'utf-8'))
     progress and bar.finish()
     return
 
@@ -178,6 +182,38 @@ def write_model(data, description, destination):
 
     return
 
+#####################################################################################################
+###                                                                                               ###
+###                                   Polygenic Score Catalogue                                   ###
+###                                                                                               ###
+#####################################################################################################
+
+#######################
+### pgs-index #########
+#######################
+
+def pgs_index(args):
+    parser = argparse.ArgumentParser(description='polygenicmaker pgs-index downloads index of gwas results from Polgenic Score Catalogue')  # todo dodać opis
+    parser.add_argument('--url', type=str, default='http://ftp.ebi.ac.uk/pub/databases/spot/pgs/metadata/pgs_all_metadata_scores.csv', help='alternative url location for index')
+    parser.add_argument('--output', type=str, default='', help='output directory')
+    parsed_args = parser.parse_args(args)
+    output_path = os.path.abspath(os.path.expanduser(parsed_args.output)) + "/pgs_manifest.tsv"
+    download(parsed_args.url, output_path, force=True)
+    return
+
+#######################
+### pgs-get ###########
+#######################
+
+def pgs_get(args):
+    parser = argparse.ArgumentParser(description='polygenicmaker pgs-get downloads specific gwas result from polygenic score catalogue')  # todo dodać opis
+    parser.add_argument('-c', '--code', type=str, required=False, help='PGS score code. Example: PGS000814')
+    parser.add_argument('-o', '--output-path', type=str, default='', help='output directory')
+    parser.add_argument('-f', '--force', action='store_true', help='overwrite downloaded file')
+    parsed_args = parser.parse_args(args)
+    url = "http://ftp.ebi.ac.uk/pub/databases/spot/pgs/scores/" + parsed_args.code + "/ScoringFiles/" + parsed_args.code + ".txt.gz"
+    download(url=url, output_path=parsed_args.output_path, force=parsed_args.force, progress=True)
+    return
 
 #####################################################################################################
 ###                                                                                               ###
@@ -482,6 +518,12 @@ def main(args = sys.argv[1:]):
             gbe_get(args[1:])
         elif args[0] == 'gbe-prepare-model':
             gbe_prepare_model(args[1:])
+        elif args[0] == 'pgs-index':
+            pgs_index(args[1:])
+        elif args[0] == 'pgs-get':
+            pgs_get(args[1:])
+        elif args[0] == 'pgs-prepare-model':
+            pgs_prepare_model(args[1:])
         else:
             raise Exception()
     except Exception as e:

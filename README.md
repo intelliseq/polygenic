@@ -119,3 +119,7 @@ categories=[
 	    QuantitativeCategory(from_=-1.657132197, to=-0.346748358, category_name='Low risk', scale_from = -1, scale_to = 0)
     ],
 ```
+
+### Updates
+#### 1.6.3
+- added try-catch for ConflictingAlleleBetweenDataAndModel to allow model to compute
