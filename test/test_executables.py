@@ -68,9 +68,9 @@ class PolygenicMakerTest(TestCase):
             "--output", "results"
         ])
 
-    def testGbePrepareModel(self):
+    def testGbePrepare(self):
         polygenicmaker.main([
-            "gbe-prepare-model",
+            "gbe-prepare",
             "--data", "results/BIN1210",
             "--af", "/home/marpiech/data/af.vcf.gz",
             "--output", "results/model"
@@ -111,8 +111,24 @@ class PolygenicMakerTest(TestCase):
     def testPgsGet(self):
         polygenicmaker.main([
             "pgs-get",
-            "--code", "BIN1210",
-            "--output", "results"
+            "--code", "PGS000004",
+            "--output-path", "/tmp/polygenic/PGS000004.txt"
+        ])
+
+    def testPgsPrepare(self):
+        polygenicmaker.main([
+            "pgs-prepare",
+            "--input", "/tmp/polygenic/PGS000004.txt",
+            "--output-path", "/tmp/polygenic/PGS000004.py",
+            "--af", "/home/marpiech/data/af.vcf.gz",
+            "--origin-reference-vcf", "/tmp/dbsnp/grch37/00-common_all.vcf.gz",
+            "--model-reference-vcf", "/tmp/dbsnp/grch38/00-common_all.vcf.gz"
+        ])
+
+    def testVcfIndex(self):
+        polygenicmaker.main([
+            "vcf-index",
+            "--vcf", "/tmp/dbsnp/grch38/00-common_all.vcf.gz"
         ])
 
 class VcfstatTest(TestCase):

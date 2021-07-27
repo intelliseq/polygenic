@@ -16,11 +16,10 @@ MODULE_PATH = os.path.abspath(__file__).rsplit(os.path.sep, 4)[0]
 sys.path.insert(0, MODULE_PATH)
 
 from polygenic.version import __version__
-from polygenic.lib.data_access.data_accessor import VcfAccessor
 
 from polygenic.lib.output import create_res_representation_for_model
 from polygenic.lib.data_access.allele_frequency_accessor import AlleleFrequencyAccessor
-from polygenic.lib.data_access.data_accessor import VcfAccessor
+from polygenic.lib.data_access.vcf_accessor import VcfAccessor
 from polygenic.seqql.score import PolygenicRiskScore
 from polygenic.seqql.score import Data
 from polygenic.lib.data_access.dto import ModelDescriptionInfo

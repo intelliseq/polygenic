@@ -15,9 +15,10 @@ from polygenic.lib.data_access.allele_frequency_accessor import AlleleFrequencyA
 from polygenic.seqql.category import validate_categories_names
 from polygenic.seqql.category import validate_categories_ranges
 from polygenic.seqql.category import QuantitativeCategory
-from polygenic.lib.data_access.data_accessor import VcfAccessor
+from polygenic.lib.data_access.vcf_accessor import VcfAccessor
+from polygenic.lib.data_access.vcf_accessor import DataNotPresentError
 from polygenic.lib.data_access.dto import SnpData
-from polygenic.lib.data_access.data_accessor import DataNotPresentError
+
 
 logger = logging.getLogger('description_language.' + __name__)
 
