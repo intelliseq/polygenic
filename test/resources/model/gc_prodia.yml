@@ -1,0 +1,131 @@
+model:
+  diplotype_model:
+    diplotypes:
+      - name: 1s/1s
+        diplotype_variants:
+          - rsid: rs7041
+            alleles:
+              - G
+              - G
+      - name: 1s/1f 
+        diplotype_variants: 
+          - rsid: rs7041
+            alleles: 
+              - G
+              - T
+          - rsid: rs4588
+            alleles:
+              - C
+              - C
+      - name: 1s/1f 
+        diplotype_variants: 
+          - rsid: rs7041
+            alleles: 
+              - G
+              - T
+          - rsid: rs2282679
+            alleles:
+              - A
+              - A
+      - name: 1s/2 
+        diplotype_variants: 
+          - rsid: rs7041
+            alleles: 
+              - G
+              - T
+          - rsid: rs4588
+            alleles:
+              - A
+              - C
+      - name: 1s/2 
+        diplotype_variants: 
+          - rsid: rs7041
+            alleles: 
+              - G
+              - T
+          - rsid: rs2282679
+            alleles:
+              - A
+              - C
+      - name: 1f/1f 
+        diplotype_variants: 
+          - rsid: rs7041
+            alleles: 
+              - T
+              - T
+          - rsid: rs4588
+            alleles:
+              - C
+              - C
+      - name: 1f/1f 
+        diplotype_variants: 
+          - rsid: rs7041
+            alleles: 
+              - T
+              - T
+          - rsid: rs2282679
+            alleles:
+              - A
+              - A
+      - name: 1f/2 
+        diplotype_variants: 
+          - rsid: rs7041
+            alleles: 
+              - T
+              - T
+          - rsid: rs4588
+            alleles:
+              - A
+              - C
+      - name: 1f/2 
+        diplotype_variants: 
+          - rsid: rs7041
+            alleles: 
+              - T
+              - T
+          - rsid: rs2282679
+            alleles:
+              - A
+              - C
+      - name: 2/2 
+        diplotype_variants: 
+          - rsid: rs4588
+            alleles:
+              - A
+              - A
+      - name: 2/2 
+        diplotype_variants: 
+          - rsid: rs2282679
+            alleles:
+              - C
+              - C
+description:
+  about: 
+  genes: []
+  result_statement_choice:
+    Average risk: Avg
+    Potential risk: Pot
+    High risk: Hig
+    Low risk: Low
+  science_behind_the_test:
+  test_type: Polygenic Risk Score
+  trait: Breast cancer
+  trait_authors:
+    - taken from the PGS catalog
+  trait_copyright: Intelliseq all rights reserved
+  trait_explained: None
+  trait_heritability: None
+  trait_pgs_id: PGS000001
+  trait_pmids:
+    - 25855707
+  trait_snp_heritability: None
+  trait_title: Breast_Cancer
+  trait_version: 1.0
+  what_you_can_do_choice:
+    Average risk:
+    High risk:
+    Low risk:
+  what_your_result_means_choice:
+    Average risk:
+    High risk:
+    Low risk:

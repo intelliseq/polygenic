@@ -50,7 +50,8 @@ setuptools.setup(
         'pytabix==0.1',
         'pandas==1.3.0',
         'plotly==5.1.0',
-        'kaleido==0.2.1'
+        'kaleido==0.2.1',
+        'DotMap==1.3.24'
     ],
     python_requires='>=3.8',
     entry_points={

@@ -7,7 +7,16 @@ import progressbar
 import sys
 import urllib.request
 
-
+def merge(old_dict, new_dict):
+    for item in new_dict:
+        if item in old_dict:
+            if type(new_dict[item]) is int or type(new_dict[item]) is float or type(new_dict[item]) is list:
+                old_dict[item] += new_dict[item]
+            if type(new_dict[item]) is dict:
+                merge(old_dict[item], new_dict[item])
+        else:
+            old_dict[item] = new_dict[item]
+            
 def is_valid_path(path: str, is_directory: bool = False):
     """Checks whether path is valid.
 

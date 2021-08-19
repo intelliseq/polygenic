@@ -34,28 +34,38 @@ config.read(os.path.dirname(__file__) + "/../polygenic/polygenic.cfg")
 ###   add af     ###
 ####################
 
-def add_annotation(dict, vcf: VcfAccessor, column_name: str = 'rsid', default = None):
+def add_annotation(
+      dict, 
+      vcf: VcfAccessor, 
+      column_name: str = 'rsid', 
+      new_name: str = None, 
+      backup_column: str = None,
+      default = ""):
+    print(str(dict))
+    if new_name is None:
+        new_name = column_name
+    if backup_column is None:
+        backup_column = column_name
     annotation_dict = None
-    try: #by position
-        if annotation_dict is None and "CHR" in dict:
-            annotation_dict = vcf.get_record_by_position(dict['CHR'], dict['POS'])
-        if annotation_dict is None and "CHROM" in dict:
-            print(dict['CHROM'], dict['POS'])
-            annotation_dict = vcf.get_record_by_position(dict['CHROM'], dict['POS'])
-        if annotation_dict is None and "chr_name" in dict:
-            annotation_dict = vcf.get_record_by_position(dict['chr_name'], dict['chr_position'])
-        if annotation_dict is None and "ID" in dict:
-            annotation_dict = vcf.get_record_by_rsid(dict['ID'])
-        if annotation_dict is None and "rsid" in dict:
-            annotation_dict = vcf.get_record_by_rsid(dict['rsid'])
-    except:
-        pass
-        #raise RuntimeError('Record not found in annotation file ' + str(dict))    
-    try:
-        dict[column_name] = annotation_dict[column_name]
-    except:
-        pass
-        #raise RuntimeError('Column not found in annotation file ' + str(dict))    
+    if annotation_dict is None and "CHR" in dict:
+        annotation_dict = vcf.get_record_by_position(dict['CHR'], dict['POS'])
+    if annotation_dict is None and "CHROM" in dict:
+        annotation_dict = vcf.get_record_by_position(dict['CHROM'], dict['POS'])
+    if annotation_dict is None and "chr_name" in dict:
+        annotation_dict = vcf.get_record_by_position(dict['chr_name'], dict['chr_position'])
+    if annotation_dict is None and "ID" in dict:
+        annotation_dict = vcf.get_record_by_rsid(dict['ID'])
+    if annotation_dict is None and "rsid" in dict:
+        annotation_dict = vcf.get_record_by_rsid(dict['rsid'])
+    if not annotation_dict is None:
+        annotation_dict = annotation_dict.get_as_dict()
+    if not annotation_dict is None and column_name in annotation_dict:
+        print(str(annotation_dict[column_name]))
+        dict[new_name] = annotation_dict[column_name]
+    elif backup_column in dict:
+        dict[new_name] = dict[backup_column]
+    else:
+        dict[new_name] = default
     return dict
 
 def add_af(line, af_accessor: VcfAccessor, population: str = 'nfe', rsid_column_name: str = 'rsid'):
@@ -368,7 +378,9 @@ def gbe_prepare_model(args):
     rsid_vcf = VcfAccessor(config['urls']['hg19-rsids'])
     data = [line for line in data if "rs" in line['ID']]
     #data = [add_rsid(line, tabix_source) for line in data]
-    data = [add_annotation(line, rsid_vcf, 'rsid') for line in data]
+    #print(data[1])
+    #add_annotation(data[1], rsid_vcf, 'ID')
+    data = [add_annotation(line, rsid_vcf, 'ID', new_name='rsid', backup_column='ID') for line in data]
     #data = [add_af(line, af, population=parsed_args.pop) for line in data]
     #description = simulate_parameters(data)
     #model_path = parsed_args.output + "/" + \

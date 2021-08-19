@@ -11,6 +11,33 @@ class PolygenicTest(TestCase):
 
     def test(self):
         self.assertEqual(1, 1)
+
+    def testPolygenicYml(self):
+        polygenic.main([
+            "--vcf", "test/resources/vcf/my.vcf.gz",
+            "--sample", "yfyfy", 
+            "--log-file", "/dev/null",
+            #"--model", "test/resources/model/variantset.yml",  
+            "--model", "test/resources/model/breast_prodia.yml",  
+            #"--model", "test/resources/model/polygenicscore.yml",  
+            "--output-directory", "/tmp/polygenic",
+            "--output-name-appendix", "yml",
+            "--af", "test/resources/vcf/af.vcf.gz"])
+        self.assertEqual('1', '1')
+
+    def testPolygenicGc(self):
+        polygenic.main([
+            "--vcf", "test/resources/vcf/my.vcf.gz",
+            "--sample", "yfyfy", 
+            "--log-file", "/dev/null",
+            #"--model", "test/resources/model/variantset.yml",  
+            "--model", "test/resources/model/gc_prodia.yml",  
+            #"--model", "test/resources/model/polygenicscore.yml",  
+            "--output-directory", "/tmp/polygenic",
+            "--output-name-appendix", "yml",
+            "--af", "test/resources/vcf/af.vcf.gz"])
+        self.assertEqual('1', '1')
+
     def testPolygenicCoreWithAf(self):
         polygenic.main([
             "--vcf", "test/resources/vcf/my.vcf.gz",
@@ -19,7 +46,7 @@ class PolygenicTest(TestCase):
             "--model", "test/resources/model/scaled_eas_model.py", 
             "--population", "eas", 
             "--output-directory", "/tmp/polygenic",
-            "--output-file-name", "bambala.json",
+            "--output-name-appendix", "bambala",
             "--af", "test/resources/vcf/af.vcf.gz"])
         self.assertEqual('1', '1')
     

@@ -1,6 +1,7 @@
 import logging
 import os
 import configparser
+from polygenic.lib.data_access.data_accessor import DataAccessor
 import sys
 import argparse
 import glob
@@ -22,6 +23,7 @@ from polygenic.lib.data_access.allele_frequency_accessor import AlleleFrequencyA
 from polygenic.lib.data_access.vcf_accessor import VcfAccessor
 from polygenic.seqql.score import PolygenicRiskScore
 from polygenic.seqql.score import Data
+from polygenic.seqql.model import Model, SeqqlOperator
 from polygenic.lib.data_access.dto import ModelDescriptionInfo
 
 
@@ -85,7 +87,7 @@ def process_model(model_description_info:ModelDescriptionInfo, vcf_accessor:VcfA
     if package_str not in sys.path:
         sys.path.insert(0, package_str)
     module = importlib.import_module(model_description_info.model_fname.split('.')[0])
-    pop_short = pop.replace('AF', '').lstrip('_')
+    #pop_short = pop.replace('AF', '').lstrip('_')
     #if pop_short != module.trait_was_prepared_for_population:
     #    raise ImproperPopulationForModelError(f"You requested data for population {pop_short} while the model was prepared for {module.trait_was_prepared_for_population}")
     model: PolygenicRiskScore = module.model
@@ -175,7 +177,7 @@ def main(args = sys.argv[1:]):
         allele_accessor = None
     else:    
         allele_accessor = VcfAccessor(expand_path(parsed_args.af))
-    sample_names = vcf_accessor.sample_names
+    sample_names = vcf_accessor.get_sample_names()
 
     if "sample_name" in parsed_args:
         sample_names = [parsed_args.sample_name]
@@ -183,8 +185,19 @@ def main(args = sys.argv[1:]):
     for sample_name in sample_names:
         results_representations = {}
         for model_path, model_desc_info in models_info.items():
-            res = process_model(model_desc_info, vcf_accessor, allele_accessor, population, sample_name)
-            results_representations[model_path] = create_res_representation_for_model(res, model_desc_info, parsed_args.population)
+            if ".yml" in model_path:
+                data_accessor = DataAccessor(
+                    genotypes = vcf_accessor,
+                    imputed_genotypes = vcf_accessor,
+                    allele_frequencies =  allele_accessor,
+                    sample_name = sample_name,
+                    af_field_name = "AF_nfe")
+                model = SeqqlOperator.fromYaml(model_path)
+                #model.compute(data_accessor)
+                print(json.dumps(model.compute(data_accessor), indent=2))
+            else:
+                res = process_model(model_desc_info, vcf_accessor, allele_accessor, population, sample_name)
+                results_representations[model_path] = create_res_representation_for_model(res, model_desc_info, parsed_args.population)
         appendix = parsed_args.output_name_appendix
         if appendix != "": 
             appendix = "-" + appendix

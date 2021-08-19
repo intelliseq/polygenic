@@ -21,16 +21,19 @@ class VcfAccessor(object):
     def __init__(self, vcf_path:str):
         super().__init__()
         self.__path = vcf_path
-        if not "://" in self.__path and not os.path.exists(self.__path):
+        self.__is_remote = True if "://" in self.__path else False
+        if not self.__is_remote and not os.path.exists(self.__path):
             raise RuntimeError('Can not access {path}'.format(path = self.__path))
-        if not "://" in self.__path and not os.path.exists(self.__path + '.tbi'):
+        if not self.__is_remote and not os.path.exists(self.__path + '.tbi'):
             raise RuntimeError('Can not access tabix index for {path}'.format(path = self.__path))
         self.__tabix = tabix.open(self.__path)
-        if not "://" in self.__path and not os.path.exists(self.__path + '.idx.db'):
+        if not self.__is_remote and not os.path.exists(self.__path + '.idx.db'):
             with sqlite3.connect(self.__path + '.idx.db') as dbconn, gzopen(self.__path, 'rt') as vcffh:
                 rsidx.index.index(dbconn, vcffh)
-        if not "://" in self.__path:
+        if not self.__is_remote:
             self.__sample_names = self.get_sample_names()
+        else:
+            self.__sample_names = []
         #self.__rsidx_conn = sqlite3.connect(self.__path + '.idx.db')
         self.__data: Dict[str, Dict[str:SnpData]] = {}  # dictionary rsid:{sample_name:ModelSnpData}
 

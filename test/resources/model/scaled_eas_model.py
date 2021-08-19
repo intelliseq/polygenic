@@ -9,7 +9,7 @@ model = PolygenicRiskScore(
         QuantitativeCategory(from_=1.371624087, to=2.581880425, category_name='High risk', scale_from = 0, scale_to = 1),
         QuantitativeCategory(from_=1.169616034, to=1.371624087, category_name='Potential risk'),
         QuantitativeCategory(from_=-0.346748358, to=1.169616034, category_name='Average risk'),
-	QuantitativeCategory(from_=-1.657132197, to=-0.346748358, category_name='Low risk')
+	      QuantitativeCategory(from_=-1.657132197, to=-0.346748358, category_name='Low risk')
     ],
     snips_and_coefficients={
 	'rs10012': ModelData(effect_allele='G', coeff_value=0.369215857410143),

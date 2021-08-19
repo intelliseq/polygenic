@@ -3,6 +3,7 @@ import logging
 import operator
 import functools
 import numpy as np
+import yaml
 from typing import Set
 from typing import Callable
 from typing import Iterable
@@ -21,7 +22,6 @@ from polygenic.lib.data_access.dto import SnpData
 
 
 logger = logging.getLogger('description_language.' + __name__)
-
 
 class FunctionData(NamedTuple):
     function_to_apply_on_allele_pair: Callable
@@ -84,6 +84,7 @@ class PolygenicRiskScoreResult(NamedTuple):
     scaled_result: float
     category: str
     boundaries: Dict[str, Dict[str, float]]
+    genotypes: dict
 
 
 class Data(object):
@@ -220,7 +221,8 @@ class Data(object):
             result_for_model,
             get_category(self._model.categories, result_for_model).scale_cat(result_for_model),
             get_category(self._model.categories, result_for_model).name,
-            category_boundaries
+            category_boundaries,
+            genotypes = {}
         )
 
 
