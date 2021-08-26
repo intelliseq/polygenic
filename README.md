@@ -3,6 +3,11 @@
 [![PyPI](https://img.shields.io/pypi/v/polygenic.svg)](https://pypi.python.org/pypi/polygenic)
 python package for computation of polygenic scores based for particular sample
 
+Index:
+- [Installation](#installation)
+- [Running](#running)
+- [YML models](#building_models_in _yml)
+
 ## Installation
 ### Using pip
 ```
@@ -50,9 +55,18 @@ Models have two properties which is `model` and `description`. `model` is a spec
 model:
 description:
 ```
+### Types of models
+There are currently implemented four types of models:  
+- `category_model`
+- `diplotype_model`
+- `haplotype_model`
+- `score_model`
+
+
+
 ###
-`model` - property to be computed
-`description` - all properties to be included in the final results
+`model` - property to be computed  
+`description` - all properties to be included in the final results  
 
 ## Building models in .py
 Models defined as .py are pure python3 scripts that use "sequencing query languange" called seqql.  
