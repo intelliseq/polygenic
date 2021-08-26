@@ -1,10 +1,9 @@
 # polygenic
 
 [![PyPI](https://img.shields.io/pypi/v/polygenic.svg)](https://pypi.python.org/pypi/polygenic)
-
 python package for computation of polygenic scores based for particular sample
 
-## How to install
+## Installation
 ### Using pip
 ```
 pip3 install --upgrade polygenic
@@ -27,11 +26,10 @@ apt -y install build-essential
 pip install polygenic
 ```
 
-## How to run
+## Running
 ```
 polygenic --vcf [your_vcf_gz] --model [your_model] [other raguments]
 ```
-
 ### Arguments
 #### Required
 - `--vcf` vcf.gz file with genotypes (tabix index should be available)
@@ -46,143 +44,18 @@ polygenic --vcf [your_vcf_gz] --model [your_model] [other raguments]
 
 ## Building models in yml
 
-
+### Basic structure of model
+Models have two properties which is `model` and `description`. `model` is a specification of computation and `description` is
 ```
 model:
-  diplotype_model:
-    diplotypes:
-      - name: 1s/1s
-        diplotype_variants:
-          - rsid: rs7041
-            alleles:
-              - G
-              - G
-      - name: 1s/1f 
-        diplotype_variants: 
-          - rsid: rs7041
-            alleles: 
-              - G
-              - T
-          - rsid: rs4588
-            alleles:
-              - C
-              - C
-      - name: 1s/1f 
-        diplotype_variants: 
-          - rsid: rs7041
-            alleles: 
-              - G
-              - T
-          - rsid: rs2282679
-            alleles:
-              - A
-              - A
-      - name: 1s/2 
-        diplotype_variants: 
-          - rsid: rs7041
-            alleles: 
-              - G
-              - T
-          - rsid: rs4588
-            alleles:
-              - A
-              - C
-      - name: 1s/2 
-        diplotype_variants: 
-          - rsid: rs7041
-            alleles: 
-              - G
-              - T
-          - rsid: rs2282679
-            alleles:
-              - A
-              - C
-      - name: 1f/1f 
-        diplotype_variants: 
-          - rsid: rs7041
-            alleles: 
-              - T
-              - T
-          - rsid: rs4588
-            alleles:
-              - C
-              - C
-      - name: 1f/1f 
-        diplotype_variants: 
-          - rsid: rs7041
-            alleles: 
-              - T
-              - T
-          - rsid: rs2282679
-            alleles:
-              - A
-              - A
-      - name: 1f/2 
-        diplotype_variants: 
-          - rsid: rs7041
-            alleles: 
-              - T
-              - T
-          - rsid: rs4588
-            alleles:
-              - A
-              - C
-      - name: 1f/2 
-        diplotype_variants: 
-          - rsid: rs7041
-            alleles: 
-              - T
-              - T
-          - rsid: rs2282679
-            alleles:
-              - A
-              - C
-      - name: 2/2 
-        diplotype_variants: 
-          - rsid: rs4588
-            alleles:
-              - A
-              - A
-      - name: 2/2 
-        diplotype_variants: 
-          - rsid: rs2282679
-            alleles:
-              - C
-              - C
 description:
-  about: 
-  genes: []
-  result_statement_choice:
-    Average risk: Avg
-    Potential risk: Pot
-    High risk: Hig
-    Low risk: Low
-  science_behind_the_test:
-  test_type: Polygenic Risk Score
-  trait: Breast cancer
-  trait_authors:
-    - taken from the PGS catalog
-  trait_copyright: Intelliseq all rights reserved
-  trait_explained: None
-  trait_heritability: None
-  trait_pgs_id: PGS000001
-  trait_pmids:
-    - 25855707
-  trait_snp_heritability: None
-  trait_title: Breast_Cancer
-  trait_version: 1.0
-  what_you_can_do_choice:
-    Average risk:
-    High risk:
-    Low risk:
-  what_your_result_means_choice:
-    Average risk:
-    High risk:
-    Low risk:
 ```
+###
+`model` - property to be computed
+`description` - all properties to be included in the final results
 
-## Building models
-Models are pure python scripts tha use "sequencing query languange" called seqql.  
+## Building models in .py
+Models defined as .py are pure python3 scripts that use "sequencing query languange" called seqql.  
 It is required to import language elements.
 ```
 from polygenic.lib.model.seqql import PolygenicRiskScore
@@ -260,3 +133,5 @@ categories=[
 ### Updates
 #### 1.6.3
 - added try-catch for ConflictingAlleleBetweenDataAndModel to allow model to compute
+#### 1.8.0
+- added yaml as model definitions
