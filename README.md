@@ -6,7 +6,9 @@ python package for computation of polygenic scores based for particular sample
 Index:
 - [Installation](#installation)
 - [Running](#running)
-- [YML models](#building_models_in _yml)
+- [YML models](#building_models_in_yml)
+- [Python3 models](#building_models_in_py)
+- [Updates](#updates)
 
 ## Installation
 ### Using pip
@@ -48,25 +50,119 @@ polygenic --vcf [your_vcf_gz] --model [your_model] [other raguments]
 - `--version` prints version of package
 
 ## Building models in yml
+Index:
+[Model structure](#model_structure)
+[Model types](#model_types)
+[Example diplotype model](#example_diplotype_model)
 
-### Basic structure of model
-Models have two properties which is `model` and `description`. `model` is a specification of computation and `description` is
+### Model structure
+##### Core structure
+Models have two properties which is `model` and `description`. `model` is a specification of computation to be performed and `description` is additional information to be included in the result.
 ```
 model:
 description:
 ```
-### Types of models
+##### Object keys
+Each object that is not collection has a set of predefined keys (required or optional) that can be used for computation. For example: `diplotype_model` object has a required `diplotypes` key.
+```
+diplotype_model:
+  diplotypes:
+```
+The computation is first delegated to key specified objects and later aggregated by the top level object itself.
+##### Collections
+There is special category of objects that don't have predefined keys but are collections. Each key within collection becomes element of collection. Collections are easy to recognize, because they are specified in plural form like `diplotypes` or `variants`. Each element of collection will be defined as singular object of collection type. For example key in `variants` collection will becomes objects of `variant` type.
+```
+      variants:
+        rs7041: {diplotype: C/C}
+        rs4588: {diplotype: T/T}
+```
+
+### Model types
 There are currently implemented four types of models:  
 - `category_model`
 - `diplotype_model`
 - `haplotype_model`
 - `score_model`
+The type of model can be specified at the top of yml structure or within the `model` field.  
+##### Specification of model type at the top of yml structure
+```
+diplotype_model:
+description:
+```
+##### Specification of model type within the `model` field
+```
+model:
+  diplotype_model:
+description:
+```
+### Example diplotype model
+This example diplotype model is based on [Randolph 2014](https://pubmed.ncbi.nlm.nih.gov/24447085/).
+```
+diplotype_model:
+  diplotypes:
+    1/1:
+      variants:
+        rs7041: {diplotype: C/C}
+        rs4588: {diplotype: T/T}
+    1/1s:
+      variants:
+        rs7041: {diplotype: C/C}
+        rs4588: {diplotype: T/G}
+    1/1f:
+      variants:
+        rs7041: {diplotype: C/A}
+        rs4588: {diplotype: T/G}
+    1/2:
+      variants:
+        rs7041: {diplotype: C/A}
+        rs4588: {diplotype: T/T}
+    1s/1s:
+      variants:
+        rs7041: {diplotype: C/C}
+        rs4588: {diplotype: G/G}
+    1s/1f:
+      variants: 
+        rs7041: {diplotype: C/A}
+        rs4588: {diplotype: G/G}
+    1s/2:
+      variants: 
+        rs7041: {diplotype: C/A}
+        rs4588: {diplotype: G/T}
+    1f/1f: 
+      variants: 
+        rs7041: {diplotype: A/A}
+        rs4588: {diplotype: G/G}
+    1f/2: 
+      variants: 
+        rs7041: {diplotype: A/A}
+        rs4588: {diplotype: G/T}
+    2/2: 
+      variants: 
+        rs7041: {diplotype: A/A}
+        rs4588: {diplotype: T/T}
+description:
+  pmid: 24447085
+  genes: [GC]
+  result_diplotype_choice:
+    1/1: Moderate
+    1/1s: High
+    1/1f: High
+    1/2: Low
+    1s/1s: Very high
+    1s/1f: Very high
+    1s/2: Moderate
+    1f/1f: Very high
+    1f/2: Moderate
+    2/2: Very low
+```
 
-
-
-###
-`model` - property to be computed  
-`description` - all properties to be included in the final results  
+### Description
+### Model keys glossary
+- `model` - generic model that can aggregate results of other model types  
+- `diplotype_model` 
+    Required keys:
+    - `diplotypes`
+- `description` - all properties to be included in the final results  
 
 ## Building models in .py
 Models defined as .py are pure python3 scripts that use "sequencing query languange" called seqql.  
@@ -103,7 +199,7 @@ with their effect allele in genomic notation and coeffcient value. Snps are defi
 ```
 'rs10012': ModelData(effect_allele='G', coeff_value=0.369215857410143),
 ```
-## Example model
+### Example model
 ```
 from polygenic.lib.model.seqql import PolygenicRiskScore
 from polygenic.lib.model.seqql import ModelData
@@ -133,7 +229,7 @@ model = PolygenicRiskScore(
 )
 ```
 
-## Rescaling model results
+### Rescaling model results
 It is possible to further rescale model results within each Category
 ```
 categories=[
@@ -144,7 +240,7 @@ categories=[
     ],
 ```
 
-### Updates
+## Updates
 #### 1.6.3
 - added try-catch for ConflictingAlleleBetweenDataAndModel to allow model to compute
 #### 1.8.0
