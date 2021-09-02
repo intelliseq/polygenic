@@ -156,6 +156,56 @@ description:
     2/2: Very low
 ```
 
+### Example score model with catgeories rescaling
+```
+score_model:
+  variants:
+    rs10012: {effect_allele: G, effect_size: 0.369215857410143}
+    rs1014971: {effect_allele: T, effect_size: 0.075546961392531}
+    rs10936599: {effect_allele: C, effect_size: 0.086359830674748}
+    rs11892031: {effect_allele: C, effect_size: -0.552841968657781}
+    rs1495741: {effect_allele: A, effect_size: 0.05307844348342}
+    rs17674580: {effect_allele: C, effect_size: 0.187520720836463}
+    rs2294008: {effect_allele: T, effect_size: 0.08278537031645}
+    rs798766: {effect_allele: T, effect_size: 0.093421685162235}
+    rs9642880: {effect_allele: G, effect_size: 0.093421685162235}
+  categories:
+    High risk: {from: 1.371624087, to: 2.581880425, scale_from: 2, scale_to: 3}
+    Potential risk: {from: 1.169616034, to: 1.371624087, scale_from: 1, scale_to: 2}
+    Average risk: {from: -0.346748358, to: 1.169616034, scale_from: 0, scale_to: 1}
+    Low risk: {from: -1.657132197, to: -0.346748358, scale_from: -1, scale_to: 0}
+description:
+  about: 
+  genes: []
+  result_statement_choice:
+    Average risk: Avg
+    Potential risk: Pot
+    High risk: Hig
+    Low risk: Low
+  science_behind_the_test:
+  test_type: Polygenic Risk Score
+  trait: Breast cancer
+  trait_authors:
+    - taken from the PGS catalog
+  trait_copyright: Intelliseq all rights reserved
+  trait_explained: None
+  trait_heritability: None
+  trait_pgs_id: PGS000001
+  trait_pmids:
+    - 25855707
+  trait_snp_heritability: None
+  trait_title: Breast_Cancer
+  trait_version: 1.0
+  what_you_can_do_choice:
+    Average risk:
+    High risk:
+    Low risk:
+  what_your_result_means_choice:
+    Average risk:
+    High risk:
+    Low risk:
+ ```
+
 ### Description
 ### Model keys glossary
 - `model` - generic model that can aggregate results of other model types  
