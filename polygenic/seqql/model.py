@@ -255,4 +255,6 @@ class Variant(SeqqlOperator):
         if self.has("effect_size") and self.has("effect_allele"):
             result["score"] = self.get("effect_size") * result["genotype"]["genotype"].count(self.get("effect_allele"))
             result["effect_size"] = self.get("effect_size")
+        if self.has("symbol"):
+            result["symbol"] = self.get("symbol")
         return result

@@ -1,0 +1,4 @@
+score_model:
+  variants:
+    rs123: {effect_allele: A, effect_size: 1, symbol: BRCA1}
+

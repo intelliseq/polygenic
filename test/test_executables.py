@@ -86,6 +86,12 @@ class PolygenicTest(TestCase):
             "--parameters", "test/resources/json/test-params.json",
             "--output-directory", "/tmp/polygenic/",
             "--log-file", "/dev/null"])
+    def testPolygenicGeneSymbol(self):
+        polygenic.main([
+            "--vcf", "test/resources/vcf/my.vcf.gz", 
+            "--model", "test/resources/model/test-gene-symbol.yml",
+            "--output-directory", "/tmp/polygenic/",
+            "--log-file", "/dev/null"])
 
 class PolygenicMakerTest(TestCase):
 

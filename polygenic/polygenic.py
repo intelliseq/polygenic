@@ -184,7 +184,7 @@ def main(args = sys.argv[1:]):
         sample_names = [parsed_args.sample_name]
 
     parameters = {}
-    if "parameters" in parsed_args:
+    if "parameters" in parsed_args and not parsed_args.parameters is None:
         with open(parsed_args.parameters) as parameters_json:
             parameters = json.load(parameters_json)
 
