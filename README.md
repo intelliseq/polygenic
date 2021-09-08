@@ -54,7 +54,9 @@ polygenic --vcf [your_vcf_gz] --model [your_model] [other raguments]
 Index:
 [Model structure](#model_structure)
 [Model types](#model_types)
+[Parameters](#parameters)
 [Example diplotype model](#example_diplotype_model)
+
 
 ### Model structure
 ##### Core structure
@@ -80,10 +82,10 @@ There is special category of objects that don't have predefined keys but are col
 
 ### Model types
 There are currently implemented four types of models:  
-- `category_model`
+- `score_model`
 - `diplotype_model`
 - `haplotype_model`
-- `score_model`
+- `formula_model`
 The type of model can be specified at the top of yml structure or within the `model` field.  
 ##### Specification of model type at the top of yml structure
 ```
@@ -95,6 +97,22 @@ description:
 model:
   diplotype_model:
 description:
+```
+### Parameters
+External parameters can be used in `formula_model` through `@parameters` keyword.  
+Example parameters file in `.json` format:
+```
+{"sex": "F"}
+```
+Path to file can be provided as argument to polygenic tool:
+```
+--parameters /path/to/parameters.json
+```
+Example of use of parameters in the `formula_model`:
+```
+formula_model:
+  formula:
+    value: "'female' if @parameters.sex == 'F' else 'male'"
 ```
 ### Example diplotype model
 This example diplotype model is based on [Randolph 2014](https://pubmed.ncbi.nlm.nih.gov/24447085/).
@@ -296,3 +314,5 @@ categories=[
 - added try-catch for ConflictingAlleleBetweenDataAndModel to allow model to compute
 #### 1.8.0
 - added yaml as model definitions
+#### 1.9.0
+- added parameters as input to formula_model

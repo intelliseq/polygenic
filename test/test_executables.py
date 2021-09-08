@@ -62,22 +62,30 @@ class PolygenicTest(TestCase):
     def testPolygenicForBiobankModel(self):
         polygenic.main([
             "--vcf", "test/resources/vcf/my.vcf.gz", 
-            "--log_file", "/dev/null",
+            "--log-file", "/dev/null",
             "--model", "test/resources/model/biomarkers-30600-both_sexes-irnt.tsv.py", 
             "--population", "eas", 
-            "--out_dir", "/tmp/",
+            "--output-directory", "/tmp/",
             "--af", "test/resources/vcf/af.vcf.gz"])
         self.assertEqual('1', '1')
 
     def testPolygenicForGbeModel(self):
         polygenic.main([
             "--vcf", "test/resources/vcf/my.vcf.gz", 
-            "--log_file", "/dev/null",
+            "--log-file", "/dev/null",
             "--model", "results/model/BIN1210.py", 
             "--population", "nfe", 
-            "--out_dir", "/tmp/",
+            "--output-directory", "/tmp/",
             "--af", "test/resources/vcf/af.vcf.gz"])
         self.assertEqual('1', '1')
+
+    def testPolygenicParameters(self):
+        polygenic.main([
+            "--vcf", "test/resources/vcf/my.vcf.gz", 
+            "--model", "test/resources/model/test-params.yml",
+            "--parameters", "test/resources/json/test-params.json",
+            "--output-directory", "/tmp/polygenic/",
+            "--log-file", "/dev/null"])
 
 class PolygenicMakerTest(TestCase):
 

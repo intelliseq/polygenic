@@ -10,12 +10,17 @@ class DataAccessor(object):
         imputed_genotypes: VcfAccessor,
         allele_frequencies: VcfAccessor,
         sample_name: str,
-        af_field_name: str = "AF_nfe"):
+        af_field_name: str = "AF_nfe",
+        parameters = {}):
         self.__genotypes = genotypes
         self.__imputed_genotypes = imputed_genotypes
         self.__allele_frequencies = allele_frequencies
         self.__sample_name = sample_name
         self.__af_field_name = af_field_name
+        self.__parameters = parameters
+
+    def get_parameters(self) -> dict:
+        return(self.__parameters)
 
     def get_genotype_by_rsid(self, rsid) -> VcfRecord:
         genotype = {"rsid": rsid}

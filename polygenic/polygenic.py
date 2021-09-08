@@ -112,10 +112,12 @@ def parse_model(path: str):
 def main(args = sys.argv[1:]):
     parser = argparse.ArgumentParser(description='')  # todo dodać opis
     parser.add_argument('-i', '--vcf', required=True, help='Vcf file with genotypes')
-    parser.add_argument('-l', '--log-file', type=str, default='/var/logs/polygenic.log')
+    parser.add_argument('-m', '--model', action='append', help="Path to model")
+    parser.add_argument('--parameters', type=str, help="Parameters json")
     parser.add_argument('-s', '--sample-name', type=str, help='Sample name to calculate')
     parser.add_argument('-o', '--output-directory', type=str, default="", help='Directory for result jsons.')
     parser.add_argument('-n', '--output-name-appendix', type=str, default="", help='Output file name appendix.')
+    parser.add_argument('-l', '--log-file', type=str, default='/var/logs/polygenic.log')
     parser.add_argument('-p', '--population', type=str, default='nfe',
                         choices=['', 'nfe', 'eas', 'afr', 'amr', 'asj', 'fin', 'oth'],
                         help='''Population code:
@@ -132,10 +134,9 @@ def main(args = sys.argv[1:]):
     # parser.add_argument('--actionable_dir', type=str, default='',
     #                     help='Directory containing "actionable" models')  # default='vitalleo_actionable'
     #parser.add_argument('--models_path', type=str, default='', help="Path to a directory containing models and corresponding_descriptions")
-    parser.add_argument('-m', '--model', action='append', help="Path to model")
+    
     #parser.add_argument('--mapping_json', type=str, default='', help="A file containing mapping between models and descriptions")
-    parser.add_argument('--af', type=str, default='',
-                        help="A file containing allele freq data")
+    parser.add_argument('--af', type=str, default='', help="A file containing allele freq data")
     parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__)
 
     parsed_args = parser.parse_args(args)
@@ -182,6 +183,11 @@ def main(args = sys.argv[1:]):
     if "sample_name" in parsed_args and not parsed_args.sample_name is None:
         sample_names = [parsed_args.sample_name]
 
+    parameters = {}
+    if "parameters" in parsed_args:
+        with open(parsed_args.parameters) as parameters_json:
+            parameters = json.load(parameters_json)
+
     for sample_name in sample_names:
         results_representations = {}
         for model_path, model_desc_info in models_info.items():
@@ -191,7 +197,8 @@ def main(args = sys.argv[1:]):
                     imputed_genotypes = vcf_accessor,
                     allele_frequencies =  allele_accessor,
                     sample_name = sample_name,
-                    af_field_name = "AF_nfe")
+                    af_field_name = "AF_nfe",
+                    parameters = parameters)
                 model = SeqqlOperator.fromYaml(model_path)
                 #model.compute(data_accessor)
                 print()

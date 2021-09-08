@@ -178,6 +178,7 @@ class FormulaModel(SeqqlOperator):
 
     def compute(self, data_accessor: DataAccessor):
         result = super(FormulaModel, self).compute(data_accessor)
+        result["parameters"] = data_accessor.get_parameters()
         dotmap = DotMap(result)
         formula = self.get("formula").get_entries()
         for item in formula:

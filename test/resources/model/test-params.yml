@@ -1,0 +1,4 @@
+formula_model:
+  formula:
+    value: "'female' if @parameters.sex == 'F' else 'male'"
+
