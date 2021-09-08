@@ -45,7 +45,7 @@ polygenic --vcf [your_vcf_gz] --model [your_model] [other raguments]
 - `--version` prints version of package
 
 ## Building models in yml
-
+`model` - defines
 
 ```
 model:

@@ -1,47 +1,19 @@
-model:
-  category:
-    categories:
-      - name: High risk
-        from: 1.371624087
-        to: 2.581880425
-      - name: Potential risk
-        from: 1.169616034
-        to: 1.371624087
-      - name: Average risk
-        from: -0.346748358
-        to: 1.169616034
-      - name: Low risk
-        from: -1.657132197
-        to: -0.346748358
-    score:
-      variants:
-        - rsid: rs10012
-          effect_allele: G
-          effect_size: 0.369215857410143
-        - rsid: rs1014971
-          effect_allele: T
-          effect_size: 0.075546961392531
-        - rsid: rs10936599
-          effect_allele: C
-          effect_size: 0.086359830674748
-        - rsid: rs11892031'
-          effect_allele: C
-          effect_size: -0.552841968657781
-        - rsid: rs1495741
-          effect_allele: A
-          effect_size: 0.05307844348342
-        - rsid: rs17674580
-          effect_allele: C
-          effect_size: 0.187520720836463
-        - rsid: rs2294008
-          effect_allele: T
-          effect_size: 0.08278537031645
-        - rsid: rs798766
-          effect_allele: T
-          effect_size: 0.093421685162235
-        - rsid: rs9642880
-          effect_allele: G
-          effect_size: 0.093421685162235
+score_model:
+  variants:
+    rs10012: {effect_allele: G, effect_size: 0.369215857410143}
+    rs1014971: {effect_allele: T, effect_size: 0.075546961392531}
+    rs10936599: {effect_allele: C, effect_size: 0.086359830674748}
+    rs11892031: {effect_allele: C, effect_size: -0.552841968657781}
+    rs1495741: {effect_allele: A, effect_size: 0.05307844348342}
+    rs17674580: {effect_allele: C, effect_size: 0.187520720836463}
+    rs2294008: {effect_allele: T, effect_size: 0.08278537031645}
+    rs798766: {effect_allele: T, effect_size: 0.093421685162235}
+    rs9642880: {effect_allele: G, effect_size: 0.093421685162235}
+  categories:
+    High risk: {from: 1.371624087, to: 2.581880425, scale_from: 2, scale_to: 3}
+    Potential risk: {from: 1.169616034, to: 1.371624087, scale_from: 1, scale_to: 2}
+    Average risk: {from: -0.346748358, to: 1.169616034, scale_from: 0, scale_to: 1}
+    Low risk: {from: -1.657132197, to: -0.346748358, scale_from: -1, scale_to: 0}
 description:
   about: 
   genes: []

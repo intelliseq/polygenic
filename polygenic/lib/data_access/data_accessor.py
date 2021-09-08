@@ -24,20 +24,26 @@ class DataAccessor(object):
             if not record is None:
                 genotype["genotype"] = record.get_genotype(self.__sample_name)
                 genotype["source"] = "genotyping"
+                genotype["ref"] = record.get_ref()
+                return genotype
         if record is None and not self.__imputed_genotypes is None:
             record = self.__imputed_genotypes.get_record_by_rsid(rsid)
             if not record is None:
                 genotype["genotype"] = record.get_genotype(self.__sample_name)
                 genotype["source"] = "imputing"
+                genotype["ref"] = record.get_ref()
+                return genotype
         if record is None and not self.__allele_frequencies is None:
             record = self.__allele_frequencies.get_record_by_rsid(rsid)
             if not record is None:
                 genotype["genotype"] = record.get_genotype_by_af(self.__af_field_name)
                 genotype["source"] = "af"
-        if not genotype is None:
-            genotype["genotype"] = [None, None]
-            genotype["source"] = "missing"
-            return genotype
-        return None
+                genotype["ref"] = record.get_ref()
+                return genotype
+        genotype["genotype"] = [None, None]
+        genotype["source"] = "missing"
+        genotype["ref"] = None
+        return genotype
+
             
 

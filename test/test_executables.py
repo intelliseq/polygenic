@@ -14,15 +14,23 @@ class PolygenicTest(TestCase):
 
     def testPolygenicYml(self):
         polygenic.main([
-            "--vcf", "test/resources/vcf/my.vcf.gz",
-            "--sample", "yfyfy", 
-            "--log-file", "/dev/null",
+            #'--vcf', '/home/marpiech/data/gtcgenome/clusterd.id.vcf.gz',
+            '--vcf', '/home/marpiech/data/mygenome-bgi/bgi-genotype.nochr.vcf.gz',
+            '--log-file', '/dev/null',
+            #'--model', 'test/resources/model/gc_prodia.yml',  
+            '--model', 'test/resources/model/hirisplex.yml',
+            #'--model', 'test/resources/model/breast_prodia.yml',
+            '--output-directory', '/tmp/polygenic',
+            '--output-name-appendix', 'yml'])
+            #"--vcf", "test/resources/vcf/my.vcf.gz",
+            #"--sample", "yfyfy", 
+            #"--log-file", "/dev/null",
             #"--model", "test/resources/model/variantset.yml",  
-            "--model", "test/resources/model/breast_prodia.yml",  
+            #"--model", "test/resources/model/brest_prodia.yml",  
             #"--model", "test/resources/model/polygenicscore.yml",  
-            "--output-directory", "/tmp/polygenic",
-            "--output-name-appendix", "yml",
-            "--af", "test/resources/vcf/af.vcf.gz"])
+            #"--output-directory", "/tmp/polygenic",
+            #"--output-name-appendix", "yml",
+            #"--af", "test/resources/vcf/af.vcf.gz"])
         self.assertEqual('1', '1')
 
     def testPolygenicGc(self):
@@ -31,7 +39,8 @@ class PolygenicTest(TestCase):
             "--sample", "yfyfy", 
             "--log-file", "/dev/null",
             #"--model", "test/resources/model/variantset.yml",  
-            "--model", "test/resources/model/gc_prodia.yml",  
+            #"--model", "test/resources/model/gc_prodia.yml",
+            "--model", "test/resources/model/breast_prodia.yml",
             #"--model", "test/resources/model/polygenicscore.yml",  
             "--output-directory", "/tmp/polygenic",
             "--output-name-appendix", "yml",
@@ -85,14 +94,14 @@ class PolygenicMakerTest(TestCase):
     def testGbeIndex(self):
         polygenicmaker.main([
             "gbe-index",
-            "--output", "results"
+            "--output", "/tmp/polygenic/results"
         ])
 
     def testGbeGet(self):
         polygenicmaker.main([
             "gbe-get",
-            "--code", "BIN1210",
-            "--output", "results"
+            "--code", "HC710",
+            "--output", "/tmp/polygenic/results"
         ])
 
     def testGbePrepare(self):

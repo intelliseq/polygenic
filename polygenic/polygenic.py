@@ -179,7 +179,7 @@ def main(args = sys.argv[1:]):
         allele_accessor = VcfAccessor(expand_path(parsed_args.af))
     sample_names = vcf_accessor.get_sample_names()
 
-    if "sample_name" in parsed_args:
+    if "sample_name" in parsed_args and not parsed_args.sample_name is None:
         sample_names = [parsed_args.sample_name]
 
     for sample_name in sample_names:
@@ -194,7 +194,9 @@ def main(args = sys.argv[1:]):
                     af_field_name = "AF_nfe")
                 model = SeqqlOperator.fromYaml(model_path)
                 #model.compute(data_accessor)
-                print(json.dumps(model.compute(data_accessor), indent=2))
+                print()
+                model.compute(data_accessor)
+                print(json.dumps(model.refine_results(), indent=2))
             else:
                 res = process_model(model_desc_info, vcf_accessor, allele_accessor, population, sample_name)
                 results_representations[model_path] = create_res_representation_for_model(res, model_desc_info, parsed_args.population)

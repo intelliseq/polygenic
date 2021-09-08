@@ -6,7 +6,7 @@ import setuptools
 from typing import List
 from setuptools import setup, find_packages
 
-PACKAGE_VERSION = '1.7.0'
+PACKAGE_VERSION = '1.8.4'
 
 def write_version_py(filename='polygenic/version.py'):
     cnt = """
@@ -31,7 +31,7 @@ setuptools.setup(
     #long_description=long_description,
     #long_description_content_type="text/reStructuredText",
     url="https://github.com/marpiech/polygenic",
-    packages=setuptools.find_packages(include=['polygenic', 'polygenic.seqql']),
+    packages=setuptools.find_packages(include=['polygenic', 'polygenic.lib', 'polygenic.seqql', 'polygenic.lib.data_access']),
     package_data={'polygenic': ['*.cfg'], 'polygenic': ['resources/chromsizes/*.sizes']},
     license="Intelliseq dual licenses this package. For commercial use, please contact [contact @ intelliseq.com](mailto:contact@intelliseq.com). For non-commercial use, this license permits use of the software only by government agencies, schools, universities, non-profit organizations or individuals on projects that do not receive external funding other than government research grants and contracts. Any other use requires a commercial license. For the full license, please see [LICENSE.md](https://github.com/intelliseq/polygenic/blob/master/LICENSE.md), in this source repository.",
     classifiers=[

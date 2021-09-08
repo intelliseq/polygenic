@@ -659,44 +659,42 @@ def save_model(args, description):
 
 
 def main(args=sys.argv[1:]):
-    # try:
-    if args[0] == 'biobankuk-index':
-        biobankuk_index(args[1:])
-    elif args[0] == 'biobankuk-get':
-        biobankuk_get(args[1:])
-    elif args[0] == 'biobankuk-prepare':
-        biobankuk_prepare_model(args[1:])
-    elif args[0] == 'gbe-index':
-        gbe_index(args[1:])
-    elif args[0] == 'gbe-get':
-        gbe_get(args[1:])
-    elif args[0] == 'gbe-prepare':
-        gbe_prepare_model(args[1:])
-    elif args[0] == 'pgs-index':
-        pgs_index(args[1:])
-    elif args[0] == 'pgs-get':
-        pgs_get(args[1:])
-    elif args[0] == 'pgs-prepare':
-        pgs_prepare_model(args[1:])
-    elif args[0] == 'vcf-index':
-        vcf_index(args[1:])
-    else:
-        raise Error('Please select proper tool name')
-#     except Exception as e:
-#         print("ERROR " + str(e))
-#         print("""
-#         Program: polygenicmaker (downloads gwas data, clumps and build polygenic scores)
-#         Contact: Marcin Piechota <piechota.marcin@gmail.com>
+    try:
+        if args[0] == 'biobankuk-index':
+            biobankuk_index(args[1:])
+        elif args[0] == 'biobankuk-get':
+            biobankuk_get(args[1:])
+        elif args[0] == 'biobankuk-prepare':
+            biobankuk_prepare_model(args[1:])
+        elif args[0] == 'gbe-index':
+            gbe_index(args[1:])
+        elif args[0] == 'gbe-get':
+            gbe_get(args[1:])
+        elif args[0] == 'gbe-prepare':
+            gbe_prepare_model(args[1:])
+        elif args[0] == 'pgs-index':
+            pgs_index(args[1:])
+        elif args[0] == 'pgs-get':
+            pgs_get(args[1:])
+        elif args[0] == 'pgs-prepare':
+            pgs_prepare_model(args[1:])
+        elif args[0] == 'vcf-index':
+            vcf_index(args[1:])
+        else:
+            print('ERROR: Please select proper tool name"')
+            print("""
+            Program: polygenicmaker (downloads gwas data, clumps and build polygenic scores)
+            Contact: Marcin Piechota <piechota@intelliseq.com>
+            Usage:   polygenicmaker <command> [options]
 
-#         Usage:   polygenicmaker <command> [options]
-# \
-#         Command:
-#         biobankuk-index         downloads pan biobankuk index of gwas results
-#         biobankuk-get           downloads gwas results for given phenocode
-#         biobankuk-build-model   build polygenic score based on gwas results
+            Command:
+            biobankuk-index         downloads pan biobankuk index of gwas results
+            biobankuk-get           downloads gwas results for given phenocode
+            biobankuk-build-model   build polygenic score based on gwas results
 
-#         """)
-
+            """)
+    except RuntimeError as e:
+        print("ERROR: " + str(e))
 
 if __name__ == '__main__':
     main(sys.argv[1:])
