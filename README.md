@@ -112,7 +112,14 @@ Example of use of parameters in the `formula_model`:
 ```
 formula_model:
   formula:
-    value: "'female' if @parameters.sex == 'F' else 'male'"
+    value: "@female.score_model.value if @parameters.sex == 'F' else @male.score_model.value"
+  male:
+    score_model:
+      variants:
+        ...
+  female:
+    score_model:
+      variants:
 ```
 ### Example diplotype model
 This example diplotype model is based on [Randolph 2014](https://pubmed.ncbi.nlm.nih.gov/24447085/).
