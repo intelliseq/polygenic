@@ -19,14 +19,22 @@ def merge(old_dict, new_dict):
         else:
             old_dict[item] = new_dict[item]
 
-def is_valid_path(path: str, is_directory: bool = False):
+def is_valid_path(path: str, is_directory: bool = False, create_directory: bool = True, possible_url: bool = False):
     """Checks whether path is valid.
 
     Keyword arguments:
     path -- the path to file or directory
     is_directory -- flag if the targe is directory
     """
+    if possible_url and "://" in path:
+        return True
     if is_directory:
+        if create_directory:
+            try:
+                os.makedirs(path, exist_ok=True)
+            except:
+                print("ERROR: Could not create " + path)
+                return False
         if not os.path.isdir(path):
             print("ERROR: " + path + " does not exists or is not directory")
             return False

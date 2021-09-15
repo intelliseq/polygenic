@@ -1,14 +1,14 @@
 score_model:
   variants:
-    rs10012: {effect_allele: G, effect_size: 0.369215857410143}
-    rs1014971: {effect_allele: T, effect_size: 0.075546961392531}
-    rs10936599: {effect_allele: C, effect_size: 0.086359830674748}
-    rs11892031: {effect_allele: C, effect_size: -0.552841968657781}
-    rs1495741: {effect_allele: A, effect_size: 0.05307844348342}
-    rs17674580: {effect_allele: C, effect_size: 0.187520720836463}
-    rs2294008: {effect_allele: T, effect_size: 0.08278537031645}
-    rs798766: {effect_allele: T, effect_size: 0.093421685162235}
-    rs9642880: {effect_allele: G, effect_size: 0.093421685162235}
+    rs10012: {effect_allele: G, effect_size: 0.369215857410143, symbol: BRCA1}
+    rs1014971: {effect_allele: T, effect_size: 0.075546961392531, symbol: BRCA2}
+    rs10936599: {effect_allele: C, effect_size: 0.086359830674748, symbol: EGFR}
+    rs11892031: {effect_allele: C, effect_size: -0.552841968657781, symbol: FEGFR}
+    rs1495741: {effect_allele: A, effect_size: 0.05307844348342, symbol: TP53}
+    rs17674580: {effect_allele: C, effect_size: 0.187520720836463, symbol: TP53}
+    rs2294008: {effect_allele: T, effect_size: 0.08278537031645, symbol: CHEK2}
+    rs798766: {effect_allele: T, effect_size: 0.093421685162235, symbol: CHEK2}
+    rs9642880: {effect_allele: G, effect_size: 0.093421685162235, symbol: CHEK2}
   categories:
     High risk: {from: 1.371624087, to: 2.581880425, scale_from: 2, scale_to: 3}
     Potential risk: {from: 1.169616034, to: 1.371624087, scale_from: 1, scale_to: 2}

@@ -18,8 +18,8 @@ class PolygenicTest(TestCase):
             '--vcf', '/home/marpiech/data/mygenome-bgi/bgi-genotype.nochr.vcf.gz',
             '--log-file', '/dev/null',
             #'--model', 'test/resources/model/gc_prodia.yml',  
-            '--model', 'test/resources/model/hirisplex.yml',
-            #'--model', 'test/resources/model/breast_prodia.yml',
+            #'--model', 'test/resources/model/hirisplex.yml',
+            '--model', 'test/resources/model/breast_prodia.yml',
             '--output-directory', '/tmp/polygenic',
             '--output-name-appendix', 'yml'])
             #"--vcf", "test/resources/vcf/my.vcf.gz",
@@ -86,6 +86,7 @@ class PolygenicTest(TestCase):
             "--parameters", "test/resources/json/test-params.json",
             "--output-directory", "/tmp/polygenic/",
             "--log-file", "/dev/null"])
+
     def testPolygenicGeneSymbol(self):
         polygenic.main([
             "--vcf", "test/resources/vcf/my.vcf.gz", 
@@ -111,19 +112,12 @@ class PolygenicMakerTest(TestCase):
             "--output", "/tmp/polygenic/results"
         ])
 
-    def testGbeGet(self):
+    def testGbeModel(self):
         polygenicmaker.main([
-            "gbe-get",
+            "gbe-model",
             "--code", "HC710",
-            "--output", "/tmp/polygenic/results"
-        ])
-
-    def testGbePrepare(self):
-        polygenicmaker.main([
-            "gbe-prepare",
-            "--data", "results/BIN1210",
-            "--af", "/home/marpiech/data/af.vcf.gz",
-            "--output", "results/model"
+            "--af", "http://anakin.intelliseq.pl/public/resources/1kg/1kg.rsid.chr.vcf.gz",
+            "--output-directory", "/tmp/polygenic/results/HC710"
         ])
 
     def testBiobankukIndex(self):

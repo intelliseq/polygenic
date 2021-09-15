@@ -34,39 +34,65 @@ config.read(os.path.dirname(__file__) + "/../polygenic/polygenic.cfg")
 ###   add af     ###
 ####################
 
+def validate(
+    validated_line: dict,
+    validation_source: VcfAccessor,
+    invert_field: str = "BETA"):
+    record = validation_source.get_record_by_rsid(validated_line['rsid'])
+    if record is None:
+        print("WARNING: Failed validation for " + validated_line['rsid'] + ". SNP not present in validation vcf.")
+        return validated_line
+    if (not validated_line['REF'] == record.get_ref()) or (not validated_line['REF'] in record.get_ref()): 
+        if (validated_line['REF'] == record.get_alt()[0] and validated_line['ALT'] == record.get_ref()):
+            ref = validated_line['REF']
+            alt = validated_line['ALT']
+            validated_line['REF'] = alt
+            validated_line['ALT'] = ref
+            validated_line[invert_field] = - float(validated_line[invert_field])
+            print("WARNING: " + "Failed validation for " + validated_line['rsid'] + ". REF and ALT do not match. " + record.get_ref() + "/" + str(record.get_alt()) + " succesful invert!")
+            return validated_line
+        else:
+            print("ERROR: " + "Failed validation for " + validated_line['rsid'] + ". REF and ALT do not match. " + record.get_ref() + "/" + str(record.get_alt()))
+        return None
+    return validated_line
+
 def add_annotation(
-      dict, 
-      vcf: VcfAccessor, 
-      column_name: str = 'rsid', 
-      new_name: str = None, 
-      backup_column: str = None,
-      default = ""):
-    print(str(dict))
-    if new_name is None:
-        new_name = column_name
-    if backup_column is None:
-        backup_column = column_name
-    annotation_dict = None
-    if annotation_dict is None and "CHR" in dict:
-        annotation_dict = vcf.get_record_by_position(dict['CHR'], dict['POS'])
-    if annotation_dict is None and "CHROM" in dict:
-        annotation_dict = vcf.get_record_by_position(dict['CHROM'], dict['POS'])
-    if annotation_dict is None and "chr_name" in dict:
-        annotation_dict = vcf.get_record_by_position(dict['chr_name'], dict['chr_position'])
-    if annotation_dict is None and "ID" in dict:
-        annotation_dict = vcf.get_record_by_rsid(dict['ID'])
-    if annotation_dict is None and "rsid" in dict:
-        annotation_dict = vcf.get_record_by_rsid(dict['rsid'])
-    if not annotation_dict is None:
-        annotation_dict = annotation_dict.get_as_dict()
-    if not annotation_dict is None and column_name in annotation_dict:
-        print(str(annotation_dict[column_name]))
-        dict[new_name] = annotation_dict[column_name]
-    elif backup_column in dict:
-        dict[new_name] = dict[backup_column]
-    else:
-        dict[new_name] = default
-    return dict
+    annotated_line: dict,
+    annotation_name: str,
+    annotation_source: VcfAccessor,
+    annotation_source_field: str):
+    return annotated_line
+    #   vcf: VcfAccessor, 
+    #   column_name: str = 'rsid', 
+    #   new_name: str = None, 
+    #   backup_column: str = None,
+    #   default = ""):
+    # print(str(dict))
+    # if new_name is None:
+    #     new_name = column_name
+    # if backup_column is None:
+    #     backup_column = column_name
+    # annotation_dict = None
+    # if annotation_dict is None and "CHR" in dict:
+    #     annotation_dict = vcf.get_record_by_position(dict['CHR'], dict['POS'])
+    # if annotation_dict is None and "CHROM" in dict:
+    #     annotation_dict = vcf.get_record_by_position(dict['CHROM'], dict['POS'])
+    # if annotation_dict is None and "chr_name" in dict:
+    #     annotation_dict = vcf.get_record_by_position(dict['chr_name'], dict['chr_position'])
+    # if annotation_dict is None and "ID" in dict:
+    #     annotation_dict = vcf.get_record_by_rsid(dict['ID'])
+    # if annotation_dict is None and "rsid" in dict:
+    #     annotation_dict = vcf.get_record_by_rsid(dict['rsid'])
+    # if not annotation_dict is None:
+    #     annotation_dict = annotation_dict.get_as_dict()
+    # if not annotation_dict is None and column_name in annotation_dict:
+    #     print(str(annotation_dict[column_name]))
+    #     dict[new_name] = annotation_dict[column_name]
+    # elif backup_column in dict:
+    #     dict[new_name] = dict[backup_column]
+    # else:
+    #     dict[new_name] = default
+    # return dict
 
 def add_af(line, af_accessor: VcfAccessor, population: str = 'nfe', rsid_column_name: str = 'rsid'):
     try:
@@ -310,82 +336,76 @@ def pgs_prepare_model(args):
 ### gbe-index #########
 #######################
 
-
 def gbe_index(args):
     print("GBEINDEX")
     parser = argparse.ArgumentParser(
         description='polygenicmaker gbe-index downloads index of gwas results from pan.ukbb study')  # todo dodać opis
     parser.add_argument('--url', type=str, default='https://biobankengine.stanford.edu/static/degas-risk/degas_n_977_traits.tsv',
                         help='alternative url location for index')
-    parser.add_argument('--output', type=str, default='',
+    parser.add_argument('--output-directory', type=str, default='',
                         help='output directory')
     parsed_args = parser.parse_args(args)
     output_path = os.path.abspath(os.path.expanduser(
-        parsed_args.output)) + "/gbe_phenotype_manifest.tsv"
+        parsed_args.output_directory)) + "/gbe_phenotype_manifest.tsv"
     download(parsed_args.url, output_path)
     return
 
-#######################
-### gbe-get ###########
-#######################
+###############
+### gbe-get ###
+###############
 
-
-def gbe_get(args):
-    parser = argparse.ArgumentParser(
-        description='polygenicmaker biobankuk-get downloads specific gwas result from pan.ukbb study')  # todo dodać opis
-    parser.add_argument('--code', type=str, required=False,
-                        help='GBE phenotype code. Example: BIN1210')
-    parser.add_argument('--output', type=str, default='',
-                        help='output directory')
-    parser.add_argument('--force', action='store_true',
-                        help='overwrite downloaded file')
-    parsed_args = parser.parse_args(args)
+def gbe_get(parsed_args):
     url = "https://biobankengine.stanford.edu/static/PRS_map/" + parsed_args.code + ".tsv"
-    output_directory = os.path.abspath(os.path.expanduser(parsed_args.output))
+    output_directory = os.path.abspath(os.path.expanduser(parsed_args.output_directory))
     output_file_name = os.path.splitext(os.path.basename(url))[0]
     output_path = output_directory + "/" + output_file_name
     download(url=url, output_path=output_path,
              force=parsed_args.force, progress=True)
-    return
+    return output_path
 
 #######################
 ### gbe-prepare #######
 #######################
 
-
-def gbe_prepare_model(args):
+def gbe_model(args):
     parser = argparse.ArgumentParser(
         description='polygenicmaker biobankuk-build-model constructs polygenic score model based on p value data')  # todo dodać opis
-    parser.add_argument('--data', type=str, required=True,
+    parser.add_argument('-c','--code', type=str, required=True,
                         help='path to PRS file from gbe. It can be downloaded using gbe-get')
-    parser.add_argument('--output', type=str, default='',
+    parser.add_argument('-o', '--output-directory', type=str, default='',
                         help='output directory')
     parser.add_argument('--af', type=str, required=True,
-                        help='path to allele frequency vcf. It can be downloaded with biobank-get-anno')
-    parser.add_argument('--pop', type=str, default='nfe',
+                        help='path to allele frequency vcf.')
+    parser.add_argument('--af-field', type=str, default='nfe',
                         help='population: meta, AFR, AMR, CSA, EAS, EUR, MID')
-    parser.add_argument('--iterations', type=float, default=1000,
+    parser.add_argument('-i', '--iterations', type=float, default=1000,
                         help='simulation iterations for mean and sd')
+    parser.add_argument('-f', '--force', action='store_true',
+                        help='overwrite downloaded file')
     parsed_args = parser.parse_args(args)
-    if not is_valid_path(parsed_args.output, is_directory=True):
+    if not is_valid_path(parsed_args.output_directory, is_directory=True):
         return
-    if not is_valid_path(parsed_args.data):
+    path = gbe_get(parsed_args)
+    if not is_valid_path(path):
         return
-    if not is_valid_path(parsed_args.af):
+    if not is_valid_path(parsed_args.af, possible_url = True):
         return
-    data = read_table(parsed_args.data)
+    data = read_table(path)
     af = VcfAccessor(parsed_args.af)
     rsid_vcf = VcfAccessor(config['urls']['hg19-rsids'])
     data = [line for line in data if "rs" in line['ID']]
-    #data = [add_rsid(line, tabix_source) for line in data]
-    #print(data[1])
-    #add_annotation(data[1], rsid_vcf, 'ID')
-    data = [add_annotation(line, rsid_vcf, 'ID', new_name='rsid', backup_column='ID') for line in data]
-    #data = [add_af(line, af, population=parsed_args.pop) for line in data]
-    #description = simulate_parameters(data)
-    #model_path = parsed_args.output + "/" + \
-    #    os.path.basename(parsed_args.data).split('.')[0] + ".py"
-    #write_model(data, description, model_path)
+    for line in data: line.update({"rsid": line['ID']})
+    data = [validate(line, validation_source = af) for line in data]
+    data = [add_annotation(
+        line, 
+        annotation_name = "af", 
+        annotation_source = af, 
+        annotation_source_field = parsed_args.af_field) for line in data]
+
+    # #description = simulate_parameters(data)
+    # #model_path = parsed_args.output + "/" + \
+    # #    os.path.basename(parsed_args.data).split('.')[0] + ".py"
+    # #write_model(data, description, model_path)
     return
 
 
@@ -668,10 +688,8 @@ def main(args=sys.argv[1:]):
             biobankuk_prepare_model(args[1:])
         elif args[0] == 'gbe-index':
             gbe_index(args[1:])
-        elif args[0] == 'gbe-get':
-            gbe_get(args[1:])
-        elif args[0] == 'gbe-prepare':
-            gbe_prepare_model(args[1:])
+        elif args[0] == 'gbe-model':
+            gbe_model(args[1:])
         elif args[0] == 'pgs-index':
             pgs_index(args[1:])
         elif args[0] == 'pgs-get':
@@ -691,6 +709,8 @@ def main(args=sys.argv[1:]):
             biobankuk-index         downloads pan biobankuk index of gwas results
             biobankuk-get           downloads gwas results for given phenocode
             biobankuk-build-model   build polygenic score based on gwas results
+            gbe-index               downloads Global Biobank Engine index of Polygenic Risk Scores
+            gbe-model               build polygenic score based on gwas results
 
             """)
     except RuntimeError as e:
