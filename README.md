@@ -121,7 +121,14 @@ Example of use of parameters in the `formula_model`:
 ```
 formula_model:
   formula:
-    value: "'female' if @parameters.sex == 'F' else 'male'"
+    value: "@female.score_model.value if @parameters.sex == 'F' else @male.score_model.value"
+  male:
+    score_model:
+      variants:
+        ...
+  female:
+    score_model:
+      variants:
 ```
 ## Example models
 ### Example diplotype model
@@ -234,6 +241,98 @@ description:
     High risk:
     Low risk:
  ```
+
+#### Example Formula Model
+```
+formula_model:
+  formula:
+    brownexp: "math.exp(@brown.score_model.value - 2.0769)"
+    redexp: "math.exp(@red.score_model.value - 6.3953)"
+    blackexp: "math.exp(@black.score_model.value - 2.4029)"
+    sumexp: "@brownexp + @redexp + @blackexp"
+    brown_prob: "@brownexp / (1 + @sumexp)"
+    red_prob: "@redexp / (1 + @sumexp)"
+    black_prob: "@blackexp / (1 + @sumexp)"
+    blonde_prob: "1 - (@brown_prob + @red_prob + @black_prob)"
+  brown:
+    score_model:
+      variants:
+        rs796296176: {effect_allele: CA, effect_size: 1.2522}
+        rs11547464: {effect_allele: A, effect_size: -0.61155}
+        rs885479: {effect_allele: T, effect_size: 0.2937}
+        rs1805008: {effect_allele: T, effect_size: -0.50143}
+        rs1805005: {effect_allele: T, effect_size: 0.21172}
+        rs1805006: {effect_allele: A, effect_size: 1.9293}
+        rs1805007: {effect_allele: T, effect_size: -0.32318}
+        rs1805009: {effect_allele: C, effect_size: 0.60861}
+        rs1805009: {effect_allele: A, effect_size: 0.25624}
+        rs2228479: {effect_allele: A, effect_size: -0.054143}
+        rs1110400: {effect_allele: C, effect_size: -0.56315}
+        rs28777: {effect_allele: C, effect_size: 0.52168}
+        rs16891982: {effect_allele: C, effect_size: 0.75284}
+        rs12821256: {effect_allele: G, effect_size: -0.34957}
+        rs4959270: {effect_allele: A, effect_size: -0.19171}
+        rs12203592: {effect_allele: T, effect_size: 1.6475}
+        rs1042602: {effect_allele: T, effect_size: 0.16092}
+        rs1800407: {effect_allele: A, effect_size: -0.19111}
+        rs2402130: {effect_allele: G, effect_size: 0.35821}
+        rs12913832: {effect_allele: T, effect_size: 1.214}
+        rs2378249: {effect_allele: C, effect_size: 0.12669}
+        rs683: {effect_allele: C, effect_size: 0.21172}
+  red:
+    score_model:
+      variants:
+        rs796296176: {effect_allele: CA, effect_size: 25.508}
+        rs11547464: {effect_allele: A, effect_size: 2.5381}
+        rs885479: {effect_allele: T, effect_size: -0.20889}
+        rs1805008: {effect_allele: T, effect_size: 2.801}
+        rs1805005: {effect_allele: T, effect_size: 0.93493}
+        rs1805006: {effect_allele: A, effect_size: 3.65}
+        rs1805007: {effect_allele: T, effect_size: 3.4408}
+        rs1805009: {effect_allele: C, effect_size: 4.5868}
+        rs1805009: {effect_allele: A, effect_size: 22.107}
+        rs2228479: {effect_allele: A, effect_size: 0.62307}
+        rs1110400: {effect_allele: C, effect_size: 1.4453}
+        rs28777: {effect_allele: C, effect_size: 0.70401}
+        rs16891982: {effect_allele: C, effect_size: -0.41869}
+        rs12821256: {effect_allele: G, effect_size: -0.57964}
+        rs4959270: {effect_allele: A, effect_size: 0.24861}
+        rs12203592: {effect_allele: T, effect_size: 0.90233}
+        rs1042602: {effect_allele: T, effect_size: 0.45003}
+        rs1800407: {effect_allele: A, effect_size: -0.27606}
+        rs2402130: {effect_allele: G, effect_size: 0.28313}
+        rs12913832: {effect_allele: T, effect_size: -0.093776}
+        rs2378249: {effect_allele: C, effect_size: 0.76634}
+        rs683: {effect_allele: C, effect_size: -0.053427}
+  black:
+    score_model:
+      variants:
+        rs796296176: {effect_allele: CA, effect_size: 2.732}
+        rs11547464: {effect_allele: A, effect_size: -16.969}
+        rs885479: {effect_allele: T, effect_size: 0.39983}
+        rs1805008: {effect_allele: T, effect_size: -0.86062}
+        rs1805005: {effect_allele: T, effect_size: -0.0029013}
+        rs1805006: {effect_allele: A, effect_size: -16.088}
+        rs1805007: {effect_allele: T, effect_size: -1.3757}
+        rs1805009: {effect_allele: C, effect_size: 0.060631}
+        rs1805009: {effect_allele: A, effect_size: 3.9824}
+        rs2228479: {effect_allele: A, effect_size: 0.17012}
+        rs1110400: {effect_allele: C, effect_size: 0.29143}
+        rs28777: {effect_allele: C, effect_size: 0.82228}
+        rs16891982: {effect_allele: C, effect_size: 1.1617}
+        rs12821256: {effect_allele: G, effect_size: -0.89824}
+        rs4959270: {effect_allele: A, effect_size: -0.36359}
+        rs12203592: {effect_allele: T, effect_size: 1.997}
+        rs1042602: {effect_allele: T, effect_size: 0.065432}
+        rs1800407: {effect_allele: A, effect_size: -0.49601}
+        rs2402130: {effect_allele: G, effect_size: 0.26536}
+        rs12913832: {effect_allele: T, effect_size: 1.9391}
+        rs2378249: {effect_allele: C, effect_size: -0.089509}
+        rs683: {effect_allele: C, effect_size: 0.15796}
+description:
+  name: HirisPlex
+
+```
 
 ### Description
 ### Model keys glossary
