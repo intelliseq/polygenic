@@ -15,11 +15,12 @@ class PolygenicTest(TestCase):
     def testPolygenicYml(self):
         polygenic.main([
             #'--vcf', '/home/marpiech/data/gtcgenome/clusterd.id.vcf.gz',
-            '--vcf', '/home/marpiech/data/mygenome-bgi/bgi-genotype.nochr.vcf.gz',
+            #'--vcf', '/home/marpiech/data/mygenome-bgi/bgi-genotype.nochr.vcf.gz',
+            '--vcf', '/tmp/marpiech/kenobi/mygenome/bgi/bgi-genotype.nochr.rsid.vcf.gz',
             '--log-file', '/dev/null',
             #'--model', 'test/resources/model/gc_prodia.yml',  
             #'--model', 'test/resources/model/hirisplex.yml',
-            '--model', 'test/resources/model/breast_prodia.yml',
+            '--model', 'polygenic/tests/resources/model/breast_prodia.yml',
             '--output-directory', '/tmp/polygenic',
             '--output-name-appendix', 'yml'])
             #"--vcf", "test/resources/vcf/my.vcf.gz",
@@ -116,35 +117,30 @@ class PolygenicMakerTest(TestCase):
         polygenicmaker.main([
             "gbe-model",
             "--code", "HC710",
-            "--af", "http://anakin.intelliseq.pl/public/resources/1kg/1kg.rsid.chr.vcf.gz",
+            "--source-ref-vcf", "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20100804/ALL.2of4intersection.20100804.genotypes.vcf.gz",
+            "--target-ref-vcf", "/tmp/marpiech/kenobi/resources/GRCh38.dbSNP155.chr.norm.rsidonly.vcf.gz",
+            "--af-vcf", "/tmp/marpiech/kenobi/resources/1kg.rsid.chr.vcf.gz",
+            "--af-field", "EUR_AF",
             "--output-directory", "/tmp/polygenic/results/HC710"
         ])
 
     def testBiobankukIndex(self):
         polygenicmaker.main([
             "biobankuk-index",
-            "--output", "results"
+            "--output-directory", "/tmp/polygenic/results"
         ])
-        self.assertEqual('1', '1')
 
-    def testBiobankukGet(self):
+    def testBiobankukModel(self):
         polygenicmaker.main([
-            "biobankuk-get",
-            "--index", "results/phenotype_manifest.tsv",
-            "--phenocode", "30600",
-            "--output", "results"
-        ])
-        self.assertEqual('1', '1')
-
-    def testBiobankukBuildModel(self):
-        polygenicmaker.main([
-            "biobankuk-build-model",
-            "--data", "results/biomarkers-30600-both_sexes-irnt.tsv",
-            "--output", "results/model",
-            "--anno", "results/full_variant_qc_metrics.txt",
+            "biobankuk-model",
+            "--code", "2395",
+            "--sex", "both_sexes",
+            "--coding", "4", 
+            "--index", "/tmp/polygenic/results/panukbb_phenotype_manifest.tsv",
+            "--output-directory", "/tmp/polygenic/results/model",
+            "--variant-metrics", "/tmp/polygenic/results/full_variant_qc_metrics.txt",
             "--threshold", "1e-08"
         ])
-        self.assertEqual('1', '1')
 
     def testPgsIndex(self):
         polygenicmaker.main([

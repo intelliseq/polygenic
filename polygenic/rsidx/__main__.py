@@ -8,7 +8,7 @@
 # -----------------------------------------------------------------------------
 
 import argparse
-import rsidx
+import polygenic.rsidx
 import sys
 
 

@@ -7,7 +7,7 @@
 # and is licensed under the BSD license: see LICENSE.txt.
 # -----------------------------------------------------------------------------
 
-import rsidx
+import polygenic.rsidx
 import sqlite3
 from subprocess import Popen, PIPE
 import sys

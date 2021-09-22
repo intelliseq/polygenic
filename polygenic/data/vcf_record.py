@@ -89,6 +89,7 @@ class VcfRecord(object):
             field_name = field.split("=")[0]
             if field_name == name:
                 return field.split("=")[1]
+        return None
 
     def get_af_by_pop(self, af_field_name) -> Dict[str, float]:
         if self.get_info_field(af_field_name) is None:

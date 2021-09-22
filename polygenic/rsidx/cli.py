@@ -9,7 +9,7 @@
 # -*- coding: utf-8 -*-
 
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
-import rsidx
+import polygenic.rsidx
 
 
 def index_subparser(subparsers):

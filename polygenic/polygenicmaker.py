@@ -8,14 +8,16 @@ import urllib.request
 import configparser
 import tabix
 
+import yaml 
+
 # utils
 # simulate
-from polygenic.lib.data_access.vcf_accessor import VcfAccessor
-from polygenic.lib.data_access.vcf_accessor import DataNotPresentError
-from polygenic.lib.utils import is_valid_path
-from polygenic.lib.utils import download
-from polygenic.lib.utils import read_header
-from polygenic.lib.utils import read_table
+from polygenic.data.vcf_accessor import VcfAccessor
+from polygenic.data.vcf_accessor import DataNotPresentError
+from polygenic.core.utils import is_valid_path
+from polygenic.core.utils import download
+from polygenic.core.utils import read_header
+from polygenic.core.utils import read_table
 
 # clumping
 import subprocess
@@ -37,18 +39,19 @@ config.read(os.path.dirname(__file__) + "/../polygenic/polygenic.cfg")
 def validate(
     validated_line: dict,
     validation_source: VcfAccessor,
-    invert_field: str = "BETA"):
+    invert_field: str = None):
     record = validation_source.get_record_by_rsid(validated_line['rsid'])
     if record is None:
         print("WARNING: Failed validation for " + validated_line['rsid'] + ". SNP not present in validation vcf.")
         return validated_line
-    if (not validated_line['REF'] == record.get_ref()) or (not validated_line['REF'] in record.get_ref()): 
+    if not (validated_line['REF'] == record.get_ref()): 
         if (validated_line['REF'] == record.get_alt()[0] and validated_line['ALT'] == record.get_ref()):
             ref = validated_line['REF']
             alt = validated_line['ALT']
             validated_line['REF'] = alt
             validated_line['ALT'] = ref
-            validated_line[invert_field] = - float(validated_line[invert_field])
+            if invert_field is not None:
+                validated_line[invert_field] = - float(validated_line[invert_field])
             print("WARNING: " + "Failed validation for " + validated_line['rsid'] + ". REF and ALT do not match. " + record.get_ref() + "/" + str(record.get_alt()) + " succesful invert!")
             return validated_line
         else:
@@ -60,39 +63,22 @@ def add_annotation(
     annotated_line: dict,
     annotation_name: str,
     annotation_source: VcfAccessor,
-    annotation_source_field: str):
+    annotation_source_field: str,
+    default_value):
+    annotated_line[annotation_name] = default_value
+    record = annotation_source.get_record_by_rsid(annotated_line['rsid'])
+    if record is None:
+        print("WARNING: Failed annotation for " + annotated_line['rsid'] + ". No record in source file.")
+        return annotated_line
+    if not (annotated_line['REF'] == record.get_ref()) or not (annotated_line['ALT'] in record.get_alt()): 
+        print("WARNING: Failed annotation for " + annotated_line['rsid'] + ". REF and ALT do not match. " + record.get_ref() + "/" + str(record.get_alt()))
+        return annotated_line    
+    info = record.get_info_field(annotation_source_field)
+    if info is None:
+        print("WARNING: Failed annotation for " + annotated_line['rsid'] + ". No " + annotation_source_field + " in source.")
+        return annotated_line    
+    annotated_line[annotation_name] = info
     return annotated_line
-    #   vcf: VcfAccessor, 
-    #   column_name: str = 'rsid', 
-    #   new_name: str = None, 
-    #   backup_column: str = None,
-    #   default = ""):
-    # print(str(dict))
-    # if new_name is None:
-    #     new_name = column_name
-    # if backup_column is None:
-    #     backup_column = column_name
-    # annotation_dict = None
-    # if annotation_dict is None and "CHR" in dict:
-    #     annotation_dict = vcf.get_record_by_position(dict['CHR'], dict['POS'])
-    # if annotation_dict is None and "CHROM" in dict:
-    #     annotation_dict = vcf.get_record_by_position(dict['CHROM'], dict['POS'])
-    # if annotation_dict is None and "chr_name" in dict:
-    #     annotation_dict = vcf.get_record_by_position(dict['chr_name'], dict['chr_position'])
-    # if annotation_dict is None and "ID" in dict:
-    #     annotation_dict = vcf.get_record_by_rsid(dict['ID'])
-    # if annotation_dict is None and "rsid" in dict:
-    #     annotation_dict = vcf.get_record_by_rsid(dict['rsid'])
-    # if not annotation_dict is None:
-    #     annotation_dict = annotation_dict.get_as_dict()
-    # if not annotation_dict is None and column_name in annotation_dict:
-    #     print(str(annotation_dict[column_name]))
-    #     dict[new_name] = annotation_dict[column_name]
-    # elif backup_column in dict:
-    #     dict[new_name] = dict[backup_column]
-    # else:
-    #     dict[new_name] = default
-    # return dict
 
 def add_af(line, af_accessor: VcfAccessor, population: str = 'nfe', rsid_column_name: str = 'rsid'):
     try:
@@ -138,7 +124,7 @@ def simulate_parameters(data, iterations: int = 1000, coeff_column_name: str = '
     randomized_beta_list = []
     for _ in range(iterations):
         randomized_beta_list.append(sum(map(lambda snp: randomize_beta(
-            float(snp[coeff_column_name]), snp['af']), data)))
+            float(snp[coeff_column_name]), float(snp['af'])), data)))
     minsum = sum(map(lambda snp: min(float(snp[coeff_column_name]), 0), data))
     maxsum = sum(map(lambda snp: max(float(snp[coeff_column_name]), 0), data))
     return {
@@ -156,31 +142,20 @@ def simulate_parameters(data, iterations: int = 1000, coeff_column_name: str = '
 def write_model(data, description, destination):
 
     with open(destination, 'w') as model_file:
-        model_file.write(
-            "from polygenic.seqql.score import PolygenicRiskScore\n")
-        model_file.write("from polygenic.seqql.score import ModelData\n")
-        model_file.write(
-            "from polygenic.seqql.category import QuantitativeCategory\n")
-        model_file.write("\n")
-        model_file.write("model = PolygenicRiskScore(\n")
-        model_file.write("categories=[\n")
-        model_file.write("QuantitativeCategory(from_=" + str(description['min']) + ", to=" + str(
-            description['mean'] - 1.645 * description['sd']) + ", category_name='Reduced'),\n")
-        model_file.write("QuantitativeCategory(from_=" + str(description['mean'] - 1.645 * description['sd']) + ", to=" + str(
-            description['mean'] + 1.645 * description['sd']) + ", category_name='Average'),\n")
-        model_file.write("QuantitativeCategory(from_=" + str(description['mean'] + 1.645 * description['sd']) + ", to=" + str(
-            description['max']) + ", category_name='Increased')\n")
-        model_file.write("],\n")
-        model_file.write("snips_and_coefficients={\n")
+        model_file.write("score_model\n")
+        model_file.write("  categories:\n")
+        borders = []
+        borders.append(description['mean'] - 1.645 * description['sd'])
+        borders.append(description['mean'] + 1.645 * description['sd'])
+        model_file.write("    " + "reduced: {from: " + str(description['min']) + ", to: " + str(borders[0]) + "}\n")
+        model_file.write("    " + "average: {from: " + str(borders[0]) + ", to: " + str(borders[1]) + "}\n")
+        model_file.write("    " + "increased: {from: " + str(borders[1]) + ", to: " + str(description['max']) + "}\n")
+        model_file.write("  variants:\n")
         snps = []
         for snp in data:
-            snps.append("'" + snp['rsid'] + "': ModelData(effect_allele='" +
-                        snp['ALT'] + "', coeff_value=" + snp['BETA'] + ")")
-        model_file.write(",\n".join(snps))
-        model_file.write("},\n")
-        model_file.write("model_type='beta'\n")
-        model_file.write(")\n")
-        model_file.write("description = " + json.dumps(description, indent=4))
+            model_file.write("    " + snp['rsid'] + ": {effect_allele: " + snp['ALT'] + ", effect_size: " + snp['BETA'] + "}\n")
+        description = {"description": description}
+        model_file.write(yaml.dump(description, indent=2))
 
     return
 
@@ -364,7 +339,7 @@ def gbe_get(parsed_args):
     return output_path
 
 #######################
-### gbe-prepare #######
+### gbe-model #########
 #######################
 
 def gbe_model(args):
@@ -374,7 +349,11 @@ def gbe_model(args):
                         help='path to PRS file from gbe. It can be downloaded using gbe-get')
     parser.add_argument('-o', '--output-directory', type=str, default='',
                         help='output directory')
-    parser.add_argument('--af', type=str, required=True,
+    parser.add_argument('--source-ref-vcf', type=str, required=True,
+                        help='source reference vcf (hg19)')
+    parser.add_argument('--target-ref-vcf', type=str, required=True,
+                        help='source reference vcf (hg38)')
+    parser.add_argument('--af-vcf', type=str, required=True,
                         help='path to allele frequency vcf.')
     parser.add_argument('--af-field', type=str, default='nfe',
                         help='population: meta, AFR, AMR, CSA, EAS, EUR, MID')
@@ -388,24 +367,28 @@ def gbe_model(args):
     path = gbe_get(parsed_args)
     if not is_valid_path(path):
         return
-    if not is_valid_path(parsed_args.af, possible_url = True):
+    if not is_valid_path(parsed_args.af_vcf, possible_url = True):
         return
     data = read_table(path)
-    af = VcfAccessor(parsed_args.af)
-    rsid_vcf = VcfAccessor(config['urls']['hg19-rsids'])
+    af_vcf = VcfAccessor(parsed_args.af_vcf)
+    source_vcf = VcfAccessor(parsed_args.source_ref_vcf)
+    target_vcf = VcfAccessor(parsed_args.target_ref_vcf)
     data = [line for line in data if "rs" in line['ID']]
     for line in data: line.update({"rsid": line['ID']})
-    data = [validate(line, validation_source = af) for line in data]
+    data = [validate(line, validation_source = target_vcf) for line in data]
+
+
+
     data = [add_annotation(
         line, 
         annotation_name = "af", 
-        annotation_source = af, 
-        annotation_source_field = parsed_args.af_field) for line in data]
+        annotation_source = af_vcf, 
+        annotation_source_field = parsed_args.af_field,
+        default_value = 0.001) for line in data]
 
-    # #description = simulate_parameters(data)
-    # #model_path = parsed_args.output + "/" + \
-    # #    os.path.basename(parsed_args.data).split('.')[0] + ".py"
-    # #write_model(data, description, model_path)
+    description = simulate_parameters(data)
+    model_path = parsed_args.output_directory + "/" + parsed_args.code + ".yml"
+    write_model(data, description, model_path)
     return
 
 
@@ -418,130 +401,130 @@ def biobankuk_index(args):
         description='polygenicmaker biobankuk-index downloads index of gwas results from pan.ukbb study')  # todo dodać opis
     parser.add_argument('--url', type=str, default='https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_release/phenotype_manifest.tsv.bgz',
                         help='alternative url location for index')
-    parser.add_argument('--output', type=str, default='',
+    pasrer.add_argument('--variant-metrics', type=str, default='https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_release/full_variant_qc_metrics.txt.bgz',
+                        help='alternative url location for variant metrics')
+    parser.add_argument('--output-directory', type=str, default='',
                         help='output directory')
     parsed_args = parser.parse_args(args)
     output_path = os.path.abspath(os.path.expanduser(
-        parsed_args.output)) + "/panukbb_phenotype_manifest.tsv"
+        parsed_args.output_directory)) + "/panukbb_phenotype_manifest.tsv"
     download(parsed_args.url, output_path)
+    output_path = os.path.abspath(os.path.expanduser(
+        parsed_args.output_directory)) + "/full_variant_qc_metrics.txt"
+    download(parsed_args.variant_metrics, output_path)
     return
 
 #######################
 ### biobankuk-get #####
 #######################
 
-
-def biobankuk_get(args):
-    parser = argparse.ArgumentParser(
-        description='polygenicmaker biobankuk-get downloads specific gwas result from pan.ukbb study')  # todo dodać opis
-    parser.add_argument('--index', type=str, default='panukbb_phenotype_manifest.tsv',
-                        help='path to phenotype_manifest.tsv index file. Can be downloaded using polygenicmaker biobankuk-index command')
-    parser.add_argument('--phenocode', type=str, required=False,
-                        help='biobankUK phenotype code. Example: 30600')
-    parser.add_argument('--pheno_sex', type=str, default='both_sexes',
-                        help='biobankUK pheno_sex code. Example: both_sexes')
-    parser.add_argument('--coding', type=str, required=True,
-                        help='biobankUK phenotype code. Example 30600')
-    parser.add_argument('--modifier', type=str, required=True,
-                        help='biobankUK phenotype code. Example 30600')
-    parser.add_argument('--output', type=str, default='',
-                        help='output directory')
-    parser.add_argument('--force', action='store_true',
-                        help='overwrite downloaded file')
-    parsed_args = parser.parse_args(args)
+def biobankuk_get(parsed_args):
     # checking index file for download url
     with open(parsed_args.index, 'r') as indexfile:
         firstline = indexfile.readline()
         phenocode_colnumber = firstline.split('\t').index("phenocode")
+        pheno_sex_colnumber = firstline.split('\t').index("pheno_sex")
+        coding_colnumber = firstline.split('\t').index("coding")
         aws_link_colnumber = firstline.split('\t').index("aws_link")
         while True:
             line = indexfile.readline()
             if not line:
                 break
-            if line.split('\t')[phenocode_colnumber] != parsed_args.phenocode:
+            if line.split('\t')[phenocode_colnumber] != parsed_args.code:
+                continue
+            if line.split('\t')[pheno_sex_colnumber] != parsed_args.sex:
+                continue
+            if line.split('\t')[coding_colnumber] != parsed_args.coding:
                 continue
             url = line.split('\t')[aws_link_colnumber]
             break
     # downloading
     if not url is None:
-        logger.info("Downloading from " + url)
-        output_directory = os.path.abspath(
-            os.path.expanduser(parsed_args.output))
+        output_directory = os.path.abspath(os.path.expanduser(parsed_args.output_directory))
         output_file_name = os.path.splitext(os.path.basename(url))[0]
         output_path = output_directory + "/" + output_file_name
-        print(parsed_args.force)
-        if os.path.isfile(output_path) and parsed_args.force is False:
-            print("File is laready downloaded")
-            return
-        logger.info("Saving to " + output_path)
-        response = urllib.request.urlopen(url)
-        file_size = 3.5 * int(response.getheader('Content-length'))
-        decompressed_file = gzip.GzipFile(fileobj=response)
-        if file_size is None:
-            file_size = 7078686639
-        else:
-            bar = progressbar.ProgressBar(max_value=file_size).start()
-            downloaded = 0
-            with open(output_path, 'w') as outfile:
-                while (bytes := decompressed_file.read(1024)):
-                    outfile.write(str(bytes, 'utf-8'))
-                    downloaded = downloaded + 1024
-                    bar.update(min(downloaded, file_size))
-            bar.update(file_size)
-            bar.finish()
-    return
+        logger.info("Downloading from " + url + " to " + output_path)
+        download(url=url, output_path=output_path,
+             force=False, progress=True)
+        return output_path
+    return None
 
 #############################
-### biobankuk-build-model ###
+### biobankuk-model #########
 #############################
 
-
-def biobankuk_prepare_model(args):
+def biobankuk_model(args):
     parser = argparse.ArgumentParser(
-        description='polygenicmaker biobankuk-build-model constructs polygenic score model based on p value data')  # todo dodać opis
-    parser.add_argument('--data', type=str, required=True,
-                        help='path to biomarkers file from biobank uk. It can be downloaded using biobankuk-get')
-    parser.add_argument('--h2', type=str, help='')
-    parser.add_argument('--output', type=str, default='',
+        description='polygenicmaker biobankuk-model prepares polygenic score model based on p value data')
+    parser.add_argument('--code', '--phenocode', type=str, required=True,
+                        help='phenocode of phenotype form Uk Biobank')
+    parser.add_argument('--sex', '--pheno_sex', type=str, default="both_sexes",
+                        help='pheno_sex of phenotype form Uk Biobank')
+    parser.add_argument('--coding', type=str, default="",
+                        help='additional coding of phenotype form Uk Biobank')
+    parser.add_argument('--index', type=str, required=True,
+                        help='path to Index file from PAN UKBiobank. It can be downloaded using gbe-get')
+    parser.add_argument('--output-directory', type=str, default='',
                         help='output directory')
-    parser.add_argument('--anno', type=str, required=True,
-                        help='path to annotation file. It can be downloaded with biobank-get-anno')
-    parser.add_argument('--pop', type=str, default='meta',
-                        help='population: meta, AFR, AMR, CSA, EAS, EUR, MID')
+    parser.add_argument('--variant-metrics', type=str, required=True,
+                        help='path to annotation file. It can be downloaded from https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_release/full_variant_qc_metrics.txt.bgz')
     parser.add_argument('--threshold', type=float, default=1e-08,
+                        help='significance cut-off threshold')
+    parser.add_argument('--population', type=str, default='EUR',
                         help='population: meta, AFR, AMR, CSA, EAS, EUR, MID')
-    parser.add_argument('--iterations', type=float, default=1000,
-                        help='simulation iterations for mean and sd')
+    parser.add_argument('--clumping-vcf', type=str, default='/tmp/polygenic/results/eur.phase3.biobank.set.vcf.gz',
+                        help='')
+    parser.add_argument('--target-vcf', type=str, default='/tmp/polygenic/results/eur.phase3.biobank.set.vcf.gz',
+                        help='')
+#    parser.add_argument('--h2', type=str, help='')
+#    parser.add_argument('--anno', type=str, required=True,
+#                        help='path to annotation file. It can be downloaded with biobank-get-anno')
+#    parser.add_argument('--pop', type=str, default='meta',
+#                        help='population: meta, AFR, AMR, CSA, EAS, EUR, MID')
+
+#    parser.add_argument('--iterations', type=float, default=1000,
+#                        help='simulation iterations for mean and sd')
+#    parser.add_argument('--source-ref-vcf', type=str, required=True,
+#                        help='source reference vcf (hg19)')
+#    parser.add_argument('--target-ref-vcf', type=str, required=True,
+#                        help='source reference vcf (hg38)')
+#    parser.add_argument('--af-vcf', type=str, required=True,
+#                        help='path to allele frequency vcf.')
+#    parser.add_argument('--af-field', type=str, default='nfe',
+#                        help='population: meta, AFR, AMR, CSA, EAS, EUR, MID')
+#    parser.add_argument('-i', '--iterations', type=float, default=1000,
+#                        help='simulation iterations for mean and sd')
+#    parser.add_argument('-f', '--force', action='store_true',
+#                        help='overwrite downloaded file')
+
     parsed_args = parser.parse_args(args)
-    if not os.path.isdir(parsed_args.output):
-        print("ERROR: " + parsed_args.output +
-              " does not exists or is not directory")
-        return
-    if not os.path.isfile(parsed_args.data):
-        print("ERROR: " + parsed_args.data +
-              " does not exists or is not a file")
-        return
-    if not os.path.isfile(parsed_args.anno):
-        print("ERROR: " + parsed_args.anno +
-              " does not exists or is not a file")
-        return
-    # filter_pval(parsed_args)
-    # clump(parsed_args)
-    simulation_results = simulate(parsed_args)
-    description = {
-        'mean': simulation_results['mean'],
-        'sd': simulation_results['sd'],
-        'min': simulation_results['min'],
-        'max': simulation_results['max'],
-        'population': parsed_args.pop
-    }
-    save_model(parsed_args, description)
-    return
+    if not is_valid_path(parsed_args.output_directory, is_directory=True): return
+    path = biobankuk_get(parsed_args)
+    if not is_valid_path(path): return
+    if not is_valid_path(parsed_args.variant_metrics): return
+    
+    #filter_pval(path, parsed_args)
+    #clump(path, parsed_args)
+    data = read_table(path + ".clumped")
+    for line in data: line.update({"id": line['chr'] + ":" + line['pos'] + "_" + line['ref'] + "_" + line['alt']})
+    #data = [validate(line, validation_source = target_vcf) for line in data]
+
+    #data = [add_annotation(
+    #    line, 
+    #    annotation_name = "af", 
+    #    annotation_source = af_vcf, 
+    #    annotation_source_field = parsed_args.af_field,
+    #    default_value = 0.001) for line in data]
+
+    #description = simulate_parameters(data)
 
 
-def filter_pval(args):
-    output_path = args.output + "/" + os.path.basename(args.data) + ".filtered"
-    with open(args.data, 'r') as data, open(args.anno, 'r') as anno, open(output_path, 'w') as output:
+    # return
+
+
+def filter_pval(path, parsed_args):
+    output_path = path + ".filtered"
+    with open(path, 'r') as data, open(parsed_args.variant_metrics, 'r') as anno, open(output_path, 'w') as output:
         data_header = data.readline().rstrip().split('\t')
         anno_header = anno.readline().rstrip().split('\t')
         output.write('\t'.join(data_header + anno_header) + "\n")
@@ -549,24 +532,26 @@ def filter_pval(args):
             try:
                 data_line = data.readline().rstrip().split('\t')
                 anno_line = anno.readline().rstrip().split('\t')
-                if float(data_line[data_header.index('pval_' + args.pop)].replace('NA', '1', 1)) <= args.threshold:
+                if float(data_line[data_header.index('pval_' + parsed_args.population)].replace('NA', '1', 1)) <= parsed_args.threshold:
                     output.write('\t'.join(data_line + anno_line) + "\n")
             except:
                 break
     return
 
 
-def clump(args):
-    filtered_path = args.output + "/" + \
-        os.path.basename(args.data) + ".filtered"
+def clump(path, parsed_args):
+
+    filtered_path = path + ".filtered"
+    clumped_path = path + ".clumped"
+
     subprocess.call("plink" +
                     " --clump " + filtered_path +
-                    " --clump-p1 " + str(args.threshold) +
+                    " --clump-p1 " + str(parsed_args.threshold) +
                     " --clump-r2 0.25 " +
                     " --clump-kb 1000 " +
                     " --clump-snp-field rsid " +
-                    " --clump-field pval_" + args.pop +
-                    " --vcf results/eur.phase3.biobank.set.vcf.gz " +
+                    " --clump-field pval_" + parsed_args.population +
+                    " --vcf " + parsed_args.clumping_vcf + " " +
                     " --allow-extra-chr",
                     shell=True)
     clumped_rsids = []
@@ -581,9 +566,7 @@ def clump(args):
         os.remove("plink.nosex")
     except:
         pass
-    filtered_path = args.output + "/" + \
-        os.path.basename(args.data) + ".filtered"
-    clumped_path = args.output + "/" + os.path.basename(args.data) + ".clumped"
+    
     with open(filtered_path, 'r') as filtered_file, open(clumped_path, 'w') as clumped_file:
         filtered_header = filtered_file.readline().rstrip().split('\t')
         clumped_file.write('\t'.join(filtered_header) + "\n")
@@ -627,12 +610,10 @@ def simulate(args):
         'max': maxsum
     }
 
-
 def randomize_beta(beta: float, af: float):
     first_allele_beta = beta if random.uniform(0, 1) < af else 0
     second_allele_beta = beta if random.uniform(0, 1) < af else 0
     return first_allele_beta + second_allele_beta
-
 
 def save_model(args, description):
     model_path = args.output + "/" + \
@@ -677,25 +658,20 @@ def save_model(args, description):
 
     return
 
-
 def main(args=sys.argv[1:]):
     try:
         if args[0] == 'biobankuk-index':
             biobankuk_index(args[1:])
-        elif args[0] == 'biobankuk-get':
-            biobankuk_get(args[1:])
-        elif args[0] == 'biobankuk-prepare':
-            biobankuk_prepare_model(args[1:])
+        elif args[0] == 'biobankuk-model':
+            biobankuk_model(args[1:])
         elif args[0] == 'gbe-index':
             gbe_index(args[1:])
         elif args[0] == 'gbe-model':
             gbe_model(args[1:])
         elif args[0] == 'pgs-index':
             pgs_index(args[1:])
-        elif args[0] == 'pgs-get':
-            pgs_get(args[1:])
-        elif args[0] == 'pgs-prepare':
-            pgs_prepare_model(args[1:])
+        elif args[0] == 'pgs-model':
+            pgs_model(args[1:])
         elif args[0] == 'vcf-index':
             vcf_index(args[1:])
         else:
@@ -707,10 +683,12 @@ def main(args=sys.argv[1:]):
 
             Command:
             biobankuk-index         downloads pan biobankuk index of gwas results
-            biobankuk-get           downloads gwas results for given phenocode
-            biobankuk-build-model   build polygenic score based on gwas results
-            gbe-index               downloads Global Biobank Engine index of Polygenic Risk Scores
-            gbe-model               build polygenic score based on gwas results
+            biobankuk-model         prepare polygenic score model based on gwas results from biobankuk
+            gbe-index               downloads Global Biobank Engine index
+            gbe-model               prepare polygenic score model from GBE data
+            pgs-index               downloads Polygenic Risk Score index
+            pgs-model               prepare polygenic score model from PGS data
+            vcf-index               prepare rsidx for vcf
 
             """)
     except RuntimeError as e:

@@ -1,5 +1,5 @@
 from unittest import TestCase
-from polygenic.lib.data_access.vcf_accessor import VcfAccessor
+from polygenic.data.vcf_accessor import VcfAccessor
 
 class VcfAccessorTest(TestCase):
 

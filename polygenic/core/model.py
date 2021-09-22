@@ -3,8 +3,8 @@ import math
 import yaml
 from dotmap import DotMap
 
-from polygenic.lib.data_access.data_accessor import DataAccessor
-from polygenic.lib.utils import merge
+from polygenic.data.data_accessor import DataAccessor
+from polygenic.core.utils import merge
 
 logger = logging.getLogger('description_language.' + __name__)
 

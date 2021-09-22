@@ -1,6 +1,6 @@
 import logging
-from polygenic.lib.data_access.vcf_accessor import VcfAccessor
-from polygenic.lib.data_access.vcf_record import VcfRecord
+from polygenic.data.vcf_accessor import VcfAccessor
+from polygenic.data.vcf_record import VcfRecord
 
 logger = logging.getLogger('description_language.' + __name__)
 

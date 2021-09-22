@@ -110,7 +110,7 @@ def download(url: str, output_path: str, force: bool=False, progress: bool=False
     file_size = int(response.getheader('Content-length'))
     if file_size is None:
         progress = False
-    if ".gz" in url:
+    if ".gz" in url or ".bgz" in url:
         response_data = gzip.GzipFile(fileobj = response)
         file_size = progressbar.UnknownLength
     else:

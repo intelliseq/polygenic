@@ -8,7 +8,7 @@
 # -----------------------------------------------------------------------------
 
 import os
-import rsidx
+import polygenic.rsidx
 import sqlite3
 import sys
 import re

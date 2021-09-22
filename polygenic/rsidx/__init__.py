@@ -12,10 +12,10 @@ from contextlib import contextmanager
 from gzip import open as gzopen
 import sys
 
-from rsidx import index
-from rsidx import search
-from rsidx import __main__
-from rsidx import cli
+from polygenic.rsidx import index
+from polygenic.rsidx import search
+#from polygenic.rsidx import __main__
+#from polygenic.rsidx import cli
 
 from ._version import get_versions
 __version__ = get_versions()['version']

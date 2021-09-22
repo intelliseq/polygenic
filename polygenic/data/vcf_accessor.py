@@ -6,12 +6,12 @@ from typing import Union
 from polygenic.lib import mobigen_utils
 from polygenic.lib.data_access.dto import SnpData
 from polygenic.lib.data_access.dto import SnpDataManySamples
-from polygenic.lib.data_access.vcf_record import VcfRecord
+from polygenic.data.vcf_record import VcfRecord
 
 # rsidx
 import os
 from gzip import open as gzopen
-import rsidx
+import polygenic.rsidx as rsidx
 import sqlite3
 import tabix
 
