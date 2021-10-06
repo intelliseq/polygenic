@@ -6,6 +6,7 @@ import os.path
 import progressbar
 import sys
 import urllib.request
+import subprocess
 
 def merge(old_dict, new_dict):
     if new_dict is None:
@@ -102,17 +103,25 @@ def download(url: str, output_path: str, force: bool=False, progress: bool=False
     """
     logger = logging.getLogger('utils')
 
+    print(url)
+
     if os.path.isfile(output_path) and not force:
         logger.warning("File already exists: " + output_path)
-        return
+        return output_path
     logger.info("Downloading from " + url)
     response = urllib.request.urlopen(url)
     file_size = int(response.getheader('Content-length'))
     if file_size is None:
         progress = False
     if ".gz" in url or ".bgz" in url:
-        response_data = gzip.GzipFile(fileobj = response)
-        file_size = progressbar.UnknownLength
+        subprocess.call("wget " + url + " -O " + output_path + ".gz",
+                    shell=True)
+        subprocess.call("gzip -d " + output_path + ".gz",
+                    shell=True)
+        return output_path
+    #elif ".bgz" in url:
+    #    response_data = gzip.GzipFile(fileobj = response)
+    #    file_size = progressbar.UnknownLength
     else:
         response_data = response
     if progress: bar = progressbar.ProgressBar(max_value = file_size).start()
@@ -128,4 +137,4 @@ def download(url: str, output_path: str, force: bool=False, progress: bool=False
     with open(output_path, 'w') as outfile:
         outfile.write(str(bytebuffer, 'utf-8'))
     progress and bar.finish()
-    return
+    return output_path

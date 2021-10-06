@@ -64,18 +64,23 @@ def add_annotation(
     annotation_name: str,
     annotation_source: VcfAccessor,
     annotation_source_field: str,
-    default_value):
+    default_value,
+    rsid_field: str = 'rsid'):
+    rsid = annotated_line[rsid_field]
+    record = annotation_source.get_record_by_rsid(annotated_line[rsid_field])
     annotated_line[annotation_name] = default_value
-    record = annotation_source.get_record_by_rsid(annotated_line['rsid'])
     if record is None:
-        print("WARNING: Failed annotation for " + annotated_line['rsid'] + ". No record in source file.")
+        print("WARNING: Failed annotation for " + rsid + ". No record in source file.")
         return annotated_line
     if not (annotated_line['REF'] == record.get_ref()) or not (annotated_line['ALT'] in record.get_alt()): 
-        print("WARNING: Failed annotation for " + annotated_line['rsid'] + ". REF and ALT do not match. " + record.get_ref() + "/" + str(record.get_alt()))
-        return annotated_line    
-    info = record.get_info_field(annotation_source_field)
+        print("WARNING: Failed annotation for " + rsid + ". REF and ALT do not match. " + record.get_ref() + "/" + str(record.get_alt()))
+        return annotated_line
+    if annotation_source_field == "id" or annotation_source_field == "rsid":    
+        info = record.get_id()
+    else:
+        info = record.get_info_field(annotation_source_field)
     if info is None:
-        print("WARNING: Failed annotation for " + annotated_line['rsid'] + ". No " + annotation_source_field + " in source.")
+        print("WARNING: Failed annotation for " + rsid + ". No " + annotation_source_field + " in source.")
         return annotated_line    
     annotated_line[annotation_name] = info
     return annotated_line
@@ -90,27 +95,6 @@ def add_af(line, af_accessor: VcfAccessor, population: str = 'nfe', rsid_column_
         # TODO convert alternate alleles
         af = af_accessor.get_af_by_pop(line['ID'], 'AF_' + population)
         line['af'] = af[list(af.keys())[1]]
-    return line
-
-####################
-###   add rsid   ###
-####################
-
-
-def add_rsid(line, tabix_source: open, population: str = 'nfe', rsid_column_name: str = 'ID'):
-    if "rs" in line[rsid_column_name]:
-        line['rsid'] = line[rsid_column_name]
-    else:
-        try:
-            records = tabix_source.query(
-                line['CHROM'], int(line['POS']) - 1, int(line['POS']))
-            for record in records:
-                line['rsid'] = record[2]
-                print(str(line))
-                break
-        except Exception:
-            line['rsid'] = line[rsid_column_name]
-
     return line
 
 ####################
@@ -247,14 +231,10 @@ def pgs_prepare_model(args):
     parser.add_argument('--iterations', type=float, default=1000,
                         help='simulation iterations for mean and sd')
     parsed_args = parser.parse_args(args)
-    if not is_valid_path(parsed_args.input):
-        return
-    if not is_valid_path(parsed_args.origin_reference_vcf):
-        return
-    if not is_valid_path(parsed_args.model_reference_vcf):
-        return
-    if not is_valid_path(parsed_args.af):
-        return
+    if not is_valid_path(parsed_args.input): return
+    if not is_valid_path(parsed_args.origin_reference_vcf): return
+    if not is_valid_path(parsed_args.model_reference_vcf): return
+    if not is_valid_path(parsed_args.af): return
     data = read_table(parsed_args.input)
     af_vcf = VcfAccessor(parsed_args.af)
     origin_ref_vcf = VcfAccessor(parsed_args.origin_reference_vcf)
@@ -345,30 +325,20 @@ def gbe_get(parsed_args):
 def gbe_model(args):
     parser = argparse.ArgumentParser(
         description='polygenicmaker biobankuk-build-model constructs polygenic score model based on p value data')  # todo dodać opis
-    parser.add_argument('-c','--code', type=str, required=True,
-                        help='path to PRS file from gbe. It can be downloaded using gbe-get')
-    parser.add_argument('-o', '--output-directory', type=str, default='',
-                        help='output directory')
-    parser.add_argument('--source-ref-vcf', type=str, required=True,
-                        help='source reference vcf (hg19)')
-    parser.add_argument('--target-ref-vcf', type=str, required=True,
-                        help='source reference vcf (hg38)')
-    parser.add_argument('--af-vcf', type=str, required=True,
-                        help='path to allele frequency vcf.')
-    parser.add_argument('--af-field', type=str, default='nfe',
-                        help='population: meta, AFR, AMR, CSA, EAS, EUR, MID')
-    parser.add_argument('-i', '--iterations', type=float, default=1000,
-                        help='simulation iterations for mean and sd')
-    parser.add_argument('-f', '--force', action='store_true',
-                        help='overwrite downloaded file')
+    parser.add_argument('-c','--code', required=True, type=str, help='path to PRS file from gbe. It can be downloaded using gbe-get')
+    parser.add_argument('-o', '--output-directory', type=str, default='output', help='output directory')
+    parser.add_argument('--source-ref-vcf', type=str, default='dbsnp138.37.norm.vcf.gz', help='source reference vcf (hg19)')
+    parser.add_argument('--target-ref-vcf', type=str, default='dbsnp138.38.norm.vcf.gz', help='source reference vcf (hg38)')
+    parser.add_argument('--af-vcf', type=str, default='gnomad.3.1.vcf.gz', help='path to allele frequency vcf.')
+    parser.add_argument('--af-field', type=str, default='AF_nfe', help='name of the INFO field with ALT allele frequency')
+    parser.add_argument('-i', '--iterations', type=float, default=1000, help='simulation iterations for mean and sd')
+    parser.add_argument('-f', '--force', action='store_true', help='overwrite downloaded file')
     parsed_args = parser.parse_args(args)
-    if not is_valid_path(parsed_args.output_directory, is_directory=True):
-        return
+    if not is_valid_path(parsed_args.output_directory, is_directory=True): return
     path = gbe_get(parsed_args)
-    if not is_valid_path(path):
-        return
-    if not is_valid_path(parsed_args.af_vcf, possible_url = True):
-        return
+    if not is_valid_path(path): return
+    if not is_valid_path(parsed_args.af_vcf, possible_url = True): return
+
     data = read_table(path)
     af_vcf = VcfAccessor(parsed_args.af_vcf)
     source_vcf = VcfAccessor(parsed_args.source_ref_vcf)
@@ -401,7 +371,7 @@ def biobankuk_index(args):
         description='polygenicmaker biobankuk-index downloads index of gwas results from pan.ukbb study')  # todo dodać opis
     parser.add_argument('--url', type=str, default='https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_release/phenotype_manifest.tsv.bgz',
                         help='alternative url location for index')
-    pasrer.add_argument('--variant-metrics', type=str, default='https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_release/full_variant_qc_metrics.txt.bgz',
+    parser.add_argument('--variant-metrics', type=str, default='https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_release/full_variant_qc_metrics.txt.bgz',
                         help='alternative url location for variant metrics')
     parser.add_argument('--output-directory', type=str, default='',
                         help='output directory')
@@ -474,52 +444,45 @@ def biobankuk_model(args):
                         help='population: meta, AFR, AMR, CSA, EAS, EUR, MID')
     parser.add_argument('--clumping-vcf', type=str, default='/tmp/polygenic/results/eur.phase3.biobank.set.vcf.gz',
                         help='')
-    parser.add_argument('--target-vcf', type=str, default='/tmp/polygenic/results/eur.phase3.biobank.set.vcf.gz',
+    parser.add_argument('--source-ref-vcf', type=str, default='ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20100804/ALL.2of4intersection.20100804.genotypes.vcf.gz',
                         help='')
-#    parser.add_argument('--h2', type=str, help='')
-#    parser.add_argument('--anno', type=str, required=True,
-#                        help='path to annotation file. It can be downloaded with biobank-get-anno')
-#    parser.add_argument('--pop', type=str, default='meta',
-#                        help='population: meta, AFR, AMR, CSA, EAS, EUR, MID')
-
-#    parser.add_argument('--iterations', type=float, default=1000,
-#                        help='simulation iterations for mean and sd')
-#    parser.add_argument('--source-ref-vcf', type=str, required=True,
-#                        help='source reference vcf (hg19)')
-#    parser.add_argument('--target-ref-vcf', type=str, required=True,
-#                        help='source reference vcf (hg38)')
-#    parser.add_argument('--af-vcf', type=str, required=True,
-#                        help='path to allele frequency vcf.')
-#    parser.add_argument('--af-field', type=str, default='nfe',
-#                        help='population: meta, AFR, AMR, CSA, EAS, EUR, MID')
-#    parser.add_argument('-i', '--iterations', type=float, default=1000,
-#                        help='simulation iterations for mean and sd')
-#    parser.add_argument('-f', '--force', action='store_true',
-#                        help='overwrite downloaded file')
+    parser.add_argument('--target-ref-vcf', type=str, default='/tmp/marpiech/kenobi/resources/GRCh38.dbSNP155.chr.norm.rsidonly.vcf.gz',
+                        help='')
 
     parsed_args = parser.parse_args(args)
     if not is_valid_path(parsed_args.output_directory, is_directory=True): return
     path = biobankuk_get(parsed_args)
     if not is_valid_path(path): return
     if not is_valid_path(parsed_args.variant_metrics): return
-    
-    #filter_pval(path, parsed_args)
-    #clump(path, parsed_args)
+    if not is_valid_path(parsed_args.target_ref_vcf): return
+    if not is_valid_path(parsed_args.target_ref_vcf, possible_url = True): return
+    source_vcf = VcfAccessor(parsed_args.source_ref_vcf)
+    target_vcf = VcfAccessor(parsed_args.target_ref_vcf)
+
+    filter_pval(path, parsed_args)
+    clump(path, parsed_args)
+
     data = read_table(path + ".clumped")
-    for line in data: line.update({"id": line['chr'] + ":" + line['pos'] + "_" + line['ref'] + "_" + line['alt']})
-    #data = [validate(line, validation_source = target_vcf) for line in data]
+    for line in data: line.update({"rsid": line['chr'] + ":" + line['pos'] + "_" + line['ref'] + "_" + line['alt']})
+    for line in data: line.update({"REF": line['ref'], "ALT": line['alt']})
+    for line in data: line.update({"BETA": line["beta_" + parsed_args.population]})
+    for line in data: line.update({"af": line["af_" + parsed_args.population]})
 
-    #data = [add_annotation(
-    #    line, 
-    #    annotation_name = "af", 
-    #    annotation_source = af_vcf, 
-    #    annotation_source_field = parsed_args.af_field,
-    #    default_value = 0.001) for line in data]
+    data = [add_annotation(
+        line, 
+        annotation_name = "rsid", 
+        annotation_source = source_vcf, 
+        annotation_source_field = "rsid",
+        default_value = "rs0") for line in data]
 
-    #description = simulate_parameters(data)
+    data = [validate(line, validation_source = target_vcf) for line in data]
 
+    description = simulate_parameters(data)
 
-    # return
+    model_path = path + ".yml"
+    write_model(data, description, model_path)
+
+    return
 
 
 def filter_pval(path, parsed_args):

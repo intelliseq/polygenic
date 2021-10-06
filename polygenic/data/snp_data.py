@@ -16,8 +16,8 @@ class SnpDataManySamples(NamedTuple):
     genotypes: Dict[str, List[str]] # {sample: [A, G]}
 
 
-class ModelDescriptionInfo(NamedTuple):
-    model_fname:str
-    model_path: str
-    desc_paths:List[str]
-    plot_data_path:Union[str, None] = None
+# class ModelDescriptionInfo(NamedTuple):
+#     model_fname:str
+#     model_path: str
+#     desc_paths:List[str]
+#     plot_data_path:Union[str, None] = None

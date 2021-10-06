@@ -117,11 +117,11 @@ class PolygenicMakerTest(TestCase):
         polygenicmaker.main([
             "gbe-model",
             "--code", "HC710",
-            "--source-ref-vcf", "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20100804/ALL.2of4intersection.20100804.genotypes.vcf.gz",
-            "--target-ref-vcf", "/tmp/marpiech/kenobi/resources/GRCh38.dbSNP155.chr.norm.rsidonly.vcf.gz",
-            "--af-vcf", "/tmp/marpiech/kenobi/resources/1kg.rsid.chr.vcf.gz",
-            "--af-field", "EUR_AF",
-            "--output-directory", "/tmp/polygenic/results/HC710"
+            "--source-ref-vcf", "dbsnp138.37.norm.vcf.gz",
+            "--target-ref-vcf", "dbsnp138.38.norm.vcf.gz",
+            "--af-vcf", "gnomad.3.1.vcf.gz",
+            "--af-field", "AF_nfe",
+            "--output-directory", "/output"
         ])
 
     def testBiobankukIndex(self):
@@ -139,7 +139,9 @@ class PolygenicMakerTest(TestCase):
             "--index", "/tmp/polygenic/results/panukbb_phenotype_manifest.tsv",
             "--output-directory", "/tmp/polygenic/results/model",
             "--variant-metrics", "/tmp/polygenic/results/full_variant_qc_metrics.txt",
-            "--threshold", "1e-08"
+            "--threshold", "1e-08",
+            "--source-ref-vcf", "/tmp/polygenic/results/ALL.2of4intersection.20100804.genotypes.vcf.gz",
+            "--target-ref-vcf", "/tmp/marpiech/kenobi/resources/GRCh38.dbSNP155.chr.norm.rsidonly.vcf.gz"
         ])
 
     def testPgsIndex(self):

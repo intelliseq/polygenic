@@ -351,3 +351,5 @@ description:
 - added parameters as input to formula_model
 #### 1.9.1
 - added gene symbol to variants
+#### 2.0.18
+- polygenicmaker: replace native python download with wget for large gz and bgz files

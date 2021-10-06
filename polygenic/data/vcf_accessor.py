@@ -4,8 +4,8 @@ from typing import Dict
 from typing import List
 from typing import Union
 from polygenic.lib import mobigen_utils
-from polygenic.lib.data_access.dto import SnpData
-from polygenic.lib.data_access.dto import SnpDataManySamples
+from polygenic.data.snp_data import SnpData
+from polygenic.data.snp_data import SnpDataManySamples
 from polygenic.data.vcf_record import VcfRecord
 
 # rsidx
@@ -38,28 +38,47 @@ class VcfAccessor(object):
         self.__data: Dict[str, Dict[str:SnpData]] = {}  # dictionary rsid:{sample_name:ModelSnpData}
 
     def get_record_by_position(self, chromosome, position) -> VcfRecord:
-        records = self.__tabix.query(chromosome, int(position) - 1, int(position))
-        for record in records:
-            vcf_record = VcfRecord("\t".join(record), self.__sample_names)
-            if vcf_record.get_pos() == position:
-                return vcf_record
+        records = self.get_records_by_position(chromosome, position)
+        if records:
+            return records[0]
         return None
 
+    def get_records_by_position(self, chromosome, position) -> List:
+        records = []
+        try:
+            records = self.__tabix.query(chromosome, int(position) - 1, int(position))
+        except:
+            if "chr" in chromosome:
+                records = self.__tabix.query(chromosome.replace("chr",""), int(position) - 1, int(position))
+            else:
+                records = self.__tabix.query("chr" + chromosome, int(position) - 1, int(position))
+        vcf_records = []
+        if records:
+            for record in records:
+                vcf_record = VcfRecord("\t".join(record), self.__sample_names)
+                if vcf_record.get_pos() == position:
+                    vcf_records.append(vcf_record)
+        return vcf_records
+
     def get_records_by_rsid(self, rsid) -> List:
+        if ":" in rsid:
+            position = (rsid.split("_")[0]).split(':')
+            return self.get_records_by_position(position[0], position[1])
         vcf_records = []
         try:
             with sqlite3.connect(self.__path + '.idx.db') as dbconn:
-                for line in rsidx.search.search([rsid], dbconn, self.__path):
-                    vcf_records.append(VcfRecord(line, self.__sample_names))
+                if "rs" in rsid:
+                    for line in rsidx.search.search([rsid], dbconn, self.__path):
+                        vcf_records.append(VcfRecord(line, self.__sample_names))
         except KeyError:
             pass
         return vcf_records
 
     def get_record_by_rsid(self, rsid) -> VcfRecord:
-        try:
-            return self.__get_record_for_rsid(rsid)
-        except Exception:
-            return None
+        records = self.get_records_by_rsid(rsid)
+        if records:
+            return records[0]
+        return None
 
     def __get_record_for_rsid(self, rsid) -> VcfRecord:
         return VcfRecord(self.__get_vcf_line_for_rsid(rsid), self.__sample_names)
