@@ -1,22 +1,9 @@
 # polygenicmaker
 
 ## Preparing models from Global Biobank Engine
-#### Downloading index
 ```
-polygenicmaker \
-  gbe-index \
-  --output-directory /tmp/polygenic/results
-```
-#### Preparing model
-```
-polygenicmaker \
-  gbe-model \
-  --code HC710 \
-  --source-ref-vcf ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20100804/ALL.2of4intersection.20100804.genotypes.vcf.gz \
-  --target-ref-vcf /tmp/marpiech/kenobi/resources/GRCh38.dbSNP155.chr.norm.rsidonly.vcf.gz \
-  --af-vcf /tmp/marpiech/kenobi/resources/1kg.rsid.chr.vcf.gz \
-  --af-field EUR_AF \
-  --output-directory /tmp/polygenic/results/HC710
+OUTPUT_DIRECTORY=/tmp/output
+docker run -v "$OUTPUT_DIRECTORY":/output marpiech/polygenicmaker:2.0.22 polygenicmaker gbe-model --code HC710
 ```
 
 ## Preparing models from Pan Biobank UK
