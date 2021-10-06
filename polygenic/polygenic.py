@@ -48,7 +48,7 @@ def main(args = sys.argv[1:]):
     parser.add_argument('-s', '--sample-name', type=str, help='sample name in vcf.gz to calculate')
     parser.add_argument('-o', '--output-directory', type=str, default='', help='output directory')
     parser.add_argument('-n', '--output-name-appendix', type=str, default='', help='appendix for output file names')
-    parser.add_argument('-l', '--log-file', type=str, default='/var/logs/polygenic.log', help='path to log file')
+    parser.add_argument('-l', '--log-file', type=str, default='polygenic.log', help='path to log file')
     parser.add_argument('--af', type=str, default='', help='vcf file containing allele freq data')
     parser.add_argument('--af-field', type=str, default='AF',help='name of the INFO field to be used as allele frequency')
     parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + __version__)

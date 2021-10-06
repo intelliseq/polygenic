@@ -343,13 +343,8 @@ description:
 - `description` - all properties to be included in the final results  
 
 ## Updates
-#### 1.6.3
-- added try-catch for ConflictingAlleleBetweenDataAndModel to allow model to compute
-#### 1.8.0
-- added yaml as model definitions
-#### 1.9.0
-- added parameters as input to formula_model
-#### 1.9.1
-- added gene symbol to variants
-#### 2.0.18
-- polygenicmaker: replace native python download with wget for large gz and bgz files
+#### 2.0.0
+- switched to yaml model definitions
+- implemented formula, score and diplotype model types
+#### 2.1.0
+- prepared docker image with resources for polygenicmaker
