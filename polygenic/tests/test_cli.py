@@ -3,6 +3,8 @@ from polygenic import polygenic
 from polygenic import polygenicmaker
 from polygenic import vcfstat
 
+from pathlib import Path as path
+
 import tabix
 import os
 import configparser
@@ -97,6 +99,11 @@ class PolygenicTest(TestCase):
 
 class PolygenicMakerTest(TestCase):
 
+    def __init__(self, *args, **kwargs):
+        super(PolygenicMakerTest, self).__init__(*args, **kwargs)
+        self.output_directory = "/tmp/polygenic/test"
+        path(self.output_directory).mkdir(parents=True, exist_ok=True)
+
     def testTabix(self):
         config = configparser.ConfigParser()
         config.read(os.path.dirname(__file__) + "/../polygenic/polygenic.cfg")
@@ -108,21 +115,32 @@ class PolygenicMakerTest(TestCase):
             print(record[:3])
 
     def testGbeIndex(self):
-        polygenicmaker.main([
-            "gbe-index",
-            "--output", "/tmp/polygenic/results"
-        ])
+         polygenicmaker.main([
+             "gbe-index",
+             "--output", "/tmp/polygenic/output"
+         ])
 
     def testGbeModel(self):
+        
+        result_path = self.output_directory + '/HC710.yml'
+        os.remove(result_path) if os.path.exists(result_path) else None
+
         polygenicmaker.main([
             "gbe-model",
             "--code", "HC710",
-            "--source-ref-vcf", "dbsnp138.37.norm.vcf.gz",
-            "--target-ref-vcf", "dbsnp138.38.norm.vcf.gz",
-            "--af-vcf", "gnomad.3.1.vcf.gz",
+            "--gbe-index", "/tmp/marpiech/kenobi/polygenic/gbe-index.1.3.1.tsv",
+            "--gene-positions", "/tmp/marpiech/kenobi/polygenic/ensembl-genes.104.tsv",
+            "--source-ref-vcf", "/tmp/marpiech/kenobi/polygenic/dbsnp138.37.norm.vcf.gz",
+            "--target-ref-vcf", "/tmp/marpiech/kenobi/polygenic/dbsnp138.38.norm.vcf.gz",
+            "--af-vcf", "/tmp/marpiech/kenobi/polygenic/gnomad.3.1.vcf.gz",
             "--af-field", "AF_nfe",
-            "--output-directory", "/output"
+            "--output-directory", self.output_directory
         ])
+        with open(result_path, 'r') as output:
+            data = output.read()
+            header = list(filter(lambda line: "score_model:" in line, data.split('\n')))
+            self.assertEqual(1, len(header))
+            print(str(data))
 
     def testBiobankukIndex(self):
         polygenicmaker.main([

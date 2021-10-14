@@ -85,6 +85,14 @@ def add_annotation(
     annotated_line[annotation_name] = info
     return annotated_line
 
+def add_gene_symbol(line, reference, genes):
+    record = reference.get_record_by_rsid(line["rsid"])
+    if not record: return None
+    symbol = [(gene["symbol"], abs(int(record.get_pos()) - int(gene["start"]))) for gene in genes if record.get_chrom() == ("chr" + gene["chromosome"]) and abs(int(record.get_pos()) - int(gene["start"])) < 500000]
+    if not symbol: return None
+    symbol = sorted(symbol, key=lambda tup: tup[1])[0][0]
+    return symbol
+
 def add_af(line, af_accessor: VcfAccessor, population: str = 'nfe', rsid_column_name: str = 'rsid'):
     try:
         af = af_accessor.get_af_by_pop(line['ID'], 'AF_' + population)
@@ -122,24 +130,31 @@ def simulate_parameters(data, iterations: int = 1000, coeff_column_name: str = '
 ### write model ###
 ###################
 
-
 def write_model(data, description, destination):
 
     with open(destination, 'w') as model_file:
-        model_file.write("score_model\n")
-        model_file.write("  categories:\n")
-        borders = []
-        borders.append(description['mean'] - 1.645 * description['sd'])
-        borders.append(description['mean'] + 1.645 * description['sd'])
-        model_file.write("    " + "reduced: {from: " + str(description['min']) + ", to: " + str(borders[0]) + "}\n")
-        model_file.write("    " + "average: {from: " + str(borders[0]) + ", to: " + str(borders[1]) + "}\n")
-        model_file.write("    " + "increased: {from: " + str(borders[1]) + ", to: " + str(description['max']) + "}\n")
-        model_file.write("  variants:\n")
-        snps = []
+
+        categories = dict()
+        borders = [
+            description["parameters"]['mean'] - 1.645 * description["parameters"]['sd'],
+            description["parameters"]['mean'] + 1.645 * description["parameters"]['sd']
+        ]
+        categories["reduced"] = {"from": description["parameters"]['min'], "to": borders[0]}
+        categories["average"] = {"from": borders[0], "to": borders[1]}
+        categories["increased"] = {"from": borders[1], "to": description["parameters"]['max']}
+        
+        variants = dict()
         for snp in data:
-            model_file.write("    " + snp['rsid'] + ": {effect_allele: " + snp['ALT'] + ", effect_size: " + snp['BETA'] + "}\n")
+            variant = dict()
+            variant["effect_allele"] = snp['ALT']
+            variant["effect_size"] = snp['BETA']
+            variants[snp['rsid']] = variant
+
+        model = {"score_model": {"categories": categories, "variants": variants}}
+        model_file.write(yaml.dump(model, indent=2))
+
         description = {"description": description}
-        model_file.write(yaml.dump(description, indent=2))
+        model_file.write(yaml.dump(description, indent=2, default_flow_style=False))
 
     return
 
@@ -211,7 +226,6 @@ def pgs_get(args):
 #######################
 ### pgs-prepare #######
 #######################
-
 
 def pgs_prepare_model(args):
     parser = argparse.ArgumentParser(
@@ -327,27 +341,41 @@ def gbe_model(args):
         description='polygenicmaker biobankuk-build-model constructs polygenic score model based on p value data')  # todo dodać opis
     parser.add_argument('-c','--code', required=True, type=str, help='path to PRS file from gbe. It can be downloaded using gbe-get')
     parser.add_argument('-o', '--output-directory', type=str, default='output', help='output directory')
+    parser.add_argument('--gbe-index', type=str, default='gbe-index.1.3.1.tsv', help='gbe-index')
     parser.add_argument('--source-ref-vcf', type=str, default='dbsnp138.37.norm.vcf.gz', help='source reference vcf (hg19)')
     parser.add_argument('--target-ref-vcf', type=str, default='dbsnp138.38.norm.vcf.gz', help='source reference vcf (hg38)')
     parser.add_argument('--af-vcf', type=str, default='gnomad.3.1.vcf.gz', help='path to allele frequency vcf.')
     parser.add_argument('--af-field', type=str, default='AF_nfe', help='name of the INFO field with ALT allele frequency')
+    parser.add_argument('--gene-positions', type=str, default='ensembl-genes.104.tsv', help='table with ensembl genes')
     parser.add_argument('-i', '--iterations', type=float, default=1000, help='simulation iterations for mean and sd')
     parser.add_argument('-f', '--force', action='store_true', help='overwrite downloaded file')
     parsed_args = parser.parse_args(args)
+
     if not is_valid_path(parsed_args.output_directory, is_directory=True): return
     path = gbe_get(parsed_args)
-    if not is_valid_path(path): return
-    if not is_valid_path(parsed_args.af_vcf, possible_url = True): return
 
+    if not is_valid_path(path): return
     data = read_table(path)
+
+    if not is_valid_path(parsed_args.gbe_index): return
+    gbe_index = read_table(parsed_args.gbe_index)
+    info = [line for line in gbe_index if parsed_args.code in line['Trait name']][0]
+
+    if not is_valid_path(parsed_args.gene_positions): return
+    gene_positions = read_table(parsed_args.gene_positions)
+
+    if not is_valid_path(parsed_args.af_vcf, possible_url = True): return
     af_vcf = VcfAccessor(parsed_args.af_vcf)
+
+    if not is_valid_path(parsed_args.source_ref_vcf, possible_url = True): return
     source_vcf = VcfAccessor(parsed_args.source_ref_vcf)
+
+    if not is_valid_path(parsed_args.target_ref_vcf, possible_url = True): return
     target_vcf = VcfAccessor(parsed_args.target_ref_vcf)
+
     data = [line for line in data if "rs" in line['ID']]
     for line in data: line.update({"rsid": line['ID']})
     data = [validate(line, validation_source = target_vcf) for line in data]
-
-
 
     data = [add_annotation(
         line, 
@@ -356,7 +384,19 @@ def gbe_model(args):
         annotation_source_field = parsed_args.af_field,
         default_value = 0.001) for line in data]
 
-    description = simulate_parameters(data)
+    symbols = [add_gene_symbol(
+        line, 
+        target_vcf, 
+        gene_positions) for line in data]
+    symbols = [symbol for symbol in symbols if symbol]
+
+    description = dict()
+    parameters = simulate_parameters(data)
+    description["pmids"] = [33095761]
+    description["info"] = info
+    description["parameters"] = parameters
+    description["genes"] = symbols
+
     model_path = parsed_args.output_directory + "/" + parsed_args.code + ".yml"
     write_model(data, description, model_path)
     return

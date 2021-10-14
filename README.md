@@ -346,5 +346,5 @@ description:
 #### 2.0.0
 - switched to yaml model definitions
 - implemented formula, score and diplotype model types
-#### 2.1.0
 - prepared docker image with resources for polygenicmaker
+- added gene symbols to description
