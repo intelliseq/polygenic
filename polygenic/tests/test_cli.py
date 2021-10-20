@@ -142,6 +142,29 @@ class PolygenicMakerTest(TestCase):
             self.assertEqual(1, len(header))
             print(str(data))
 
+    def testINI78(self):
+        
+        result_path = self.output_directory + '/INI78.yml'
+        os.remove(result_path) if os.path.exists(result_path) else None
+
+        polygenicmaker.main([
+            "gbe-model",
+            "--code", "INI78",
+            "--gbe-index", "/tmp/marpiech/kenobi/polygenic/gbe-index.1.3.1.tsv",
+            "--gene-positions", "/tmp/marpiech/kenobi/polygenic/ensembl-genes.104.tsv",
+            "--source-ref-vcf", "/tmp/marpiech/kenobi/polygenic/dbsnp138.37.norm.vcf.gz",
+            "--target-ref-vcf", "/tmp/marpiech/kenobi/polygenic/dbsnp138.38.norm.vcf.gz",
+            "--af-vcf", "/tmp/marpiech/kenobi/polygenic/gnomad.3.1.vcf.gz",
+            "--af-field", "AF_nfe",
+            "--output-directory", self.output_directory
+        ])
+        
+        with open(result_path, 'r') as output:
+            data = output.read()
+            header = list(filter(lambda line: "score_model:" in line, data.split('\n')))
+            self.assertEqual(1, len(header))
+            print(str(data))
+
     def testBiobankukIndex(self):
         polygenicmaker.main([
             "biobankuk-index",

@@ -43,6 +43,7 @@ def validate(
     record = validation_source.get_record_by_rsid(validated_line['rsid'])
     if record is None:
         print("WARNING: Failed validation for " + validated_line['rsid'] + ". SNP not present in validation vcf.")
+        validated_line["status"] = "WARNING: snp not present"
         return validated_line
     if not (validated_line['REF'] == record.get_ref()): 
         if (validated_line['REF'] == record.get_alt()[0] and validated_line['ALT'] == record.get_ref()):
@@ -53,10 +54,13 @@ def validate(
             if invert_field is not None:
                 validated_line[invert_field] = - float(validated_line[invert_field])
             print("WARNING: " + "Failed validation for " + validated_line['rsid'] + ". REF and ALT do not match. " + record.get_ref() + "/" + str(record.get_alt()) + " succesful invert!")
+            validated_line["status"] = "WARNING: ref alt inverted"
             return validated_line
         else:
             print("ERROR: " + "Failed validation for " + validated_line['rsid'] + ". REF and ALT do not match. " + record.get_ref() + "/" + str(record.get_alt()))
-        return None
+            validated_line["status"] = "WARNING: ref alt do not match"
+            return validated_line
+    validated_line["status"] = "SUCCESS"
     return validated_line
 
 def add_annotation(
@@ -66,6 +70,7 @@ def add_annotation(
     annotation_source_field: str,
     default_value,
     rsid_field: str = 'rsid'):
+
     rsid = annotated_line[rsid_field]
     record = annotation_source.get_record_by_rsid(annotated_line[rsid_field])
     annotated_line[annotation_name] = default_value
@@ -342,8 +347,8 @@ def gbe_model(args):
     parser.add_argument('-c','--code', required=True, type=str, help='path to PRS file from gbe. It can be downloaded using gbe-get')
     parser.add_argument('-o', '--output-directory', type=str, default='output', help='output directory')
     parser.add_argument('--gbe-index', type=str, default='gbe-index.1.3.1.tsv', help='gbe-index')
-    parser.add_argument('--source-ref-vcf', type=str, default='dbsnp138.37.norm.vcf.gz', help='source reference vcf (hg19)')
-    parser.add_argument('--target-ref-vcf', type=str, default='dbsnp138.38.norm.vcf.gz', help='source reference vcf (hg38)')
+    parser.add_argument('--source-ref-vcf', type=str, default='dbsnp155.grch37.norm.vcf.gz', help='source reference vcf (hg19)')
+    parser.add_argument('--target-ref-vcf', type=str, default='dbsnp155.grch38.norm.vcf.gz', help='source reference vcf (hg38)')
     parser.add_argument('--af-vcf', type=str, default='gnomad.3.1.vcf.gz', help='path to allele frequency vcf.')
     parser.add_argument('--af-field', type=str, default='AF_nfe', help='name of the INFO field with ALT allele frequency')
     parser.add_argument('--gene-positions', type=str, default='ensembl-genes.104.tsv', help='table with ensembl genes')
@@ -376,6 +381,12 @@ def gbe_model(args):
     data = [line for line in data if "rs" in line['ID']]
     for line in data: line.update({"rsid": line['ID']})
     data = [validate(line, validation_source = target_vcf) for line in data]
+
+    for line in data:
+        if not "rsid" in line:
+            print(line)
+
+    data = [line for line in data if "rs" in line['ID']]
 
     data = [add_annotation(
         line, 
