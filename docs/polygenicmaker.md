@@ -3,7 +3,7 @@
 ## Preparing models from Global Biobank Engine
 ```
 OUTPUT_DIRECTORY=/tmp/output
-docker run -v "$OUTPUT_DIRECTORY":/output marpiech/polygenicmaker:2.0.22 polygenicmaker gbe-model --code HC710
+docker run -v "$OUTPUT_DIRECTORY":/output marpiech/polygenicmaker:2.0.26 polygenicmaker gbe-model --code HC710
 ```
 
 ## Preparing models from Pan Biobank UK
