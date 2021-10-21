@@ -5,6 +5,7 @@ from dotmap import DotMap
 
 from polygenic.data.data_accessor import DataAccessor
 from polygenic.core.utils import merge
+from polygenic.core.trial import PolygenicException
 
 logger = logging.getLogger('description_language.' + __name__)
 
@@ -19,6 +20,7 @@ class SeqqlOperator:
         self._instantiate_subclass("diplotype_model", DiplotypeModel)
         self._instantiate_subclass("diplotypes", Diplotypes)
         self._instantiate_subclass("formula_model", FormulaModel)
+        self._instantiate_subclass("haplotype_model", HaplotypeModel)
         self._instantiate_subclass("score_model", ScoreModel)
         self._instantiate_subclass("variants", Variants)
         if type(self._entries) is dict:
@@ -190,6 +192,11 @@ class FormulaModel(SeqqlOperator):
 class Model(SeqqlOperator):
     def __init__(self, entries):
         super(Model, self).__init__(entries)
+
+class HaplotypeModel(SeqqlOperator):
+    def __init__(self, entries):
+        super(ScoreModel, self).__init__(entries)
+
 class ScoreModel(SeqqlOperator):
     def __init__(self, entries):
         super(ScoreModel, self).__init__(entries)
@@ -211,14 +218,15 @@ class ScoreModel(SeqqlOperator):
             result[source + "_alleles_count"] = 0
         for variant in variants:
             variant_result = variants[variant]
-            result["max"] += 2 * variant_result["effect_size"] if variant_result["effect_size"] > 0 else 0
-            result["min"] += 2 * variant_result["effect_size"] if variant_result["effect_size"] < 0 else 0
+            effect_size = variant_result["effect_size"]
+            result["max"] += 2 * effect_size if effect_size > 0 else 0
+            result["min"] += 2 * effect_size if effect_size < 0 else 0
             result["genotypes"][variant] = variant_result
             source = variant_result["genotype"]["source"]
             result["score"] += variant_result["score"]
             result[source + "_score"] += variant_result["score"]
-            result[source + "_score_max"] += 2 * variant_result["effect_size"] if variant_result["effect_size"] > 0 else 0
-            result[source + "_score_min"] += 2 * variant_result["effect_size"] if variant_result["effect_size"] < 0 else 0
+            result[source + "_score_max"] += 2 * effect_size if effect_size > 0 else 0
+            result[source + "_score_min"] += 2 * effect_size if effect_size < 0 else 0
             result[source + "_alleles_count"] += 2            
         if self.has("constant"):
             result["score"] += self.get("constant")
@@ -253,6 +261,12 @@ class Variant(SeqqlOperator):
         if self.has("diplotype"):
             result["diplotype_match"] = (sorted(self.get("diplotype").split('/')) == sorted(result["genotype"]["genotype"]))
         if self.has("effect_size") and self.has("effect_allele"):
+
+            ### CHECK effect_size
+            try: effect_size = float(self.get("effect_size"))
+            except: raise PolygenicException("bad or missing effect_size for variant: " + str(self._entries))
+            self.set("effect_size", effect_size)
+
             result["score"] = self.get("effect_size") * result["genotype"]["genotype"].count(self.get("effect_allele"))
             result["effect_size"] = self.get("effect_size")
         if self.has("symbol"):

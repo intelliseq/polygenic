@@ -192,6 +192,25 @@ description:
     2/2: Very low
 ```
 
+### Example haplotype model
+```
+haplotype_model:
+  variants:
+    CYP2D6*1.001:
+    CYP2D6*1.002:
+      22-42126963-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    CYP2D6*1.003:
+      22-42128813-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    CYP2D6*1.004:
+      22-42128216-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    CYP2D6*1.005:
+      22-42128922-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    CYP2D6*1.006:
+      22-42129726-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+      22-42129950-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+      22-42130482-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+```
+
 ### Example score model with catgeories rescaling
 ```
 score_model:

@@ -1,0 +1,3 @@
+class PolygenicException(Exception):
+    pass
+

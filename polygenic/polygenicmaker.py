@@ -18,7 +18,7 @@ from polygenic.core.utils import is_valid_path
 from polygenic.core.utils import download
 from polygenic.core.utils import read_header
 from polygenic.core.utils import read_table
-
+from polygenic.core.trial import PolygenicException
 # clumping
 import subprocess
 import re
@@ -705,6 +705,9 @@ def main(args=sys.argv[1:]):
             vcf-index               prepare rsidx for vcf
 
             """)
+    except polygenic.core.trial.PolygenicException as e:
+        print("Analysis failed")
+        print("ERROR: " + str(e))
     except RuntimeError as e:
         print("ERROR: " + str(e))
 

@@ -36,6 +36,13 @@ class PolygenicTest(TestCase):
             #"--af", "test/resources/vcf/af.vcf.gz"])
         self.assertEqual('1', '1')
 
+    def testPolygenicMat(self):
+        polygenic.main([
+            "--vcf", "/tmp/marpiech/kenobi/polygenic/illu_merged-imputed.vcf.gz",
+            "--model", "/tmp/marpiech/kenobi/polygenic/described-model.yml",
+            "--output-directory", "/tmp/polygenic"])
+        self.assertEqual('1', '1')
+
     def testPolygenicGc(self):
         polygenic.main([
             "--vcf", "test/resources/vcf/my.vcf.gz",
