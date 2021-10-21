@@ -211,7 +211,7 @@ haplotype_model:
       22-42130482-C-A: {ref: "C", alt: "A", effect_allele: "A"}
 ```
 
-### Example score model with catgeories rescaling
+### Example score model with categories rescaling
 ```
 score_model:
   variants:
