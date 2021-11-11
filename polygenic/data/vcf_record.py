@@ -52,6 +52,8 @@ class VcfRecord(object):
         return None
 
     def recode_allele(self, allele) -> str:
+        if allele == ".":
+            return None
         if int(allele) == 0:
             return self.get_ref()
         else:

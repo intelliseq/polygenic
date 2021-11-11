@@ -243,13 +243,6 @@ class Debug(TestCase):
 
     def testDebug(self):
         polygenic.main([
-            "--vcf", "/tmp/clustered_204800980122_R01C02.vcf.gz",
-            "--sample-name", "clustered_204800980122_R01C02",
-            "--log-file", "/dev/null",
-            "--output-name-appendix", "cancer",
-            "--model", "/tmp/py/cancer1002.py",
-            "--model", "/tmp/py/cancer1044.py", 
-            "--population", "eas", 
-            "--output-directory", "/tmp/polygenic/",
-            "--af", "test/resources/vcf/af.vcf.gz"])
-        self.assertEqual('1', '1')
+            '--vcf', '/tmp/marpiech/tmp/B102_genotyped-by-vcf.vcf.gz',
+            '--model', '/data/projects/BIOINFO-221/gbe-INI78-bone-density.yml',
+            '--output-directory', '/tmp/polygenic'])

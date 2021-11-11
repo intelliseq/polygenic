@@ -362,8 +362,12 @@ description:
 - `description` - all properties to be included in the final results  
 
 ## Updates
-#### 2.0.0
+### 2.0.0
 - switched to yaml model definitions
-- implemented formula, score and diplotype model types
+- implemented formula, score, haplotype and diplotype model types
 - prepared docker image with resources for polygenicmaker
 - added gene symbols to description
+#### 2.0.27
+- improved parsing of effect_size (whitespaces and quotes are accepted now)
+#### 2.0.28
+- `./.` alleles are now treated as missing genotypes
