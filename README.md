@@ -1,24 +1,47 @@
-# polygenic
+# polygenic - the polygenic scores toolkit
 
-[![PyPI](https://img.shields.io/pypi/v/polygenic.svg)](https://pypi.python.org/pypi/polygenic)
-python package for computation of polygenic scores based for particular sample
+[![PyPI](https://img.shields.io/pypi/v/polygenic.svg)](https://pypi.python.org/pypi/polygenic)  
+[![PyPI download month](https://img.shields.io/pypi/dm/polygenic.svg)](https://pypi.python.org/pypi/polygenic/)  
+[![PyPI license](https://img.shields.io/pypi/l/polygenic.svg)](https://pypi.python.org/pypi/polygenic/)  
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/polygenic.svg)](https://pypi.python.org/pypi/polygenic/)  
+[![PyPI implementation](https://img.shields.io/pypi/implementation/polygenic.svg)](https://pypi.python.org/pypi/polygenic/)  
+![Maintainer](https://img.shields.io/badge/maintainer-marpiech-blue)  
 
 Index:
-- [Installation](#installation)
-- [Running](#running)
-- [YML models](#building_models_in_yml)
-- [Example models](#example_models)
-- [Updates](#updates)
+* [Summary](#summary)
+* [Installation](#installation)
+  * [With pip](#using_pip)
+  * [In conda](#in_conda_environment)
+* [Manual](#manual)
+  * [Tools](#tools)
+    * [pgs-compute](#pgs_compute)
+    * [pgs-build](#pgs_build)
+    * [pgs-validate](#pgs_validate)
+    * [vcf-index](#vcf_index)
+    * [vcf-validate](#vcf_validate)
+    * [model-biobankuk](#model_biobankuk)
+    * [model-pgscat](#model_pgscat)
+    * [model-gbe](#model_gbe)
+    * [model-pharmvar](#model_pharmvar)
+  * [Building models](#building_models)
+  * [Example models](#example_models)
+* [License](#license)
+* [Updates](#updates)
+
+## Summary
+Polygenic is a toolkit for a wide range of polygenic scores analysis tasks. The most important use cases include computing scores for samples in vcf files, building scores for GWAS results or fetching scores from repositories.
 
 ## Installation
-### Using pip
+### Installation using pip
 ```
-pip3 install --upgrade polygenic
+pip3 install polygenic
 ```
-### In new conda environment
+### In conda environment
+Run conda image
 ```
 docker run -it conda/miniconda3 /bin/bash
 ```
+Create python3.8 environment and install polygenic
 ```
 yes | conda create --name py38 python=3.8
 eval "$(conda shell.bash hook)"
@@ -33,7 +56,9 @@ apt -y install build-essential
 pip install polygenic
 ```
 
-## Running
+## Manual
+### Tools
+#### pgs
 ```
 polygenic --vcf [your_vcf_gz] --model [your_model] [other raguments]
 ```
