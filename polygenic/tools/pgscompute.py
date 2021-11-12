@@ -16,32 +16,14 @@ MODULE_PATH = os.path.abspath(__file__).rsplit(os.path.sep, 4)[0]
 sys.path.insert(0, MODULE_PATH)
 
 from polygenic.version import __version__ as version
+from polygenic.tools.utils import setup_logger
+from polygenic.tools.utils import expand_path
 from datetime import datetime
 
 from polygenic.data.data_accessor import DataAccessor
 from polygenic.data.vcf_accessor import VcfAccessor
 from polygenic.core.model import Model, SeqqlOperator
 from polygenic.core.trial import PolygenicException
-
-
-logger = logging.getLogger('polygenic')
-
-def expand_path(path: str) -> str:
-    return os.path.abspath(os.path.expanduser(path)) if path else ''
-
-def setup_logger(path):
-    log_directory = os.path.dirname(os.path.abspath(os.path.expanduser(path)))
-    if log_directory:
-        try:
-            os.makedirs(log_directory)
-        except OSError:
-            pass
-    logger.setLevel(logging.DEBUG)
-    logging_file_handler = logging.FileHandler(path)
-    logging_file_handler.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    logging_file_handler.setFormatter(formatter)
-    logger.addHandler(logging_file_handler)
 
 def main(args = sys.argv[1:]):
     try:
@@ -52,13 +34,15 @@ def main(args = sys.argv[1:]):
         parser.add_argument('-s', '--sample-name', type=str, help='sample name in vcf.gz to calculate')
         parser.add_argument('-o', '--output-directory', type=str, default='', help='output directory')
         parser.add_argument('-n', '--output-name-appendix', type=str, default='', help='appendix for output file names')
-        parser.add_argument('-l', '--log-file', type=str, default='polygenic.log', help='path to log file')
+        parser.add_argument('-l', '--log-file', type=str, help='path to log file')
         parser.add_argument('--af', type=str, default='', help='vcf file containing allele freq data')
         parser.add_argument('--af-field', type=str, default='AF',help='name of the INFO field to be used as allele frequency')
         parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + version)
 
         parsed_args = parser.parse_args(args)
-        setup_logger(parsed_args.log_file)
+        if not parsed_args.log_file:
+            parsed_args.log_file = parsed_args.output_directory + "/pgstk.log"
+        logger = setup_logger(parsed_args.log_file)
 
         out_dir = expand_path(parsed_args.output_directory)
 
