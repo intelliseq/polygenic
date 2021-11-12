@@ -6,7 +6,7 @@ import setuptools
 from typing import List
 from setuptools import setup, find_packages
 
-PACKAGE_VERSION = '2.0.28'
+PACKAGE_VERSION = '2.0.29'
 
 def write_version_py(filename='polygenic/version.py'):
     cnt = """
@@ -27,7 +27,7 @@ setuptools.setup(
     version=PACKAGE_VERSION,
     author="Marcin Piechota, Wojciech Gałan",
     author_email="piechota@intelliseq.com",
-    description="Polygenic score computation",
+    description="Polygenic score toolkit",
     #long_description=long_description,
     #long_description_content_type="text/reStructuredText",
     url="https://github.com/marpiech/polygenic",
@@ -57,9 +57,10 @@ setuptools.setup(
     python_requires='>=3.8',
     entry_points={
         'console_scripts': [
-            'polygenic=polygenic.polygenic:main',
-            'polygenicmaker=polygenic.polygenicmaker:main',
-            'vcfstat=polygenic.vcfstat:main'
+            'polygenic=polygenic.tools.pgscompute:main',
+            'polygenicmaker=polygenic.pgstk:main',
+            'polygenictk=polygenic.pgstk:main',
+            'pgstk=polygenic.pgstk:main'
         ],
     },
     test_suite='nose.collector',

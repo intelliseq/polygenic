@@ -1,0 +1,38 @@
+score_model:
+  variants:
+    rs1292226269: {effect_allele: A, effect_size: 0.25, symbol: GENESYMBOL1}
+    rs371194064: {effect_allele: T, effect_size: 0.25, symbol: GENESYMBOL2}
+    rs1570391830: {effect_allele: A, effect_size: 0.25, symbol: GENESYMBOL3}
+    rs11892031: {effect_allele: T, effect_size: 0.25, symbol: GENESYMBOL4}
+  categories:
+    High risk: {from: 1, to: 20}
+    Average risk: {from: 0, to: 1}
+    Low risk: {from: -1, to: 0}
+description:
+  about: 
+  genes: []
+  result_statement_choice:
+    High risk: Hig
+    Average risk: Avg
+    Low risk: Low
+  science_behind_the_test:
+  test_type: Polygenic Risk Score
+  trait: Test trait
+  trait_authors:
+    - marpiech
+  trait_copyright: Intelliseq all rights reserved
+  trait_explained: None
+  trait_heritability: None
+  trait_pmids:
+    - 25855707
+  trait_snp_heritability: None
+  trait_title: Test trait
+  trait_version: 1.0
+  what_you_can_do_choice:
+    Average risk:
+    High risk:
+    Low risk:
+  what_your_result_means_choice:
+    Average risk:
+    High risk:
+    Low risk:

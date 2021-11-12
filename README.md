@@ -7,7 +7,8 @@
 [![PyPI implementation](https://img.shields.io/pypi/implementation/polygenic.svg)](https://pypi.python.org/pypi/polygenic/)  
 ![Maintainer](https://img.shields.io/badge/maintainer-marpiech-blue)  
 
-Index:
+## Index
+
 * [Summary](#summary)
 * [Installation](#installation)
   * [With pip](#using_pip)
@@ -19,10 +20,12 @@ Index:
     * [pgs-validate](#pgs_validate)
     * [vcf-index](#vcf_index)
     * [vcf-validate](#vcf_validate)
+    * [vcf-stat](#vcf_stat)
     * [model-biobankuk](#model_biobankuk)
     * [model-pgscat](#model_pgscat)
     * [model-gbe](#model_gbe)
     * [model-pharmvar](#model_pharmvar)
+  * [Docker images](#docker_images)
   * [Building models](#building_models)
   * [Example models](#example_models)
 * [License](#license)
