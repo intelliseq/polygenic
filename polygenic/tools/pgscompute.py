@@ -22,7 +22,7 @@ def parse_args(args):
     parser.add_argument('-p', '--parameters', type=str, help="parameters json (to be used in formula models)")
     parser.add_argument('-s', '--sample-name', type=str, help='sample name in vcf.gz to calculate')
     parser.add_argument('-o', '--output-directory', type=str, default='', help='output directory')
-    parser.add_argument('-n', '--output-name-appendix', type=str, default='', help='appendix for output file names')
+    parser.add_argument('-n', '--output-name-appendix', type=str, help='appendix for output file names')
     parser.add_argument('-l', '--log-file', type=str, help='path to log file')
     parser.add_argument('--af', type=str, help='vcf file containing allele freq data')
     parser.add_argument('--af-field', type=str, default='AF',help='name of the INFO field to be used as allele frequency')
@@ -31,8 +31,8 @@ def parse_args(args):
     return parsed_args
 
 def run(args):
-    out_dir = expand_path(args.output_directory)
 
+    ### get models
     models = {}
     for model in args.model:
         model_path = expand_path(model)
@@ -43,23 +43,20 @@ def run(args):
     if not model_info:
         raise PolygenicError("No models were defined. Exiting.")
 
+    ### get sample data
     vcf_accessor = VcfAccessor(expand_path(args.vcf))
-
-    af_accessor = VcfAccessor(expand_path(args.af)) if args.af else None
-
     sample_names = vcf_accessor.get_sample_names()
-
     if "sample_name" in args and not args.sample_name is None:
         sample_names = [args.sample_name]
 
+    ### get reference data 
+    af_accessor = VcfAccessor(expand_path(args.af)) if args.af else None
+
+    ### get parameters
     parameters = {}
     if "parameters" in args and not args.parameters is None:
         with open(args.parameters) as parameters_json:
             parameters = json_load(parameters_json)
-
-    appendix = args.output_name_appendix
-    if appendix != "": 
-        appendix = "-" + appendix
 
     for sample_name in sample_names:
         results_representations = {}
@@ -74,7 +71,10 @@ def run(args):
                     parameters = parameters)
                 model = SeqqlOperator.fromYaml(model_path)
                 model.compute(data_accessor)
-            with open(os.path.join(out_dir, f'{sample_name}-{model_desc["name"]}{appendix}.sample.json'), 'w') as f:
+            # output file name 
+            appendix = "-" + args.output_name_appendix if args.output_name_appendix else ""
+            output_path = os.path.join(expand_path(args.output_directory), f'{sample_name}-{model_desc["name"]}{appendix}-result.json')
+            with open(output_path, 'w') as f:
                 json_dump(model.refine_results(), f, indent=2)
 
 
