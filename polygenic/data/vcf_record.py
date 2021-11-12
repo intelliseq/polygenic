@@ -2,7 +2,7 @@ import logging
 from typing import List
 from typing import Dict
 from typing import Tuple
-from polygenic.lib.polygenic_exception import PolygenicException
+from polygenic.error.polygenic_exception import PolygenicException
 
 logger = logging.getLogger('description_language.' + __name__)
 

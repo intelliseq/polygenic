@@ -4,7 +4,7 @@ from unittest import TestCase
 from polygenic.data.vcf_accessor import VcfAccessor
 
 # Utils
-from polygenic.core.utils import download
+from polygenic.model.utils import download
 
 class VcfAccessorTest(TestCase):
 

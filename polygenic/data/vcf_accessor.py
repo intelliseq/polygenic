@@ -3,7 +3,7 @@ import pathlib
 from typing import Dict
 from typing import List
 from typing import Union
-from polygenic.lib import mobigen_utils
+from polygenic.data import mobigen_utils
 from polygenic.data.snp_data import SnpData
 from polygenic.data.snp_data import SnpDataManySamples
 from polygenic.data.vcf_record import VcfRecord

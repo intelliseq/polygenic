@@ -12,8 +12,8 @@ from datetime import datetime
 
 from polygenic.data.data_accessor import DataAccessor
 from polygenic.data.vcf_accessor import VcfAccessor
-from polygenic.core.model import Model, SeqqlOperator
-from polygenic.core.trial import PolygenicException
+from polygenic.model.model import Model, SeqqlOperator
+from polygenic.error import polygenic_exception
 
 def parse_args(args):
     parser = argparse.ArgumentParser(description='pgs-compute computes polygenic scores for genotyped sample in vcf format')

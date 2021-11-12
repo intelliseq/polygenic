@@ -4,8 +4,8 @@ import yaml
 from dotmap import DotMap
 
 from polygenic.data.data_accessor import DataAccessor
-from polygenic.core.utils import merge
-from polygenic.core.trial import PolygenicException
+from polygenic.model.utils import merge
+from polygenic.error import polygenic_exception
 
 logger = logging.getLogger('description_language.' + __name__)
 
