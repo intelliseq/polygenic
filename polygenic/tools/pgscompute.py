@@ -1,21 +1,11 @@
 import argparse
-import configparser
-import glob
-import importlib
-import json
-import logging
-import os
 import sys
+import os
 
-from typing import Dict
-from typing import List
-from typing import Union
-from typing import Iterable
-
-MODULE_PATH = os.path.abspath(__file__).rsplit(os.path.sep, 4)[0]
-sys.path.insert(0, MODULE_PATH)
-
+from json import load as json_load
+from json import dump as json_dump
 from polygenic.version import __version__ as version
+from polygenic.tools.utils import error_print
 from polygenic.tools.utils import setup_logger
 from polygenic.tools.utils import expand_path
 from datetime import datetime
@@ -25,80 +15,84 @@ from polygenic.data.vcf_accessor import VcfAccessor
 from polygenic.core.model import Model, SeqqlOperator
 from polygenic.core.trial import PolygenicException
 
+def parse_args(args):
+    parser = argparse.ArgumentParser(description='pgs-compute computes polygenic scores for genotyped sample in vcf format')
+    parser.add_argument('-i', '--vcf', required=True, help='vcf.gz file with genotypes')
+    parser.add_argument('-m', '--model', action='append', help="path to .yml model (can be specified multiple times)")
+    parser.add_argument('-p', '--parameters', type=str, help="parameters json (to be used in formula models)")
+    parser.add_argument('-s', '--sample-name', type=str, help='sample name in vcf.gz to calculate')
+    parser.add_argument('-o', '--output-directory', type=str, default='', help='output directory')
+    parser.add_argument('-n', '--output-name-appendix', type=str, default='', help='appendix for output file names')
+    parser.add_argument('-l', '--log-file', type=str, help='path to log file')
+    parser.add_argument('--af', type=str, help='vcf file containing allele freq data')
+    parser.add_argument('--af-field', type=str, default='AF',help='name of the INFO field to be used as allele frequency')
+    parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + version)
+    parsed_args = parser.parse_args(args)
+    return parsed_args
+
+def run(args):
+    out_dir = expand_path(args.output_directory)
+
+    models = {}
+    for model in args.model:
+        model_path = expand_path(model)
+        model_name = os.path.basename(model_path)
+        model_info = {"path": model_path, "name": model_name}
+        models[model_info["path"]] = model_info
+    
+    if not model_info:
+        raise PolygenicError("No models were defined. Exiting.")
+
+    vcf_accessor = VcfAccessor(expand_path(args.vcf))
+
+    af_accessor = VcfAccessor(expand_path(args.af)) if args.af else None
+
+    sample_names = vcf_accessor.get_sample_names()
+
+    if "sample_name" in args and not args.sample_name is None:
+        sample_names = [args.sample_name]
+
+    parameters = {}
+    if "parameters" in args and not args.parameters is None:
+        with open(args.parameters) as parameters_json:
+            parameters = json_load(parameters_json)
+
+    appendix = args.output_name_appendix
+    if appendix != "": 
+        appendix = "-" + appendix
+
+    for sample_name in sample_names:
+        results_representations = {}
+        for model_path, model_desc in models.items():
+            if ".yml" in model_path:
+                data_accessor = DataAccessor(
+                    genotypes = vcf_accessor,
+                    imputed_genotypes = vcf_accessor,
+                    allele_frequencies =  af_accessor,
+                    sample_name = sample_name,
+                    af_field_name = "AF_nfe",
+                    parameters = parameters)
+                model = SeqqlOperator.fromYaml(model_path)
+                model.compute(data_accessor)
+            with open(os.path.join(out_dir, f'{sample_name}-{model_desc["name"]}{appendix}.sample.json'), 'w') as f:
+                json_dump(model.refine_results(), f, indent=2)
+
+
 def main(args = sys.argv[1:]):
+
+    args = parse_args(args)
+    if not args.log_file:
+        args.log_file = args.output_directory + "/pgstk.log"
+    logger = setup_logger(args.log_file)
+
     try:
-        parser = argparse.ArgumentParser(description='')  # todo dodać opis
-        parser.add_argument('-i', '--vcf', required=True, help='vcf.gz file with genotypes')
-        parser.add_argument('-m', '--model', action='append', help="path to model (can be specified multiple times)")
-        parser.add_argument('--parameters', type=str, help="parameters json (to be used in formula models)")
-        parser.add_argument('-s', '--sample-name', type=str, help='sample name in vcf.gz to calculate')
-        parser.add_argument('-o', '--output-directory', type=str, default='', help='output directory')
-        parser.add_argument('-n', '--output-name-appendix', type=str, default='', help='appendix for output file names')
-        parser.add_argument('-l', '--log-file', type=str, help='path to log file')
-        parser.add_argument('--af', type=str, default='', help='vcf file containing allele freq data')
-        parser.add_argument('--af-field', type=str, default='AF',help='name of the INFO field to be used as allele frequency')
-        parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + version)
-
-        parsed_args = parser.parse_args(args)
-        if not parsed_args.log_file:
-            parsed_args.log_file = parsed_args.output_directory + "/pgstk.log"
-        logger = setup_logger(parsed_args.log_file)
-
-        out_dir = expand_path(parsed_args.output_directory)
-
-        models = {}
-        for model in parsed_args.model:
-            model_path = expand_path(model)
-            model_name = os.path.basename(model_path)
-            model_info = {"path": model_path, "name": model_name}
-            models[model_info["path"]] = model_info
-        
-        if not model_info:
-            raise RuntimeError("No models loaded. Exiting.")
-
-        vcf_accessor = VcfAccessor(expand_path(parsed_args.vcf))
-
-        if parsed_args.af == "":
-            allele_accessor = None
-        else:    
-            allele_accessor = VcfAccessor(expand_path(parsed_args.af))
-        sample_names = vcf_accessor.get_sample_names()
-
-        if "sample_name" in parsed_args and not parsed_args.sample_name is None:
-            sample_names = [parsed_args.sample_name]
-
-        parameters = {}
-        if "parameters" in parsed_args and not parsed_args.parameters is None:
-            with open(parsed_args.parameters) as parameters_json:
-                parameters = json.load(parameters_json)
-
-        appendix = parsed_args.output_name_appendix
-        if appendix != "": 
-            appendix = "-" + appendix
-
-        for sample_name in sample_names:
-            results_representations = {}
-            for model_path, model_desc in models.items():
-                if ".yml" in model_path:
-                    data_accessor = DataAccessor(
-                        genotypes = vcf_accessor,
-                        imputed_genotypes = vcf_accessor,
-                        allele_frequencies =  allele_accessor,
-                        sample_name = sample_name,
-                        af_field_name = "AF_nfe",
-                        parameters = parameters)
-                    model = SeqqlOperator.fromYaml(model_path)
-                    model.compute(data_accessor)
-                with open(os.path.join(out_dir, f'{sample_name}-{model_desc["name"]}{appendix}.sample.json'), 'w') as f:
-                    json.dump(model.refine_results(), f, indent=2)
-                    #json.dump(results_representations, f, indent=4)
-
+        run(args)
     except PolygenicException as e:
         time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        print("ERROR:")
-        print("polygenic " + version + " failed at " + time)
-        print("with message: ")
-        print(str(e))
+        error_print("polygenic " + version + " failed at " + time)
+        error_print("with message: ")
+        error_print(str(e))
+        exit(1)
 
 if __name__ == '__main__':
     main(sys.argv[1:])

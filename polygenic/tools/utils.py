@@ -1,5 +1,9 @@
 import os
 import logging
+import sys
+
+def error_print(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
 
 def expand_path(path: str) -> str:
     return os.path.abspath(os.path.expanduser(path)) if path else ''
