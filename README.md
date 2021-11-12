@@ -1,10 +1,8 @@
 # polygenic - the polygenic scores toolkit
 
 [![PyPI](https://img.shields.io/pypi/v/polygenic.svg)](https://pypi.python.org/pypi/polygenic)  
-[![PyPI download month](https://img.shields.io/pypi/dm/polygenic.svg)](https://pypi.python.org/pypi/polygenic/)  
-[![PyPI license](https://img.shields.io/pypi/l/polygenic.svg)](https://pypi.python.org/pypi/polygenic/)  
+[![PyPI download month](https://img.shields.io/pypi/dm/polygenic.svg)](https://pypi.python.org/pypi/polygenic/)    
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/polygenic.svg)](https://pypi.python.org/pypi/polygenic/)  
-[![PyPI implementation](https://img.shields.io/pypi/implementation/polygenic.svg)](https://pypi.python.org/pypi/polygenic/)  
 ![Maintainer](https://img.shields.io/badge/maintainer-marpiech-blue)  
 
 ## Index
