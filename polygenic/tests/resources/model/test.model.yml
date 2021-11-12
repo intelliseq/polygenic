@@ -3,7 +3,7 @@ score_model:
     rs1292226269: {effect_allele: A, effect_size: 0.25, symbol: GENESYMBOL1}
     rs371194064: {effect_allele: T, effect_size: 0.25, symbol: GENESYMBOL2}
     rs1570391830: {effect_allele: A, effect_size: 0.25, symbol: GENESYMBOL3}
-    rs11892031: {effect_allele: T, effect_size: 0.25, symbol: GENESYMBOL4}
+    rs1570391843: {effect_allele: T, effect_size: 0.25, symbol: GENESYMBOL4}
   categories:
     High risk: {from: 1, to: 20}
     Average risk: {from: 0, to: 1}

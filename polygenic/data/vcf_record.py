@@ -84,7 +84,8 @@ class VcfRecord(object):
         return self.__dict["FORMAT"]
 
     def is_imputed(self) -> bool:
-        return self.get_format().find("DS") != -1
+        print(self.get_info())
+        return self.get_info().find("IMP") != -1
 
     def get_info_field(self, name) -> str:
         for field in self.get_info().split(";"):

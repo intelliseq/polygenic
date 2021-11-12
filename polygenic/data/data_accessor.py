@@ -7,13 +7,11 @@ logger = logging.getLogger('description_language.' + __name__)
 class DataAccessor(object):
     def __init__(self, 
         genotypes: VcfAccessor,
-        imputed_genotypes: VcfAccessor,
         allele_frequencies: VcfAccessor,
         sample_name: str,
         af_field_name: str = "AF_nfe",
         parameters = {}):
         self.__genotypes = genotypes
-        self.__imputed_genotypes = imputed_genotypes
         self.__allele_frequencies = allele_frequencies
         self.__sample_name = sample_name
         self.__af_field_name = af_field_name
@@ -28,16 +26,12 @@ class DataAccessor(object):
             record = self.__genotypes.get_record_by_rsid(rsid)
             if not record is None:
                 genotype["genotype"] = record.get_genotype(self.__sample_name)
-                genotype["source"] = "genotyping"
-                genotype["ref"] = record.get_ref()
-                return genotype
-        if record is None and not self.__imputed_genotypes is None:
-            record = self.__imputed_genotypes.get_record_by_rsid(rsid)
-            if not record is None:
-                genotype["genotype"] = record.get_genotype(self.__sample_name)
-                genotype["source"] = "imputing"
-                genotype["ref"] = record.get_ref()
-                return genotype
+                if genotype["genotype"][0] == None:
+                    record = None
+                else:    
+                    genotype["source"] = "genotyping" if not record.is_imputed() else "imputing"
+                    genotype["ref"] = record.get_ref()
+                    return genotype
         if record is None and not self.__allele_frequencies is None:
             record = self.__allele_frequencies.get_record_by_rsid(rsid)
             if not record is None:

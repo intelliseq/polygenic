@@ -64,7 +64,6 @@ def run(args):
             if ".yml" in model_path:
                 data_accessor = DataAccessor(
                     genotypes = vcf_accessor,
-                    imputed_genotypes = vcf_accessor,
                     allele_frequencies =  af_accessor,
                     sample_name = sample_name,
                     af_field_name = "AF_nfe",
