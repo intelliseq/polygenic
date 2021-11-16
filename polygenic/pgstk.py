@@ -10,15 +10,17 @@ import tabix
 
 import yaml 
 
+from polygenic.tools import pgscompute
+
 # utils
 # simulate
 from polygenic.data.vcf_accessor import VcfAccessor
 from polygenic.data.vcf_accessor import DataNotPresentError
-from polygenic.core.utils import is_valid_path
-from polygenic.core.utils import download
-from polygenic.core.utils import read_header
-from polygenic.core.utils import read_table
-from polygenic.core.trial import PolygenicException
+from polygenic.model.utils import is_valid_path
+from polygenic.model.utils import download
+from polygenic.model.utils import read_header
+from polygenic.model.utils import read_table
+from polygenic.error.polygenic_exception import PolygenicException
 # clumping
 import subprocess
 import re
@@ -674,7 +676,9 @@ def save_model(args, description):
 
 def main(args=sys.argv[1:]):
     try:
-        if args[0] == 'biobankuk-index':
+        if args[0] == 'pgs-compute':
+            pgscompute.main(args[1:])
+        elif args[0] == 'biobankuk-index':
             biobankuk_index(args[1:])
         elif args[0] == 'biobankuk-model':
             biobankuk_model(args[1:])

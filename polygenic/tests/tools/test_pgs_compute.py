@@ -1,5 +1,6 @@
 from unittest import TestCase
 from polygenic.tools import pgscompute
+from polygenic import pgstk
 
 from pathlib import Path as path
 
@@ -16,6 +17,13 @@ class PgsComputeTest(TestCase):
 
     def testPgsCompute(self):
         pgscompute.main([
+            '--vcf', 'polygenic/tests/resources/vcf/test.sample.vcf.gz',
+            '--model', 'polygenic/tests/resources/model/test.model.yml',
+            '--output-directory', self.output_directory])
+
+    def testPgsComputePgstk(self):
+        pgstk.main([
+            'pgs-compute',
             '--vcf', 'polygenic/tests/resources/vcf/test.sample.vcf.gz',
             '--model', 'polygenic/tests/resources/model/test.model.yml',
             '--output-directory', self.output_directory])

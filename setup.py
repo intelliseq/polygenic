@@ -16,7 +16,6 @@ __version__ = '{}'
     with open(filename, 'w') as f:
         f.write(cnt.format(PACKAGE_VERSION))
 
-
 write_version_py()
 
 with open("README.md", "r") as fh:

@@ -5,6 +5,14 @@ import sys
 def error_print(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
+def error_exit(e):
+    time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    error_print(" -> polygenic " + version + " failed at " + time)
+    error_print(" -> with command: pgstk " + sys.argv.join(" "))
+    error_print(" -> with message: ")
+    error_print(str(e))
+    exit(1)
+
 def expand_path(path: str) -> str:
     return os.path.abspath(os.path.expanduser(path)) if path else ''
 

@@ -5,7 +5,7 @@ import os
 from json import load as json_load
 from json import dump as json_dump
 from polygenic.version import __version__ as version
-from polygenic.tools.utils import error_print
+from polygenic.tools.utils import error_exit
 from polygenic.tools.utils import setup_logger
 from polygenic.tools.utils import expand_path
 from datetime import datetime
@@ -79,19 +79,13 @@ def run(args):
 
 def main(args = sys.argv[1:]):
 
-    args = parse_args(args)
-    if not args.log_file:
-        args.log_file = args.output_directory + "/pgstk.log"
-    logger = setup_logger(args.log_file)
+    args = parse_args(args) 
+    setup_logger(args.log_file) if args.log_file else setup_logger(args.output_directory + "/pgstk.log")
 
     try:
         run(args)
     except PolygenicException as e:
-        time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        error_print("polygenic " + version + " failed at " + time)
-        error_print("with message: ")
-        error_print(str(e))
-        exit(1)
+        error_exit(e)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
