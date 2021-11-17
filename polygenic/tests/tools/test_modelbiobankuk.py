@@ -11,7 +11,7 @@ import configparser
 class ModelBiobankukTest(TestCase):
 
     def __init__(self, *args, **kwargs):
-        super(PgsComputeTest, self).__init__(*args, **kwargs)
+        super(ModelBiobankukTest, self).__init__(*args, **kwargs)
         self.output_directory = "/tmp/polygenic/test"
         path(self.output_directory).mkdir(parents=True, exist_ok=True)
 
@@ -23,7 +23,7 @@ class ModelBiobankukTest(TestCase):
             "--coding", "4", 
             "--output-directory", self.output_directory,
             "--threshold", "1e-08",
-            "--variant-metrics", "polygenic/tests/resources/largefiles/full_variant_qc_metrics.txt",
+            "--clumping-vcf", "polygenic/tests/resources/largefiles/eur.phase3.biobank.set.vcf.gz",
             "--source-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp138.37.norm.vcf.gz",
             "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp138.38.norm.vcf.gz"
     ])

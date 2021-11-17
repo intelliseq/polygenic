@@ -11,6 +11,7 @@ import tabix
 import yaml 
 
 from polygenic.tools import pgscompute
+from polygenic.tools import modelbiobankuk
 
 # utils
 # simulate
@@ -415,62 +416,6 @@ def gbe_model(args):
     return
 
 
-#######################
-### biobankuk-index ###
-#######################
-
-def biobankuk_index(args):
-    parser = argparse.ArgumentParser(
-        description='polygenicmaker biobankuk-index downloads index of gwas results from pan.ukbb study')  # todo dodać opis
-    parser.add_argument('--url', type=str, default='https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_release/phenotype_manifest.tsv.bgz',
-                        help='alternative url location for index')
-    parser.add_argument('--variant-metrics', type=str, default='https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_release/full_variant_qc_metrics.txt.bgz',
-                        help='alternative url location for variant metrics')
-    parser.add_argument('--output-directory', type=str, default='',
-                        help='output directory')
-    parsed_args = parser.parse_args(args)
-    output_path = os.path.abspath(os.path.expanduser(
-        parsed_args.output_directory)) + "/panukbb_phenotype_manifest.tsv"
-    download(parsed_args.url, output_path)
-    output_path = os.path.abspath(os.path.expanduser(
-        parsed_args.output_directory)) + "/full_variant_qc_metrics.txt"
-    download(parsed_args.variant_metrics, output_path)
-    return
-
-#######################
-### biobankuk-get #####
-#######################
-
-def biobankuk_get(parsed_args):
-    # checking index file for download url
-    with open(parsed_args.index, 'r') as indexfile:
-        firstline = indexfile.readline()
-        phenocode_colnumber = firstline.split('\t').index("phenocode")
-        pheno_sex_colnumber = firstline.split('\t').index("pheno_sex")
-        coding_colnumber = firstline.split('\t').index("coding")
-        aws_link_colnumber = firstline.split('\t').index("aws_link")
-        while True:
-            line = indexfile.readline()
-            if not line:
-                break
-            if line.split('\t')[phenocode_colnumber] != parsed_args.code:
-                continue
-            if line.split('\t')[pheno_sex_colnumber] != parsed_args.sex:
-                continue
-            if line.split('\t')[coding_colnumber] != parsed_args.coding:
-                continue
-            url = line.split('\t')[aws_link_colnumber]
-            break
-    # downloading
-    if not url is None:
-        output_directory = os.path.abspath(os.path.expanduser(parsed_args.output_directory))
-        output_file_name = os.path.splitext(os.path.basename(url))[0]
-        output_path = output_directory + "/" + output_file_name
-        logger.info("Downloading from " + url + " to " + output_path)
-        download(url=url, output_path=output_path,
-             force=False, progress=True)
-        return output_path
-    return None
 
 #############################
 ### biobankuk-model #########
@@ -495,7 +440,7 @@ def biobankuk_model(args):
                         help='significance cut-off threshold')
     parser.add_argument('--population', type=str, default='EUR',
                         help='population: meta, AFR, AMR, CSA, EAS, EUR, MID')
-    parser.add_argument('--clumping-vcf', type=str, default='/tmp/polygenic/results/eur.phase3.biobank.set.vcf.gz',
+    parser.add_argument('--clumping-vcf', type=str, default='eur.phase3.biobank.set.vcf.gz',
                         help='')
     parser.add_argument('--source-ref-vcf', type=str, default='ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20100804/ALL.2of4intersection.20100804.genotypes.vcf.gz',
                         help='')
@@ -538,21 +483,7 @@ def biobankuk_model(args):
     return
 
 
-def filter_pval(path, parsed_args):
-    output_path = path + ".filtered"
-    with open(path, 'r') as data, open(parsed_args.variant_metrics, 'r') as anno, open(output_path, 'w') as output:
-        data_header = data.readline().rstrip().split('\t')
-        anno_header = anno.readline().rstrip().split('\t')
-        output.write('\t'.join(data_header + anno_header) + "\n")
-        while True:
-            try:
-                data_line = data.readline().rstrip().split('\t')
-                anno_line = anno.readline().rstrip().split('\t')
-                if float(data_line[data_header.index('pval_' + parsed_args.population)].replace('NA', '1', 1)) <= parsed_args.threshold:
-                    output.write('\t'.join(data_line + anno_line) + "\n")
-            except:
-                break
-    return
+
 
 
 def clump(path, parsed_args):
@@ -678,10 +609,8 @@ def main(args=sys.argv[1:]):
     try:
         if args[0] == 'pgs-compute':
             pgscompute.main(args[1:])
-        elif args[0] == 'biobankuk-index':
-            biobankuk_index(args[1:])
-        elif args[0] == 'biobankuk-model':
-            biobankuk_model(args[1:])
+        elif args[0] == 'model-biobankuk':
+            modelbiobankuk.main(args[1:])
         elif args[0] == 'gbe-index':
             gbe_index(args[1:])
         elif args[0] == 'gbe-model':

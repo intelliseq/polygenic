@@ -74,10 +74,21 @@ class VcfAccessor(object):
             pass
         return vcf_records
 
-    def get_record_by_rsid(self, rsid) -> VcfRecord:
+    def get_record_by_rsid(self, rsid, ref = "", alt = "", allow_invert = False) -> VcfRecord:
         records = self.get_records_by_rsid(rsid)
         if records:
-            return records[0]
+            if "rs" in rsid:
+                for record in records:
+                    if record.get_id() == rsid:
+                        return record
+            if ":" in rsid and "_" in rsid:
+                ref = rsid.split("_")[1]
+                alt = rsid.split("_")[2]
+                for record in records:
+                    if ref == record.get_ref() and alt in record.get_alt():
+                        return record
+                    if allow_invert and alt == record.get_ref() and ref in record.get_alt():
+                        return record
         return None
 
     def __get_record_for_rsid(self, rsid) -> VcfRecord:
