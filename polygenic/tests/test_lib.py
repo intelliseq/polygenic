@@ -1,3 +1,4 @@
+import os
 from unittest import TestCase
 
 # VcfAccessor
@@ -5,6 +6,8 @@ from polygenic.data.vcf_accessor import VcfAccessor
 
 # Utils
 from polygenic.tools.utils import download
+from polygenic.tools.utils import read_table
+from polygenic.tools.utils import write_data
 
 class VcfAccessorTest(TestCase):
 
@@ -34,3 +37,12 @@ class UtilsTest(TestCase):
         path = "/tmp/gzip"
         return_path = download(url, path)
         self.assertEqual(return_path, path)
+    
+    def testWriteData(self):
+        test_directory = "/tmp/polygenic/test"
+        os.makedirs(test_directory, exist_ok = True)
+        path = test_directory + "/test.tsv"
+        data = [{"a": 1, "b": 2, "d": 6}, {"a": 3, "c":"leleu", "d": 6}]
+        write_data(data, path)
+        data = read_table(path)
+        self.assertEqual(data[0]["d"], "6")

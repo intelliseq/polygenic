@@ -4,6 +4,9 @@ import sys
 import subprocess
 import urllib
 import re
+import random
+import statistics
+import yaml
 
 from polygenic.data.vcf_accessor import VcfAccessor
 
@@ -107,22 +110,30 @@ def is_valid_path(path: str, is_directory: bool = False, create_directory: bool 
             return False
     return True
 
-def clump(gwas_file, reference, clump_field = "pval_EUR", threshold = "1e-08"):
+def clump(
+    gwas_file, 
+    reference,  
+    clump_p1 = "1e-08", 
+    clump_r2 = "0.25", 
+    clump_kb = "1000",
+    clump_snp_field = "rsid",
+    clump_field = "pval_EUR"):
 
-    filtered_path = gwas_file + ".filtered"
     clumped_path = gwas_file + ".clumped"
 
     subprocess.call("plink" +
-                    " --clump " + filtered_path +
-                    " --clump-p1 " + str(threshold) +
-                    " --clump-r2 0.25 " +
-                    " --clump-kb 1000 " +
-                    " --clump-snp-field rsid " +
-                    " --clump-field " + clump_field +
-                    " --vcf " + reference + " " +
+                    " --clump " + gwas_file +
+                    " --clump-p1 " + str(clump_p1) +
+                    " --clump-r2 " + str(clump_r2) +
+                    " --clump-kb " + str(clump_kb) +
+                    " --clump-snp-field " + str(clump_snp_field) +
+                    " --clump-field " + str(clump_field) +
+                    " --vcf " + str(reference) + " " +
                     " --allow-extra-chr",
                     shell=True)
+
     clumped_rsids = []
+
     with open("plink.clumped", 'r') as plink_file:
         while(line := plink_file.readline()):
             if ' rs' in line:
@@ -180,9 +191,9 @@ def read_table(file_path: str, delimiter: str = '\t'):
         line = file.readline()
         while line[0] == '#':
             line = file.readline()
-        header = line.rstrip().split(delimiter)
+        header = line.rstrip('\r\n').split(delimiter)
         while True:
-            line = file.readline().rstrip().split(delimiter)
+            line = file.readline().rstrip('\r\n').split(delimiter)
             if len(line) < 2:
                 break
             if not len(header) == len(line):
@@ -194,15 +205,43 @@ def read_table(file_path: str, delimiter: str = '\t'):
             table.append(line_dict)
     return table
 
+def write_data(data: list, file_path: str, delimiter: str = '\t'):
+    """Reads table into dictionary. First row is treated as keys for dictionary.
+
+    Keyword arguments:
+    path -- the path to .tsv file
+    """
+
+    keys = set()
+    for line in data: keys.update(set(line.keys()))
+    with open(file_path, 'w') as file:
+        file.write(delimiter.join(keys) + os.linesep)
+        for line in data:
+            values = [str(line[key]) if key in line else "" for key in keys]
+            file.write(delimiter.join(values) + os.linesep)
+    return file_path
+
 def validate(
     validated_line: dict,
     validation_source: VcfAccessor,
-    invert_field: str = None):
-    record = validation_source.get_record_by_rsid(validated_line['rsid'])
+    invert_field: str = None,
+    ignore_warnings: bool = False,
+    strict: bool = True):
+    record = None
+    snpid = None
+    if "id" in validated_line:
+        record = validation_source.get_record_by_rsid(validated_line['id'])
+        snpid = validated_line['id']
+    if "rsid" in validated_line and record is None:
+        record = validation_source.get_record_by_rsid(validated_line['rsid'])
+        snpid = validated_line['rsid']
+    if "gnomadid" in validated_line and record is None:
+        record = validation_source.get_record_by_rsid(validated_line['gnomadid'])
+        snpid = validated_line['gnomadid']
     if record is None:
-        print("WARNING: Failed validation for " + validated_line['rsid'] + ". SNP not present in validation vcf.")
-        validated_line["status"] = "WARNING: snp not present"
-        return validated_line
+        error_print("ERROR: Failed validation for " + snpid + ". SNP not present in validation vcf.")
+        validated_line["status"] = "ERROR"
+        return None if strict else validated_line
     if not (validated_line['REF'] == record.get_ref()): 
         if (validated_line['REF'] == record.get_alt()[0] and validated_line['ALT'] == record.get_ref()):
             ref = validated_line['REF']
@@ -211,26 +250,72 @@ def validate(
             validated_line['ALT'] = ref
             if invert_field is not None:
                 validated_line[invert_field] = - float(validated_line[invert_field])
-            print("WARNING: " + "Failed validation for " + validated_line['rsid'] + ". REF and ALT do not match. " + record.get_ref() + "/" + str(record.get_alt()) + " succesful invert!")
-            validated_line["status"] = "WARNING: ref alt inverted"
-            return validated_line
+            error_print("WARNING: " + "Failed validation for " + validated_line['rsid'] + ". REF and ALT do not match. " + record.get_ref() + "/" + str(record.get_alt()) + " succesful invert!")
+            validated_line["status"] = "WARNING"
+            return validated_line if ignore_warnings else None
         else:
-            print("ERROR: " + "Failed validation for " + validated_line['rsid'] + ". REF and ALT do not match. " + record.get_ref() + "/" + str(record.get_alt()))
-            validated_line["status"] = "WARNING: ref alt do not match"
-            return validated_line
+            error_print("ERROR: " + "Failed validation for " + validated_line['rsid'] + ". REF and ALT do not match. " + record.get_ref() + "/" + str(record.get_alt()))
+            validated_line["status"] = "ERROR"
+            return None if strict else validated_line
     validated_line["status"] = "SUCCESS"
     return validated_line
 
 
-def validate_with_source(data, source_file):
+def validate_with_source(data, source_file, ignore_warnings = False):
     source_accessor = VcfAccessor(source_file)
     data = [validate(
         validated_line = line,
-        validation_source = source_accessor) for line in data
+        validation_source = source_accessor,
+        ignore_warnings = ignore_warnings) for line in data
     ]
-    # data = [add_annotation(
-    #      line, 
-    #      annotation_name = "rsid", 
-    #      annotation_source = source_vcf, 
-    #      annotation_source_field = "rsid",
-    #      default_value = "rs0") for line in data]
+    data = [line for line in data if line]
+    return data
+
+def simulate_parameters(data, iterations: int = 1000, coeff_column_name: str = 'BETA'):
+    random.seed(0)
+
+    randomized_beta_list = []
+    for _ in range(iterations):
+        randomized_beta_list.append(sum(map(lambda snp: randomize_beta(
+            float(snp[coeff_column_name]), float(snp['af'])), data)))
+    minsum = sum(map(lambda snp: min(float(snp[coeff_column_name]), 0), data))
+    maxsum = sum(map(lambda snp: max(float(snp[coeff_column_name]), 0), data))
+    return {
+        'mean': statistics.mean(randomized_beta_list),
+        'sd': statistics.stdev(randomized_beta_list),
+        'min': minsum,
+        'max': maxsum
+    }
+
+def randomize_beta(beta: float, af: float):
+    first_allele_beta = beta if random.uniform(0, 1) < af else 0
+    second_allele_beta = beta if random.uniform(0, 1) < af else 0
+    return first_allele_beta + second_allele_beta
+
+def write_model(data, description, destination):
+
+    with open(destination, 'w') as model_file:
+
+        categories = dict()
+        borders = [
+            description["parameters"]['mean'] - 1.645 * description["parameters"]['sd'],
+            description["parameters"]['mean'] + 1.645 * description["parameters"]['sd']
+        ]
+        categories["reduced"] = {"from": description["parameters"]['min'], "to": borders[0]}
+        categories["average"] = {"from": borders[0], "to": borders[1]}
+        categories["increased"] = {"from": borders[1], "to": description["parameters"]['max']}
+        
+        variants = dict()
+        for snp in data:
+            variant = dict()
+            variant["effect_allele"] = snp['ALT']
+            variant["effect_size"] = snp['BETA']
+            variants[snp['rsid']] = variant
+
+        model = {"score_model": {"categories": categories, "variants": variants}}
+        model_file.write(yaml.dump(model, indent=2))
+
+        description = {"description": description}
+        model_file.write(yaml.dump(description, indent=2, default_flow_style=False))
+
+    return

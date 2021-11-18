@@ -118,53 +118,6 @@ def add_af(line, af_accessor: VcfAccessor, population: str = 'nfe', rsid_column_
 ####################
 
 
-def simulate_parameters(data, iterations: int = 1000, coeff_column_name: str = 'BETA'):
-    random.seed(0)
-
-    randomized_beta_list = []
-    for _ in range(iterations):
-        randomized_beta_list.append(sum(map(lambda snp: randomize_beta(
-            float(snp[coeff_column_name]), float(snp['af'])), data)))
-    minsum = sum(map(lambda snp: min(float(snp[coeff_column_name]), 0), data))
-    maxsum = sum(map(lambda snp: max(float(snp[coeff_column_name]), 0), data))
-    return {
-        'mean': statistics.mean(randomized_beta_list),
-        'sd': statistics.stdev(randomized_beta_list),
-        'min': minsum,
-        'max': maxsum
-    }
-
-###################
-### write model ###
-###################
-
-def write_model(data, description, destination):
-
-    with open(destination, 'w') as model_file:
-
-        categories = dict()
-        borders = [
-            description["parameters"]['mean'] - 1.645 * description["parameters"]['sd'],
-            description["parameters"]['mean'] + 1.645 * description["parameters"]['sd']
-        ]
-        categories["reduced"] = {"from": description["parameters"]['min'], "to": borders[0]}
-        categories["average"] = {"from": borders[0], "to": borders[1]}
-        categories["increased"] = {"from": borders[1], "to": description["parameters"]['max']}
-        
-        variants = dict()
-        for snp in data:
-            variant = dict()
-            variant["effect_allele"] = snp['ALT']
-            variant["effect_size"] = snp['BETA']
-            variants[snp['rsid']] = variant
-
-        model = {"score_model": {"categories": categories, "variants": variants}}
-        model_file.write(yaml.dump(model, indent=2))
-
-        description = {"description": description}
-        model_file.write(yaml.dump(description, indent=2, default_flow_style=False))
-
-    return
 
 #####################################################################################################
 ###                                                                                               ###
