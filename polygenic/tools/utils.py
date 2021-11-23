@@ -7,6 +7,12 @@ import re
 import random
 import statistics
 import yaml
+import gzip
+import io
+import os.path
+import progressbar
+import urllib.request
+import numpy
 
 from polygenic.data.vcf_accessor import VcfAccessor
 
@@ -146,7 +152,7 @@ def clump(
     except:
         pass
     
-    with open(filtered_path, 'r') as filtered_file, open(clumped_path, 'w') as clumped_file:
+    with open(gwas_file, 'r') as filtered_file, open(clumped_path, 'w') as clumped_file:
         filtered_header = filtered_file.readline().rstrip().split('\t')
         clumped_file.write('\t'.join(filtered_header) + "\n")
         while True:
@@ -242,12 +248,12 @@ def validate(
         error_print("ERROR: Failed validation for " + snpid + ". SNP not present in validation vcf.")
         validated_line["status"] = "ERROR"
         return None if strict else validated_line
-    if not (validated_line['REF'] == record.get_ref()): 
-        if (validated_line['REF'] == record.get_alt()[0] and validated_line['ALT'] == record.get_ref()):
-            ref = validated_line['REF']
-            alt = validated_line['ALT']
-            validated_line['REF'] = alt
-            validated_line['ALT'] = ref
+    if not (validated_line['ref'] == record.get_ref()): 
+        if (validated_line['ref'] == record.get_alt()[0] and validated_line['alt'] == record.get_ref()):
+            ref = validated_line['ref']
+            alt = validated_line['alt']
+            validated_line['ref'] = alt
+            validated_line['alt'] = ref
             if invert_field is not None:
                 validated_line[invert_field] = - float(validated_line[invert_field])
             error_print("WARNING: " + "Failed validation for " + validated_line['rsid'] + ". REF and ALT do not match. " + record.get_ref() + "/" + str(record.get_alt()) + " succesful invert!")
@@ -284,7 +290,8 @@ def simulate_parameters(data, iterations: int = 1000, coeff_column_name: str = '
         'mean': statistics.mean(randomized_beta_list),
         'sd': statistics.stdev(randomized_beta_list),
         'min': minsum,
-        'max': maxsum
+        'max': maxsum,
+        'percentiles': get_percentiles(randomized_beta_list)
     }
 
 def randomize_beta(beta: float, af: float):
@@ -292,7 +299,21 @@ def randomize_beta(beta: float, af: float):
     second_allele_beta = beta if random.uniform(0, 1) < af else 0
     return first_allele_beta + second_allele_beta
 
-def write_model(data, description, destination):
+def get_percentiles(value_list: list):
+    value_array = numpy.array(value_list)
+    percentiles = {}
+    for i in range(101):
+        percentiles[str(i)] = numpy.percentile(value_array, i)
+    return percentiles
+
+def write_model(
+    data, 
+    description, 
+    destination, 
+    id_field = 'rsid',
+    effect_allele_field = 'alt',
+    effect_size_field = 'beta',
+    included_fields_list = []):
 
     with open(destination, 'w') as model_file:
 
@@ -308,9 +329,11 @@ def write_model(data, description, destination):
         variants = dict()
         for snp in data:
             variant = dict()
-            variant["effect_allele"] = snp['ALT']
-            variant["effect_size"] = snp['BETA']
-            variants[snp['rsid']] = variant
+            variant["effect_allele"] = snp[effect_allele_field]
+            variant["effect_size"] = snp[effect_size_field]
+            for field in included_fields_list:
+                variant[field] = snp[field]
+            variants[snp[id_field]] = variant
 
         model = {"score_model": {"categories": categories, "variants": variants}}
         model_file.write(yaml.dump(model, indent=2))

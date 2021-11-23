@@ -29,10 +29,10 @@ def parse_args(args):
     parser.add_argument('--pvalue-threshold', type=float, default=1e-08, help='significance cut-off threshold')
     parser.add_argument('--clump-r2', type=float, default=0.25, help='clumping r2 threshold')
     parser.add_argument('--clump-kb', type=float, default=1000, help='clumping kb threshold')
-    parser.add_argument('--population', type=str, default='EUR', help='population: meta, AFR, AMR, CSA, EAS, EUR, MID')
+    parser.add_argument('--population', type=str, default='EUR', help='population: meta, AFR, AMR, CSA, EUR, EAS, EUR, MID')
     parser.add_argument('--clumping-vcf', type=str, default='eur.phase3.biobank.set.vcf.gz', help='')
-    parser.add_argument('--source-ref-vcf', type=str, default='', help='')
-    parser.add_argument('--target-ref-vcf', type=str, default='', help='')
+    parser.add_argument('--source-ref-vcf', type=str, default='dbsnp155.grch37.norm.vcf.gz', help='')
+    parser.add_argument('--target-ref-vcf', type=str, default='dbsnp155.grch38.norm.vcf.gz', help='')
     parser.add_argument('--ignore-warnings', type=bool, default='False', help='')
     parser.add_argument('-l', '--log-file', type=str, help='path to log file')
     parsed_args = parser.parse_args(args)
@@ -123,15 +123,13 @@ def clump_variants(args):
     return clump(
         gwas_file = args.gwas_file + ".validated", 
         reference = os.path.abspath(os.path.expanduser(args.clumping_vcf)), 
-        clump_field = "pval_" + args.population,
-        clump_p1 = args.pvalue_threshold)
+        clump_p1 = args.pvalue_threshold,
+        clump_field = "pval_" + args.population)
 
 def read_filtered_variants(args):
     data = read_table(args.gwas_file + ".filtered")
     for line in data: line.update({"gnomadid": line['chr'] + ":" + line['pos'] + "_" + line['ref'] + "_" + line['alt']})
-    #for line in data: line.update({"rsid": line['varid']})
-    for line in data: line.update({"REF": line['ref'], "ALT": line['alt']})
-    for line in data: line.update({"BETA": line["beta_" + args.population]})
+    for line in data: line.update({"beta": float(line["beta_" + args.population])})
     for line in data: line.update({"af": line["af_" + args.population]})
     return data
 
@@ -146,9 +144,10 @@ def run(args):
     validate_paths(args) # check if vcf files are correct
     filter_pval(args) # filter results by pvalue
     data = read_filtered_variants(args) # read filtered variants
+    data = data[40:100]
     data = validate_with_source(data, args.source_ref_vcf, ignore_warnings = args.ignore_warnings) # validate if variants are present in hg19
     data = validate_with_source(data, args.target_ref_vcf, ignore_warnings = args.ignore_warnings) # validate if variants are present in hg38
-    write_data(data, args.gwas_file + ".validated") # write validated snps to file
+    write_data(data, gwas_file + ".validated") # write validated snps to file
     clump_variants(args) # clump variants
     data = read_clumped_variants(args) # read clumped variants
     description = dict() # generate description
@@ -158,7 +157,7 @@ def run(args):
     name = re.sub("[^0-9a-zA-Z]+", "_", description["info"]["description"].lower()) # trait name
     filename = "-".join(["biobankuk", name, args.code, args.sex, args.coding, args.population, str(args.pvalue_threshold)]) + ".yml"
     model_path = "/".join([args.output_directory, filename]) # output path
-    write_model(data, description, model_path) # writing model
+    write_model(data, description, model_path, included_fields_list = ['ref', 'gnomadid']) # writing model
     return
 
 def main(args = sys.argv[1:]):
