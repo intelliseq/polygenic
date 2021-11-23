@@ -591,7 +591,7 @@ def main(args=sys.argv[1:]):
             vcf-index               prepare rsidx for vcf
 
             """)
-    except polygenic.core.trial.PolygenicException as e:
+    except PolygenicException as e:
         print("Analysis failed")
         print("ERROR: " + str(e))
     except RuntimeError as e:

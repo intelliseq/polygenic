@@ -13,6 +13,8 @@ import os.path
 import progressbar
 import urllib.request
 import numpy
+from datetime import datetime
+from polygenic.version import __version__ as version
 
 from polygenic.data.vcf_accessor import VcfAccessor
 
@@ -22,7 +24,7 @@ def error_print(*args, **kwargs):
 def error_exit(e):
     time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     error_print(" -> polygenic " + version + " failed at " + time)
-    error_print(" -> with command: pgstk " + sys.argv.join(" "))
+    error_print(" -> with command: pgstk " + (" ").join(sys.argv))
     error_print(" -> with message: ")
     error_print(str(e))
     exit(1)

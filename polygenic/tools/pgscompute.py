@@ -13,7 +13,7 @@ from datetime import datetime
 from polygenic.data.data_accessor import DataAccessor
 from polygenic.data.vcf_accessor import VcfAccessor
 from polygenic.model.model import Model, SeqqlOperator
-from polygenic.error import polygenic_exception
+from polygenic.error.polygenic_exception import PolygenicException
 
 def parse_args(args):
     parser = argparse.ArgumentParser(description='pgs-compute computes polygenic scores for genotyped sample in vcf format')
@@ -66,7 +66,7 @@ def run(args):
                     genotypes = vcf_accessor,
                     allele_frequencies =  af_accessor,
                     sample_name = sample_name,
-                    af_field_name = "AF_nfe",
+                    af_field_name = args.af_field,
                     parameters = parameters)
                 model = SeqqlOperator.fromYaml(model_path)
                 model.compute(data_accessor)

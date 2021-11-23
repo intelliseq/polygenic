@@ -95,7 +95,7 @@ class VcfRecord(object):
 
     def get_af_by_pop(self, af_field_name) -> Dict[str, float]:
         if self.get_info_field(af_field_name) is None:
-            raise RuntimeError("No {field} field in allele frequency vcf ".format(field = af_field_name))
+            raise PolygenicException("No {field} field in allele frequency vcf ".format(field = af_field_name))
         af = {}
         counter = 0
         sumfreq = 0
