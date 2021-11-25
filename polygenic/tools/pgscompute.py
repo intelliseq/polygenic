@@ -21,7 +21,7 @@ def parse_args(args):
     parser.add_argument('-m', '--model', action='append', help="path to .yml model (can be specified multiple times)")
     parser.add_argument('-p', '--parameters', type=str, help="parameters json (to be used in formula models)")
     parser.add_argument('-s', '--sample-name', type=str, help='sample name in vcf.gz to calculate')
-    parser.add_argument('-o', '--output-directory', type=str, default='', help='output directory')
+    parser.add_argument('-o', '--output-directory', type=str, default='.', help='output directory')
     parser.add_argument('-n', '--output-name-appendix', type=str, help='appendix for output file names')
     parser.add_argument('-l', '--log-file', type=str, help='path to log file')
     parser.add_argument('--af', type=str, help='vcf file containing allele freq data')

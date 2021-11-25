@@ -9,8 +9,10 @@
 
 * [Summary](#summary)
 * [Installation](#installation)
-  * [With pip](#using_pip)
-  * [In conda](#in_conda_environment)
+  * [With pip](#with-pip)
+  * [With conda](#with-conda)
+  * [With docker](#with-docker)
+* [Quick start guide](#quick-start-guide)
 * [Manual](#manual)
   * [Tools](#tools)
     * [pgs-compute](#pgs_compute)
@@ -33,11 +35,18 @@
 Polygenic is a toolkit for a wide range of polygenic scores analysis tasks. The most important use cases include computing scores for samples in vcf files, building scores for GWAS results or fetching scores from repositories.
 
 ## Installation
-### Installation using pip
+### With pip
+#### Install for user account
 ```
 pip3 install polygenic
 ```
-### In conda environment
+#### Install globally
+```
+sudo -H pip3 install polygenic
+# or
+sudo -H python3 -m pip install polygenic
+```
+### With conda
 Run conda image
 ```
 docker run -it conda/miniconda3 /bin/bash
@@ -52,11 +61,28 @@ python --version
 
 ### gcc is missing to build pytabix
 apt -qq update
-apt -y install build-essential
+apt -y install build-essential tabix
 
 pip install polygenic
 ```
-
+### With docker
+#### Large image with all data included
+```
+docker run intelliseq:polygenictk:2.0.36 *command*
+```
+#### Thin image with just polygenic package installed
+```
+docker run intelliseq:polygenic:2.0.36 *command*
+```
+## Quick start guide
+```
+mkdir polygenic && cd polygenic # create working directory
+wget https://downloads.intelliseq.com/public/polygenic/gbe-INI78-bone-density.yml # download model
+wget https://downloads.intelliseq.com/public/polygenic/illu_merged-imputed.vcf.gz # download genotypes
+wget https://downloads.intelliseq.com/public/polygenic/illu_merged-imputed.vcf.gz.tbi # download position index
+wget https://downloads.intelliseq.com/public/polygenic/illu_merged-imputed.vcf.gz.idx.db # download rsid index
+docker run -v $(pwd):/data intelliseq/polygenic:latest --vcf /data/illu_merged-imputed.vcf.gz --model /data/gbe-INI78-bone-density.yml --output-directory /data # compute model
+```
 ## Manual
 ### Tools
 #### pgs

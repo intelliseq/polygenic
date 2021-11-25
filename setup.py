@@ -6,7 +6,7 @@ import setuptools
 from typing import List
 from setuptools import setup, find_packages
 
-PACKAGE_VERSION = '2.0.30'
+PACKAGE_VERSION = '2.0.38'
 
 def write_version_py(filename='polygenic/version.py'):
     cnt = """
@@ -30,7 +30,7 @@ setuptools.setup(
     #long_description=long_description,
     #long_description_content_type="text/reStructuredText",
     url="https://github.com/marpiech/polygenic",
-    packages=setuptools.find_packages(include=['polygenic','polygenic.core','polygenic.data','polygenic.rsidx','polygenic.lib']),
+    packages=setuptools.find_packages(include=['polygenic','polygenic.core','polygenic.data','polygenic.error','polygenic.rsidx','polygenic.lib','polygenic.tools','polygenic.model']),
     package_data={'polygenic': ['*.cfg'], 'polygenic': ['resources/chromsizes/*.sizes']},
     license="Intelliseq dual licenses this package. For commercial use, please contact [contact @ intelliseq.com](mailto:contact@intelliseq.com). For non-commercial use, this license permits use of the software only by government agencies, schools, universities, non-profit organizations or individuals on projects that do not receive external funding other than government research grants and contracts. Any other use requires a commercial license. For the full license, please see [LICENSE.md](https://github.com/intelliseq/polygenic/blob/master/LICENSE.md), in this source repository.",
     classifiers=[
@@ -51,7 +51,7 @@ setuptools.setup(
         'plotly==5.1.0',
         'kaleido==0.2.1',
         'DotMap==1.3.24',
-        'pyyaml==3.12'
+        'pyyaml==6.0'
     ],
     python_requires='>=3.8',
     entry_points={

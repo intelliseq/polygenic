@@ -23,10 +23,15 @@ def error_print(*args, **kwargs):
 
 def error_exit(e):
     time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    error_print(" -> polygenic " + version + " failed at " + time)
-    error_print(" -> with command: pgstk " + (" ").join(sys.argv))
-    error_print(" -> with message: ")
-    error_print(str(e))
+    error_print("")
+    error_print("  polygenic ERROR ")
+    error_print("  version: " + version)
+    error_print("  time: " + time)
+    error_print("  command: pgstk " + (" ").join(sys.argv))
+    error_print("  message: ")
+    error_print("")
+    error_print("  " + str(e))
+    error_print("")
     exit(1)
 
 def expand_path(path: str) -> str:
@@ -279,7 +284,7 @@ def validate_with_source(data, source_file, ignore_warnings = False):
     data = [line for line in data if line]
     return data
 
-def simulate_parameters(data, iterations: int = 1000, coeff_column_name: str = 'BETA'):
+def simulate_parameters(data, iterations: int = 1000, coeff_column_name: str = 'beta'):
     random.seed(0)
 
     randomized_beta_list = []
