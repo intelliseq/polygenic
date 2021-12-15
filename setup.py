@@ -1,12 +1,11 @@
-import setuptools
-
 #! /usr/bin/python
 # -*- coding: utf-8 -*-
 
+import setuptools
 from typing import List
 from setuptools import setup, find_packages
 
-PACKAGE_VERSION = '2.0.38'
+PACKAGE_VERSION = '2.0.43'
 
 def write_version_py(filename='polygenic/version.py'):
     cnt = """
@@ -24,7 +23,7 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="polygenic",
     version=PACKAGE_VERSION,
-    author="Marcin Piechota, Wojciech Gałan",
+    author="Marcin Piechota, Wojciech Galan",
     author_email="piechota@intelliseq.com",
     description="Polygenic score toolkit",
     #long_description=long_description,
@@ -51,7 +50,8 @@ setuptools.setup(
         'plotly==5.1.0',
         'kaleido==0.2.1',
         'DotMap==1.3.24',
-        'pyyaml==6.0'
+        'pyyaml==6.0',
+        'tqdm'
     ],
     python_requires='>=3.8',
     entry_points={

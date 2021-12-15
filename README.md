@@ -424,3 +424,8 @@ description:
 - improved parsing of effect_size (whitespaces and quotes are accepted now)
 #### 2.0.28
 - `./.` alleles are now treated as missing genotypes
+#### 2.0.42
+- removed extra printing from download module
+- resolved pandas warning about keywords in read_csv
+#### 2.0.43
+- added `other_allele` to PGS catalog parser

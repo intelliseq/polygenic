@@ -25,7 +25,8 @@ class ModelBiobankukTest(TestCase):
             "--pvalue-threshold", "1e-08",
             "--clumping-vcf", "polygenic/tests/resources/largefiles/eur.phase3.biobank.set.vcf.gz",
             "--source-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch37.norm.vcf.gz",
-            "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp138.38.norm.vcf.gz"
+            "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp138.38.norm.vcf.gz",
+            "--gene-positions", "polygenic/tests/resources/largefiles/ensembl-genes.104.tsv"
         ])
 
         result_path = self.output_directory + "/biobankuk-hair_balding_pattern-2395-both_sexes-4-EUR-1e-08.yml"

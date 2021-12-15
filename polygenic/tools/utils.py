@@ -13,10 +13,13 @@ import os.path
 import progressbar
 import urllib.request
 import numpy
+import csv
 from datetime import datetime
 from polygenic.version import __version__ as version
 
 from polygenic.data.vcf_accessor import VcfAccessor
+from polygenic.data.csv_accessor import CsvAccessor
+from tqdm import tqdm
 
 def error_print(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
@@ -53,6 +56,10 @@ def setup_logger(path):
     logging_file_handler.setFormatter(formatter)
     logger.addHandler(logging_file_handler)
 
+    consoleHandler = logging.StreamHandler()
+    consoleHandler.setFormatter(formatter)
+    logger.addHandler(consoleHandler)
+
     return logger
 
 ### model tools
@@ -66,7 +73,8 @@ def download(url: str, output_path: str, force: bool=False, progress: bool=False
     progress -- flag whether to present progress
     """
     logger = logging.getLogger('utils')
-
+    #print(url)
+    #print(output_path)
     if os.path.isfile(output_path) and not force:
         logger.warning("File already exists: " + output_path)
         return output_path
@@ -189,6 +197,12 @@ def read_header(file_path: str):
                 break
     return header
 
+def sum_beta(data):
+    sum = 0
+    for line in data:
+        if 'beta' in line:
+            sum += abs(float(line['beta']))
+    return sum
 
 def read_table(file_path: str, delimiter: str = '\t'):
     """Reads table into dictionary. First row is treated as keys for dictionary.
@@ -206,7 +220,7 @@ def read_table(file_path: str, delimiter: str = '\t'):
             line = file.readline()
         header = line.rstrip('\r\n').split(delimiter)
         while True:
-            line = file.readline().rstrip('\r\n').split(delimiter)
+            line = next(csv.reader([file.readline().rstrip('\r\n')], delimiter = delimiter))
             if len(line) < 2:
                 break
             if not len(header) == len(line):
@@ -217,6 +231,21 @@ def read_table(file_path: str, delimiter: str = '\t'):
                 line_dict[header_element] = line_element
             table.append(line_dict)
     return table
+def invert_nucleotides(obj):
+    if type(obj).__name__ == "str": return _invert_nucleotides_str(obj)
+    if type(obj).__name__ == "list": return _invert_nucleotides_list(obj)
+    return None
+
+def _invert_nucleotides_list(nucleotides: list):
+    return [_invert_nucleotides_str(nucleotide) if type(nucleotide).__name__ == "str" else None for nucleotide in nucleotides ]
+
+def _invert_nucleotides_str(nucleotide: str):
+    return {
+        "A": "T",
+        "T": "A",
+        "G": "C",
+        "C": "G"
+    }.get(nucleotide, None)
 
 def write_data(data: list, file_path: str, delimiter: str = '\t'):
     """Reads table into dictionary. First row is treated as keys for dictionary.
@@ -234,55 +263,151 @@ def write_data(data: list, file_path: str, delimiter: str = '\t'):
             file.write(delimiter.join(values) + os.linesep)
     return file_path
 
+def get_record(
+    line: dict,
+    vcf_accessor: VcfAccessor,
+    use_gnomad: bool = True):
+    record = None
+    if "id" in line:
+        record = vcf_accessor.get_record_by_rsid(line['id'])
+        snpid = ine['id']
+        return record, snpid
+    if "rsid" in line and record is None:
+        record = vcf_accessor.get_record_by_rsid(line['rsid'])
+        snpid = line['rsid']
+        return record, snpid
+    if "gnomadid" in line and use_gnomadid and record is None:
+        record = vcf_accessor.get_record_by_rsid(line['gnomadid'])
+        snpid = line['gnomadid']    
+        return record, snpid
+    return None, None
+
 def validate(
     validated_line: dict,
     validation_source: VcfAccessor,
-    invert_field: str = None,
+    invert_field: str = "beta",
     ignore_warnings: bool = False,
-    strict: bool = True):
-    record = None
-    snpid = None
-    if "id" in validated_line:
-        record = validation_source.get_record_by_rsid(validated_line['id'])
-        snpid = validated_line['id']
-    if "rsid" in validated_line and record is None:
-        record = validation_source.get_record_by_rsid(validated_line['rsid'])
-        snpid = validated_line['rsid']
-    if "gnomadid" in validated_line and record is None:
-        record = validation_source.get_record_by_rsid(validated_line['gnomadid'])
-        snpid = validated_line['gnomadid']
+    strict: bool = True,
+    use_gnomadid: bool = True,
+    verbose = False):
+    print("Validating")
+    verbose = True
+    record, snpid = get_record(validated_line, validation_source, use_gnomadid)
     if record is None:
-        error_print("ERROR: Failed validation for " + snpid + ". SNP not present in validation vcf.")
+        if verbose: error_print("ERROR: " + "Failed validation for " + validated_line['rsid'] + ". No id in source")
         validated_line["status"] = "ERROR"
         return None if strict else validated_line
-    if not (validated_line['ref'] == record.get_ref()): 
-        if (validated_line['ref'] == record.get_alt()[0] and validated_line['alt'] == record.get_ref()):
+    if not "ref" in validated_line:
+        validated_line['ref'] = record.get_ref()
+    if not (validated_line['ref'] == record.get_ref() and validated_line['alt'] in record.get_alt()): 
+        message = "REF mismatch. Line: " + validated_line['ref'] + "/" + validated_line['alt'] + " . Reference: " + record.get_ref() + "/" + str(record.get_alt()) + "."
+        if validated_line['ref'] == invert_nucleotides(validated_line['alt']):
+            if verbose: error_print("ERROR: " + message + " REF and ALT are complementary. Not sure whether to swap (beta will be negative) or invert (beta will be unchanged) nucleotides.")
+            validated_line["status"] = "ERROR"
+            return None if strict else validated_line
+        if (invert_nucleotides(validated_line['ref']) == record.get_ref() and invert_nucleotides(validated_line['alt']) in record.get_alt()):
+            validated_line['ref'] = invert_nucleotides(validated_line['ref'])
+            validated_line['alt'] = invert_nucleotides(validated_line['alt'])
+            if verbose: error_print("WARNING: " + message + " REF and ALT are on '-' strand notation. Succesfull inversion.")
+            validated_line["status"] = "WARNING. Minus strand notation"
+            if "pos" not in validated_line: validated_line["pos"] = record.get_pos()
+            if validated_line["pos"] == "": validated_line["pos"] = record.get_pos()
+            validated_line["gnomadid"] = record.get_chrom().replace("chr", "") + ":" + record.get_pos() + "_" + record.get_ref() + "_" + validated_line['alt']
+            return validated_line if ignore_warnings else None
+        if (validated_line['ref'] in record.get_alt() and validated_line['alt'] == record.get_ref()):
             ref = validated_line['ref']
             alt = validated_line['alt']
             validated_line['ref'] = alt
             validated_line['alt'] = ref
             if invert_field is not None:
                 validated_line[invert_field] = - float(validated_line[invert_field])
-            error_print("WARNING: " + "Failed validation for " + validated_line['rsid'] + ". REF and ALT do not match. " + record.get_ref() + "/" + str(record.get_alt()) + " succesful invert!")
-            validated_line["status"] = "WARNING"
+            if verbose: error_print("WARNING: " + message + " REF and ALT are swapped. Succesful swap.")
+            validated_line["status"] = "WARNING. Inverted ref with alt"
+            if "pos" not in validated_line: validated_line["pos"] = record.get_pos()
+            if validated_line["pos"] == "": validated_line["pos"] = record.get_pos()
+            validated_line["gnomadid"] = record.get_chrom().replace("chr", "") + ":" + record.get_pos() + "_" + record.get_ref() + "_" + validated_line['alt']
             return validated_line if ignore_warnings else None
-        else:
-            error_print("ERROR: " + "Failed validation for " + validated_line['rsid'] + ". REF and ALT do not match. " + record.get_ref() + "/" + str(record.get_alt()))
-            validated_line["status"] = "ERROR"
-            return None if strict else validated_line
+        if (invert_nucleotides(validated_line['ref']) in record.get_alt() and invert_nucleotides(validated_line['alt']) == record.get_ref()):
+            ref = invert_nucleotides(validated_line['ref'])
+            alt = invert_nucleotides(validated_line['alt'])
+            validated_line['ref'] = alt
+            validated_line['alt'] = ref
+            if invert_field is not None:
+                validated_line[invert_field] = - float(validated_line[invert_field])
+            if verbose: error_print("WARNING: " + message + " REF and ALT are on '-' strand notation and swapped. Succesfull swap and inversion.")
+            validated_line["status"] = "WARNING. Inverted ref with alt"
+            if "pos" not in validated_line: validated_line["pos"] = record.get_pos()
+            if validated_line["pos"] == "": validated_line["pos"] = record.get_pos()
+            validated_line["gnomadid"] = record.get_chrom().replace("chr", "") + ":" + record.get_pos() + "_" + record.get_ref() + "_" + validated_line['alt']
+            return validated_line if ignore_warnings else None
+        if verbose: error_print("ERROR: " + message + ". REF and ALT do not match.")
+        validated_line["status"] = "ERROR"
+        return None if strict else validated_line
+    if record.get_id():
+        validated_line["rsid"] = record.get_id()
+    if "pos" not in validated_line: validated_line["pos"] = record.get_pos()
+    if validated_line["pos"] == "": validated_line["pos"] = record.get_pos()
+    validated_line["gnomadid"] = record.get_chrom().replace("chr", "") + ":" + record.get_pos() + "_" + record.get_ref() + "_" + validated_line['alt']
     validated_line["status"] = "SUCCESS"
     return validated_line
 
+def args_to_dict(args):
+    args_dict = vars(args)
+    out_dict = dict()
+    for arg in args_dict:
+        if type(args_dict[arg]).__name__ in ["str", "bool", "int", "float"]:
+            out_dict[arg] = args_dict[arg]
+    return out_dict
 
-def validate_with_source(data, source_file, ignore_warnings = False):
-    source_accessor = VcfAccessor(source_file)
-    data = [validate(
-        validated_line = line,
-        validation_source = source_accessor,
-        ignore_warnings = ignore_warnings) for line in data
-    ]
-    data = [line for line in data if line]
-    return data
+def validate_with_source(data, source_path, ignore_warnings = False, use_gnomadid = True):
+    source_accessor = VcfAccessor(source_path)
+    validated_data = list()
+    for line in tqdm(data):
+        validated_data.append(validate(
+            validated_line = line,
+            validation_source = source_accessor,
+            ignore_warnings = ignore_warnings,
+            use_gnomadid = use_gnomadid))
+    validated_data = [line for line in validated_data if line]
+    return validated_data
+
+def add_af(line, source_accessor, af_field = "af", default_af = 0):
+    record, snpid = get_record(line, source_accessor)
+    if not record is None:
+        line["af"] = float(record.get_info_field(af_field))
+    else:
+        line["af"] = float(default_af)
+    return line
+
+def annotate_with_af(data, source_path, af_field = "af", default_af = 0):
+    source_accessor = VcfAccessor(source_path)
+    annotated_data = list()
+    for line in tqdm(data):
+        annotated_data.append(add_af(line, source_accessor, af_field, default_af))
+    return annotated_data
+
+def annotate_with_symbols(data, source_path):
+    source_accessor = CsvAccessor(source_path)
+    annotated_data = list()
+    for line in tqdm(data):
+        if "symbol" in line:
+            annotated_data.append(line)
+            continue
+        if "gnomadid" in line:
+            chrom = line["gnomadid"].split(":")[0]
+            pos = line["gnomadid"].split(":")[1].split("_")[0]
+            line["symbol"] = source_accessor.get_symbol_for_genomic_position(chrom, pos)
+            annotated_data.append(line)
+            continue
+        annotated_data.append(line)
+    return annotated_data
+
+def get_gene_symbols(data):
+    genes = set()
+    for line in data:
+        if "symbol" in line:
+            genes.add(line["symbol"])
+    return list(genes)
 
 def simulate_parameters(data, iterations: int = 1000, coeff_column_name: str = 'beta'):
     random.seed(0)
@@ -310,7 +435,7 @@ def get_percentiles(value_list: list):
     value_array = numpy.array(value_list)
     percentiles = {}
     for i in range(101):
-        percentiles[str(i)] = numpy.percentile(value_array, i)
+        percentiles[str(i)] = str(numpy.percentile(value_list, i))
     return percentiles
 
 def write_model(
@@ -337,7 +462,9 @@ def write_model(
         for snp in data:
             variant = dict()
             variant["effect_allele"] = snp[effect_allele_field]
-            variant["effect_size"] = snp[effect_size_field]
+            variant["effect_size"] = float(snp[effect_size_field])
+            if "symbol" in snp:
+                variant["symbol"] = snp["symbol"]
             for field in included_fields_list:
                 variant[field] = snp[field]
             variants[snp[id_field]] = variant

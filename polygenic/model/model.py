@@ -194,8 +194,47 @@ class Model(SeqqlOperator):
         super(Model, self).__init__(entries)
 
 class HaplotypeModel(SeqqlOperator):
+    def compute(self, data_accessor: DataAccessor):
+        haplotypes_results = super(HaplotypeModel, self).compute(data_accessor)
+        results = haplotypes_results["haplotypes"]
+        results["genotypes"] = haplotypes_results["genotypes"]
+        return results
+
+class Haplotypes(SeqqlOperator):
     def __init__(self, entries):
-        super(ScoreModel, self).__init__(entries)
+        super(Haplotypes, self).__init__({})
+        for haplotype in entries:
+            self._entries[haplotype] = Haplotype(haplotype, entries[haplotype])
+
+    def compute(self, data_accessor: DataAccessor):
+        result = {"haplotype": None, "category": None}
+        haplotypes_results = super(Haplotypes, self).compute(data_accessor)
+        result["genotypes"] = haplotypes_results.pop("genotypes")
+        for haplotype in haplotypes_results:
+            if haplotypes_results[haplotype]["haplotype_match"]:
+                result["haplotype"] = haplotype
+                result["category"] = haplotype
+        return result
+
+class Haplotype(SeqqlOperator):
+    def __init__(self, key, entries):
+        super(Haplotype, self).__init__(entries)
+        self.id = key
+
+    def genotype(self, data_accessor: DataAccessor):
+        variants_genotypes = super(Haplotype, self).compute(data_accessor)["variants"]
+
+    def compute(self, data_accessor: DataAccessor):
+        result = {}
+        result["genotypes"] = {}
+        result["haplotype_match"] = True
+        variants_results = super(Haplotype, self).compute(data_accessor)["variants"]
+        for variant in variants_results:
+            variant_result = variants_results[variant]
+            result["genotypes"][variant_result["genotype"]["rsid"]] = variant_result["genotype"]
+            if not variant_result["haplotype_match"]:
+                result["haplotype_match"] = False
+        return result
 
 class ScoreModel(SeqqlOperator):
     def __init__(self, entries):

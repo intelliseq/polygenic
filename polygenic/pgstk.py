@@ -12,6 +12,7 @@ import yaml
 
 from polygenic.tools import pgscompute
 from polygenic.tools import modelbiobankuk
+from polygenic.tools import modelpgscat
 
 # utils
 # simulate
@@ -35,96 +36,6 @@ logger = logging.getLogger('polygenicmaker')
 config = configparser.ConfigParser()
 config.read(os.path.dirname(__file__) + "/../polygenic/polygenic.cfg")
 
-####################
-###   add af     ###
-####################
-
-def validate(
-    validated_line: dict,
-    validation_source: VcfAccessor,
-    invert_field: str = None):
-    record = validation_source.get_record_by_rsid(validated_line['rsid'])
-    if record is None:
-        print("WARNING: Failed validation for " + validated_line['rsid'] + ". SNP not present in validation vcf.")
-        validated_line["status"] = "WARNING: snp not present"
-        return validated_line
-    if not (validated_line['REF'] == record.get_ref()): 
-        if (validated_line['REF'] == record.get_alt()[0] and validated_line['ALT'] == record.get_ref()):
-            ref = validated_line['REF']
-            alt = validated_line['ALT']
-            validated_line['REF'] = alt
-            validated_line['ALT'] = ref
-            if invert_field is not None:
-                validated_line[invert_field] = - float(validated_line[invert_field])
-            print("WARNING: " + "Failed validation for " + validated_line['rsid'] + ". REF and ALT do not match. " + record.get_ref() + "/" + str(record.get_alt()) + " succesful invert!")
-            validated_line["status"] = "WARNING: ref alt inverted"
-            return validated_line
-        else:
-            print("ERROR: " + "Failed validation for " + validated_line['rsid'] + ". REF and ALT do not match. " + record.get_ref() + "/" + str(record.get_alt()))
-            validated_line["status"] = "WARNING: ref alt do not match"
-            return validated_line
-    validated_line["status"] = "SUCCESS"
-    return validated_line
-
-def add_annotation(
-    annotated_line: dict,
-    annotation_name: str,
-    annotation_source: VcfAccessor,
-    annotation_source_field: str,
-    default_value,
-    rsid_field: str = 'rsid'):
-
-    rsid = annotated_line[rsid_field]
-    record = annotation_source.get_record_by_rsid(annotated_line[rsid_field])
-    annotated_line[annotation_name] = default_value
-    if record is None:
-        print("WARNING: Failed annotation for " + rsid + ". No record in source file.")
-        return annotated_line
-    if not (annotated_line['REF'] == record.get_ref()) or not (annotated_line['ALT'] in record.get_alt()): 
-        print("WARNING: Failed annotation for " + rsid + ". REF and ALT do not match. " + record.get_ref() + "/" + str(record.get_alt()))
-        return annotated_line
-    if annotation_source_field == "id" or annotation_source_field == "rsid":    
-        info = record.get_id()
-    else:
-        info = record.get_info_field(annotation_source_field)
-    if info is None:
-        print("WARNING: Failed annotation for " + rsid + ". No " + annotation_source_field + " in source.")
-        return annotated_line    
-    annotated_line[annotation_name] = info
-    return annotated_line
-
-def add_gene_symbol(line, reference, genes):
-    record = reference.get_record_by_rsid(line["rsid"])
-    if not record: return None
-    symbol = [(gene["symbol"], abs(int(record.get_pos()) - int(gene["start"]))) for gene in genes if record.get_chrom() == ("chr" + gene["chromosome"]) and abs(int(record.get_pos()) - int(gene["start"])) < 500000]
-    if not symbol: return None
-    symbol = sorted(symbol, key=lambda tup: tup[1])[0][0]
-    return symbol
-
-def add_af(line, af_accessor: VcfAccessor, population: str = 'nfe', rsid_column_name: str = 'rsid'):
-    try:
-        af = af_accessor.get_af_by_pop(line['ID'], 'AF_' + population)
-        line['af'] = af[line['ALT']]
-    except DataNotPresentError:
-        line['af'] = 0
-    except Exception:
-        # TODO convert alternate alleles
-        af = af_accessor.get_af_by_pop(line['ID'], 'AF_' + population)
-        line['af'] = af[list(af.keys())[1]]
-    return line
-
-####################
-###   simulate   ###
-####################
-
-
-
-#####################################################################################################
-###                                                                                               ###
-###                                   Utils                                                       ###
-###                                                                                               ###
-#####################################################################################################
-
 #######################
 ### vcf-index #########
 #######################
@@ -137,123 +48,6 @@ def vcf_index(args):
                         help='path to vcf file')
     parsed_args = parser.parse_args(args)
     VcfAccessor(parsed_args.vcf)
-    return
-
-
-#####################################################################################################
-###                                                                                               ###
-###                                   Polygenic Score Catalogue                                   ###
-###                                                                                               ###
-#####################################################################################################
-
-#######################
-### pgs-index #########
-#######################
-
-def pgs_index(args):
-    parser = argparse.ArgumentParser(
-        description='polygenicmaker pgs-index downloads index of gwas results from Polgenic Score Catalogue')  # todo dodać opis
-    parser.add_argument('--url', type=str, default='http://ftp.ebi.ac.uk/pub/databases/spot/pgs/metadata/pgs_all_metadata_scores.csv',
-                        help='alternative url location for index')
-    parser.add_argument('--output', type=str, default='',
-                        help='output directory')
-    parsed_args = parser.parse_args(args)
-    output_path = os.path.abspath(os.path.expanduser(
-        parsed_args.output)) + "/pgs_manifest.tsv"
-    download(parsed_args.url, output_path, force=True)
-    return
-
-#######################
-### pgs-get ###########
-#######################
-
-
-def pgs_get(args):
-    parser = argparse.ArgumentParser(
-        description='polygenicmaker pgs-get downloads specific gwas result from polygenic score catalogue')  # todo dodać opis
-    parser.add_argument('-c', '--code', type=str, required=False,
-                        help='PGS score code. Example: PGS000814')
-    parser.add_argument('-o', '--output-path', type=str,
-                        default='', help='output directory')
-    parser.add_argument('-f', '--force', action='store_true',
-                        help='overwrite downloaded file')
-    parsed_args = parser.parse_args(args)
-    url = "http://ftp.ebi.ac.uk/pub/databases/spot/pgs/scores/" + \
-        parsed_args.code + "/ScoringFiles/" + parsed_args.code + ".txt.gz"
-    download(url=url, output_path=parsed_args.output_path,
-             force=parsed_args.force, progress=True)
-    return
-
-#######################
-### pgs-prepare #######
-#######################
-
-def pgs_prepare_model(args):
-    parser = argparse.ArgumentParser(
-        description='polygenicmaker pgs-prepare-model constructs polygenic score model')  # todo dodać opis
-    parser.add_argument('-i', '--input', type=str,
-                        required=True, help='path to PRS file from PGS.')
-    parser.add_argument('-o', '--output-path', type=str,
-                        required=True, help='path to output file.')
-    parser.add_argument('--origin-reference-vcf', type=str,
-                        required=True, help='path to rsid vcf.')
-    parser.add_argument('--model-reference-vcf', type=str,
-                        required=True, help='path to rsid vcf.')
-    parser.add_argument('--af', type=str, required=True,
-                        help='path to allele frequency vcf.')
-    parser.add_argument('--pop', type=str, default='nfe',
-                        help='population: meta, afr, amr, csa, eas, eur, mid')
-    parser.add_argument('--iterations', type=float, default=1000,
-                        help='simulation iterations for mean and sd')
-    parsed_args = parser.parse_args(args)
-    if not is_valid_path(parsed_args.input): return
-    if not is_valid_path(parsed_args.origin_reference_vcf): return
-    if not is_valid_path(parsed_args.model_reference_vcf): return
-    if not is_valid_path(parsed_args.af): return
-    data = read_table(parsed_args.input)
-    af_vcf = VcfAccessor(parsed_args.af)
-    origin_ref_vcf = VcfAccessor(parsed_args.origin_reference_vcf)
-    model_ref_vcf = VcfAccessor(parsed_args.model_reference_vcf)
-
-    clean_data = []
-    for pgs_entry in data:
-        origin_record = origin_ref_vcf.get_record_by_position(
-            pgs_entry['chr_name'], pgs_entry['chr_position'])
-        model_record = model_ref_vcf.get_record_by_rsid(origin_record.get_id())
-        af_records = af_vcf.get_records_by_rsid(origin_record.get_id())
-        af_record = None
-        for record in af_records:
-            if record.get_alt()[0] == pgs_entry['effect_allele']:
-                af_record = record
-                break
-        if model_record is None and not af_record is None:
-            model_record = af_record
-        if origin_record is None or model_record is None:
-            logger.warning("Variant {chromosome}:{position} is not present in reference.".format(
-                chromosome=pgs_entry['chr_name'], position=pgs_entry['chr_position']))
-            continue
-        if not pgs_entry['reference_allele'] == origin_record.get_ref():
-            logger.warning("Variant {chromosome}:{position} has mismatch nucleotide in reference.".format(
-                chromosome=pgs_entry['chr_name'], position=pgs_entry['chr_position']))
-            continue
-        if not origin_record.get_ref() == model_record.get_ref():
-            logger.warning("Variant {chromosome}:{position} has mismatch nucleotide between references (grch37 vs grch38).".format(
-                chromosome=pgs_entry['chr_name'], position=pgs_entry['chr_position']))
-            continue
-        pgs_entry['rsid'] = origin_record.get_id()
-        if af_record is None:
-            pgs_entry['af'] = 0.001
-        else:
-            pgs_entry['af'] = af_record.get_af_by_pop(
-                'AF_' + parsed_args.pop)[pgs_entry['effect_allele']]
-        pgs_entry['ALT'] = pgs_entry['effect_allele']
-        pgs_entry['BETA'] = pgs_entry['effect_weight']
-        clean_data.append(pgs_entry)
-
-    description = simulate_parameters(clean_data)
-    description.update(read_header(parsed_args.input))
-    write_model(clean_data, description, parsed_args.output_path)
-
     return
 
 #####################################################################################################
@@ -370,193 +164,6 @@ def gbe_model(args):
 
 
 
-#############################
-### biobankuk-model #########
-#############################
-
-def biobankuk_model(args):
-    parser = argparse.ArgumentParser(
-        description='polygenicmaker biobankuk-model prepares polygenic score model based on p value data')
-    parser.add_argument('--code', '--phenocode', type=str, required=True,
-                        help='phenocode of phenotype form Uk Biobank')
-    parser.add_argument('--sex', '--pheno_sex', type=str, default="both_sexes",
-                        help='pheno_sex of phenotype form Uk Biobank')
-    parser.add_argument('--coding', type=str, default="",
-                        help='additional coding of phenotype form Uk Biobank')
-    parser.add_argument('--index', type=str, required=True,
-                        help='path to Index file from PAN UKBiobank. It can be downloaded using gbe-get')
-    parser.add_argument('--output-directory', type=str, default='',
-                        help='output directory')
-    parser.add_argument('--variant-metrics', type=str, required=True,
-                        help='path to annotation file. It can be downloaded from https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_release/full_variant_qc_metrics.txt.bgz')
-    parser.add_argument('--threshold', type=float, default=1e-08,
-                        help='significance cut-off threshold')
-    parser.add_argument('--population', type=str, default='EUR',
-                        help='population: meta, AFR, AMR, CSA, EAS, EUR, MID')
-    parser.add_argument('--clumping-vcf', type=str, default='eur.phase3.biobank.set.vcf.gz',
-                        help='')
-    parser.add_argument('--source-ref-vcf', type=str, default='ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20100804/ALL.2of4intersection.20100804.genotypes.vcf.gz',
-                        help='')
-    parser.add_argument('--target-ref-vcf', type=str, default='/tmp/marpiech/kenobi/resources/GRCh38.dbSNP155.chr.norm.rsidonly.vcf.gz',
-                        help='')
-
-    parsed_args = parser.parse_args(args)
-    if not is_valid_path(parsed_args.output_directory, is_directory=True): return
-    path = biobankuk_get(parsed_args)
-    if not is_valid_path(path): return
-    if not is_valid_path(parsed_args.variant_metrics): return
-    if not is_valid_path(parsed_args.target_ref_vcf): return
-    if not is_valid_path(parsed_args.target_ref_vcf, possible_url = True): return
-    source_vcf = VcfAccessor(parsed_args.source_ref_vcf)
-    target_vcf = VcfAccessor(parsed_args.target_ref_vcf)
-
-    filter_pval(path, parsed_args)
-    clump(path, parsed_args)
-
-    data = read_table(path + ".clumped")
-    for line in data: line.update({"rsid": line['chr'] + ":" + line['pos'] + "_" + line['ref'] + "_" + line['alt']})
-    for line in data: line.update({"REF": line['ref'], "ALT": line['alt']})
-    for line in data: line.update({"BETA": line["beta_" + parsed_args.population]})
-    for line in data: line.update({"af": line["af_" + parsed_args.population]})
-
-    data = [add_annotation(
-        line, 
-        annotation_name = "rsid", 
-        annotation_source = source_vcf, 
-        annotation_source_field = "rsid",
-        default_value = "rs0") for line in data]
-
-    data = [validate(line, validation_source = target_vcf) for line in data]
-
-    description = simulate_parameters(data)
-
-    model_path = path + ".yml"
-    write_model(data, description, model_path)
-
-    return
-
-
-
-
-
-def clump(path, parsed_args):
-
-    filtered_path = path + ".filtered"
-    clumped_path = path + ".clumped"
-
-    subprocess.call("plink" +
-                    " --clump " + filtered_path +
-                    " --clump-p1 " + str(parsed_args.threshold) +
-                    " --clump-r2 0.25 " +
-                    " --clump-kb 1000 " +
-                    " --clump-snp-field rsid " +
-                    " --clump-field pval_" + parsed_args.population +
-                    " --vcf " + parsed_args.clumping_vcf + " " +
-                    " --allow-extra-chr",
-                    shell=True)
-    clumped_rsids = []
-    with open("plink.clumped", 'r') as plink_file:
-        while(line := plink_file.readline()):
-            if ' rs' in line:
-                line = re.sub(' +', '\t', line).rstrip().split('\t')
-                clumped_rsids.append(line[3])
-    try:
-        os.remove("plink.clumped")
-        os.remove("plink.log")
-        os.remove("plink.nosex")
-    except:
-        pass
-    
-    with open(filtered_path, 'r') as filtered_file, open(clumped_path, 'w') as clumped_file:
-        filtered_header = filtered_file.readline().rstrip().split('\t')
-        clumped_file.write('\t'.join(filtered_header) + "\n")
-        while True:
-            try:
-                filtered_line = filtered_file.readline().rstrip().split('\t')
-                if filtered_line[filtered_header.index('rsid')] in clumped_rsids:
-                    clumped_file.write('\t'.join(filtered_line) + "\n")
-            except:
-                break
-    return
-
-
-def simulate(args):
-    clumped_path = args.output + "/" + os.path.basename(args.data) + ".clumped"
-    random.seed(0)
-    simulation_data = []
-    with open(clumped_path, 'r') as clumped_file:
-        clumped_header = clumped_file.readline().rstrip().split('\t')
-        clumped_line = clumped_header
-        while True:
-            clumped_line = clumped_file.readline().rstrip().split('\t')
-            if len(clumped_line) < 2:
-                break
-            rsid = clumped_line[clumped_header.index('rsid')]
-            af = float(clumped_line[clumped_header.index('af_' + args.pop)])
-            beta = float(
-                clumped_line[clumped_header.index('beta_' + args.pop)])
-            simulation_data.append({'rsid': rsid, 'af': af, 'beta': beta})
-
-    randomized_beta_list = []
-    for _ in range(args.iterations):
-        randomized_beta_list.append(
-            sum(map(lambda snp: randomize_beta(snp['beta'], snp['af']), simulation_data)))
-    minsum = sum(map(lambda snp: min(snp['beta'], 0), simulation_data))
-    maxsum = sum(map(lambda snp: max(snp['beta'], 0), simulation_data))
-    return {
-        'mean': statistics.mean(randomized_beta_list),
-        'sd': statistics.stdev(randomized_beta_list),
-        'min': minsum,
-        'max': maxsum
-    }
-
-def randomize_beta(beta: float, af: float):
-    first_allele_beta = beta if random.uniform(0, 1) < af else 0
-    second_allele_beta = beta if random.uniform(0, 1) < af else 0
-    return first_allele_beta + second_allele_beta
-
-def save_model(args, description):
-    model_path = args.output + "/" + \
-        os.path.basename(args.data).split('.')[0] + ".py"
-    with open(model_path, 'w') as model_file:
-        model_file.write(
-            "from polygenic.seqql.score import PolygenicRiskScore\n")
-        model_file.write("from polygenic.seqql.score import ModelData\n")
-        model_file.write(
-            "from polygenic.seqql.category import QuantitativeCategory\n")
-        model_file.write("\n")
-        model_file.write("model = PolygenicRiskScore(\n")
-        model_file.write("categories=[\n")
-        model_file.write("QuantitativeCategory(from_=" + str(description['min']) + ", to=" + str(
-            description['mean'] - 1.645 * description['sd']) + ", category_name='Reduced'),\n")
-        model_file.write("QuantitativeCategory(from_=" + str(description['mean'] - 1.645 * description['sd']) + ", to=" + str(
-            description['mean'] + 1.645 * description['sd']) + ", category_name='Average'),\n")
-        model_file.write("QuantitativeCategory(from_=" + str(description['mean'] + 1.645 * description['sd']) + ", to=" + str(
-            description['max']) + ", category_name='Increased')\n")
-        model_file.write("],\n")
-        model_file.write("snips_and_coefficients={\n")
-        clumped_path = args.output + "/" + \
-            os.path.basename(args.data) + ".clumped"
-        snps = []
-        with open(clumped_path, 'r') as clumped_file:
-            clumped_header = clumped_file.readline().rstrip().split('\t')
-            while True:
-                clumped_line = clumped_file.readline().rstrip().split('\t')
-                if len(clumped_line) < 2:
-                    break
-                rsid = clumped_line[clumped_header.index('rsid')]
-                allele = clumped_line[clumped_header.index('alt')]
-                beta = str(
-                    float(clumped_line[clumped_header.index('beta_' + args.pop)]))
-                snps.append("'" + rsid + "': ModelData(effect_allele='" +
-                            allele + "', coeff_value=" + beta + ")")
-        model_file.write(",\n".join(snps))
-        model_file.write("},\n")
-        model_file.write("model_type='beta'\n")
-        model_file.write(")\n")
-        model_file.write("description = " + json.dumps(description, indent=4))
-
-    return
 
 def main(args=sys.argv[1:]):
     try:
@@ -564,14 +171,8 @@ def main(args=sys.argv[1:]):
             pgscompute.main(args[1:])
         elif args[0] == 'model-biobankuk':
             modelbiobankuk.main(args[1:])
-        elif args[0] == 'gbe-index':
-            gbe_index(args[1:])
-        elif args[0] == 'gbe-model':
-            gbe_model(args[1:])
-        elif args[0] == 'pgs-index':
-            pgs_index(args[1:])
-        elif args[0] == 'pgs-model':
-            pgs_model(args[1:])
+        elif args[0] == 'model-pgscat':
+            modelpgscat.main(args[1:])
         elif args[0] == 'vcf-index':
             vcf_index(args[1:])
         else:
@@ -579,15 +180,12 @@ def main(args=sys.argv[1:]):
             print("""
             Program: polygenicmaker (downloads gwas data, clumps and build polygenic scores)
             Contact: Marcin Piechota <piechota@intelliseq.com>
-            Usage:   polygenicmaker <command> [options]
+            Usage:   pgstk <command> [options]
 
             Command:
-            biobankuk-index         downloads pan biobankuk index of gwas results
-            biobankuk-model         prepare polygenic score model based on gwas results from biobankuk
-            gbe-index               downloads Global Biobank Engine index
-            gbe-model               prepare polygenic score model from GBE data
-            pgs-index               downloads Polygenic Risk Score index
-            pgs-model               prepare polygenic score model from PGS data
+            pgs-compute             computes pgs score for vcf file
+            model-biobankuk         prepare polygenic score model based on gwas results from biobankuk
+            model-pgscat            prepare polygenic score model based on gwas results from PGS Catalogue
             vcf-index               prepare rsidx for vcf
 
             """)

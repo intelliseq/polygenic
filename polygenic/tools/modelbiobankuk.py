@@ -2,6 +2,7 @@ import argparse
 import sys
 import os
 import re
+from tqdm import tqdm
 
 from polygenic.tools.utils import error_exit
 from polygenic.tools.utils import setup_logger
@@ -13,6 +14,8 @@ from polygenic.tools.utils import validate_with_source
 from polygenic.tools.utils import write_data
 from polygenic.tools.utils import simulate_parameters
 from polygenic.tools.utils import write_model
+from polygenic.tools.utils import annotate_with_symbols
+from polygenic.tools.utils import get_gene_symbols
 from polygenic.data.vcf_accessor import VcfAccessor
 from polygenic.error.polygenic_exception import PolygenicException
 
@@ -33,6 +36,7 @@ def parse_args(args):
     parser.add_argument('--clumping-vcf', type=str, default='eur.phase3.biobank.set.vcf.gz', help='')
     parser.add_argument('--source-ref-vcf', type=str, default='dbsnp155.grch37.norm.vcf.gz', help='')
     parser.add_argument('--target-ref-vcf', type=str, default='dbsnp155.grch38.norm.vcf.gz', help='')
+    parser.add_argument('--gene-positions', type=str, default='ensembl-genes.104.tsv', help='table with ensembl genes')
     parser.add_argument('--ignore-warnings', type=bool, default='False', help='')
     parser.add_argument('-l', '--log-file', type=str, help='path to log file')
     parsed_args = parser.parse_args(args)
@@ -109,7 +113,9 @@ def filter_pval(args):
         data_header = data.readline().rstrip().split('\t')
         anno_header = anno.readline().rstrip().split('\t')
         output.write('\t'.join(data_header + anno_header) + "\n")
+        pbar = tqdm(total = 28987535)
         while True:
+            pbar.update(1)
             try:
                 data_line = data.readline().rstrip().split('\t')
                 anno_line = anno.readline().rstrip().split('\t')
@@ -117,6 +123,7 @@ def filter_pval(args):
                     output.write('\t'.join(data_line + anno_line) + "\n")
             except:
                 break
+        pbar.close()
     return
 
 def clump_variants(args):
@@ -142,18 +149,25 @@ def run(args):
     get_index(args) # download index
     gwas_file = get_data(args) # download gwas results
     validate_paths(args) # check if vcf files are correct
+    args.logger.info("Filtering variants by p value")
     filter_pval(args) # filter results by pvalue
     data = read_filtered_variants(args) # read filtered variants
-    data = data[40:100]
+    args.logger.info("Validating variants with GRCh37")
     data = validate_with_source(data, args.source_ref_vcf, ignore_warnings = args.ignore_warnings) # validate if variants are present in hg19
-    data = validate_with_source(data, args.target_ref_vcf, ignore_warnings = args.ignore_warnings) # validate if variants are present in hg38
+    args.logger.info("Validating variants with GRCh38")
+    data = validate_with_source(data, args.target_ref_vcf, ignore_warnings = args.ignore_warnings, use_gnomadid = False) # validate if variants are present in hg38
     write_data(data, gwas_file + ".validated") # write validated snps to file
     clump_variants(args) # clump variants
     data = read_clumped_variants(args) # read clumped variants
+    args.logger.info("Annotating with symbols")
+    data = annotate_with_symbols(data, args.gene_positions)
+    genes = get_gene_symbols(data)
     description = dict() # generate description
     description["info"] = get_info(args)
     description["arguments"] = vars(args)
     description["parameters"] = simulate_parameters(data)
+    description["pmid"] = ["25826379"]
+    description["genes"] = genes
     name = re.sub("[^0-9a-zA-Z]+", "_", description["info"]["description"].lower()) # trait name
     filename = "-".join(["biobankuk", name, args.code, args.sex, args.coding, args.population, str(args.pvalue_threshold)]) + ".yml"
     model_path = "/".join([args.output_directory, filename]) # output path
@@ -163,7 +177,7 @@ def run(args):
 def main(args = sys.argv[1:]):
 
     args = parse_args(args) 
-    setup_logger(args.log_file) if args.log_file else setup_logger(args.output_directory + "/pgstk.log")
+    args.logger = setup_logger(args.log_file) if args.log_file else setup_logger(args.output_directory + "/pgstk.log")
 
     try:
         run(args)
