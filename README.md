@@ -429,3 +429,5 @@ description:
 - resolved pandas warning about keywords in read_csv
 #### 2.0.43
 - added `other_allele` to PGS catalog parser
+#### 2.0.44
+- removed logs from validation

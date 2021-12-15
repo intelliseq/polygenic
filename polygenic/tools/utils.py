@@ -290,7 +290,6 @@ def validate(
     strict: bool = True,
     use_gnomadid: bool = True,
     verbose = False):
-    print("Validating")
     verbose = True
     record, snpid = get_record(validated_line, validation_source, use_gnomadid)
     if record is None:
