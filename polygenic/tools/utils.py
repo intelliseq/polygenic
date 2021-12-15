@@ -290,7 +290,6 @@ def validate(
     strict: bool = True,
     use_gnomadid: bool = True,
     verbose = False):
-    verbose = True
     record, snpid = get_record(validated_line, validation_source, use_gnomadid)
     if record is None:
         if verbose: error_print("ERROR: " + "Failed validation for " + validated_line['rsid'] + ". No id in source")
