@@ -431,3 +431,5 @@ description:
 - added `other_allele` to PGS catalog parser
 #### 2.0.44
 - removed logs from validation
+#### 2.0.46
+- 

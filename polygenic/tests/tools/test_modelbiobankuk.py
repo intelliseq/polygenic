@@ -22,10 +22,10 @@ class ModelBiobankukTest(TestCase):
             "--sex", "both_sexes",
             "--coding", "4", 
             "--output-directory", self.output_directory,
-            "--pvalue-threshold", "1e-08",
+            "--pvalue-threshold", "1e-60",
             "--clumping-vcf", "polygenic/tests/resources/largefiles/eur.phase3.biobank.set.vcf.gz",
             "--source-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch37.norm.vcf.gz",
-            "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp138.38.norm.vcf.gz",
+            "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch38.norm.vcf.gz",
             "--gene-positions", "polygenic/tests/resources/largefiles/ensembl-genes.104.tsv"
         ])
 

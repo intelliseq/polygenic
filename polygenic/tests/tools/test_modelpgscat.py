@@ -55,10 +55,11 @@ class ModelPgscatTest(TestCase):
     def testModelPgscatCreateModel(self):
         pgstk.main([
             "model-pgscat",
-            "--code", "PGS000001",
+            "--code", "PGS000005",
             "--output-directory", self.output_directory,
             "--af", "polygenic/tests/resources/largefiles/gnomad.3.1.vcf.gz",
-            "--origin-genome-build", "Grch38",
+            "--af-field", "AF_nfe",
+            "--origin-genome-build", "Grch37",
             "--source-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch37.norm.vcf.gz",
             "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch38.norm.vcf.gz",
             "--gene-positions", "polygenic/tests/resources/largefiles/ensembl-genes.104.tsv"

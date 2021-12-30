@@ -80,6 +80,21 @@ class PgsComputeTest(TestCase):
 
         self.assertEqual(cm.exception.code, 1)
 
+    # test haplotype
+    def testPgsComputeError(self):
+        appendix = "bitter"
+        with self.assertRaises(SystemExit) as cm:
+            pgstk.main([
+                'pgs-compute',
+                '--vcf', 'polygenic/tests/resources/vcf/test.sample.vcf.gz',
+                '--model', 'polygenic/tests/resources/model/bitter-taste.yml',
+                '--output-name-appendix', appendix,
+                '--af', 'polygenic/tests/resources/vcf/test.af.vcf.gz',
+                '--af-field', 'AF_nfe',
+                '--output-directory', self.output_directory])
+
+        self.assertEqual(cm.exception.code, 1)
+
     # def testPolygenicMat(self):
     #     polygenic.main([
     #         "--vcf", "/tmp/marpiech/kenobi/polygenic/illu_merged-imputed.vcf.gz",

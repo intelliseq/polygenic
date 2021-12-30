@@ -266,7 +266,7 @@ def write_data(data: list, file_path: str, delimiter: str = '\t'):
 def get_record(
     line: dict,
     vcf_accessor: VcfAccessor,
-    use_gnomad: bool = True):
+    use_gnomadid: bool = True):
     record = None
     if "id" in line:
         record = vcf_accessor.get_record_by_rsid(line['id'])
