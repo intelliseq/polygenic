@@ -37,6 +37,22 @@ class VcfRecord(object):
 
         return parsed_line
 
+    def is_phased(self, sample_name) -> list:
+        phased = None
+        samples = self.__dict["SAMPLES"]
+        if not self.__sample_names is None:
+            idx = self.__sample_names.index(sample_name)
+        else:
+            idx = None
+        if not samples is None and not idx is None:
+            sample = samples[idx]
+            sample = sample.split(":")[0]
+            if "|" in sample:
+                return True
+            if "/" in sample:
+                return False
+        return None
+
     def get_genotype(self, sample_name) -> list:
         samples = self.__dict["SAMPLES"]
         if not self.__sample_names is None:

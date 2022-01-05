@@ -7,6 +7,9 @@ from polygenic.data.data_accessor import DataAccessor
 from polygenic.model.utils import merge
 from polygenic.error import polygenic_exception
 
+#tmp
+import json
+
 logger = logging.getLogger('description_language.' + __name__)
 
 class SeqqlOperator:
@@ -21,6 +24,7 @@ class SeqqlOperator:
         self._instantiate_subclass("diplotypes", Diplotypes)
         self._instantiate_subclass("formula_model", FormulaModel)
         self._instantiate_subclass("haplotype_model", HaplotypeModel)
+        self._instantiate_subclass("haplotypes", Haplotypes)
         self._instantiate_subclass("score_model", ScoreModel)
         self._instantiate_subclass("variants", Variants)
         if type(self._entries) is dict:
@@ -116,25 +120,30 @@ class SeqqlOperator:
         return refined_result
 class Description(SeqqlOperator):
     pass
+
 class Categories(SeqqlOperator):
     def __init__(self, entries):
         super(Categories, self).__init__({})
         for key in entries:
             self._entries[key] = Category(key, entries[key])
+
 class Category(SeqqlOperator):
     def __init__(self, key, entries):
         super(Category, self).__init__(entries)
         self.id = key
-        self.require("from")
-        self.require("to")
+        if self._entries and not isinstance(self._entries, list):
+            self.require("from")
+            self.require("to")
 
     def compute(self, score: float):
         result = {"id": self.id, "match": False, "value": score}
-        if score > self.get("from") and score < self.get("to"):
+        if score >= self.get("from") and score <= self.get("to"):
             result["match"] = True
         if self.has("scale_from") and self.has("scale_to"):
             result["value"] = self.get("scale_from") + (score - self.get("from")) / (self.get("to") - self.get("from")) * (self.get("scale_to") - self.get("scale_from"))
         return result
+    
+
 class DiplotypeModel(SeqqlOperator):
     def compute(self, data_accessor: DataAccessor):
         diplotypes_results = super(DiplotypeModel, self).compute(data_accessor)
@@ -195,10 +204,22 @@ class Model(SeqqlOperator):
 
 class HaplotypeModel(SeqqlOperator):
     def compute(self, data_accessor: DataAccessor):
-        haplotypes_results = super(HaplotypeModel, self).compute(data_accessor)
-        results = haplotypes_results["haplotypes"]
-        results["genotypes"] = haplotypes_results["genotypes"]
-        return results
+        genotypes = {}
+        if "variants" in self._entries:
+            genotypes = self._entries["variants"].compute(data_accessor)
+        result = {}
+        genotypes = self._entries["haplotypes"].compute_genotypes(data_accessor, genotypes)
+        haplotypes = self._entries["haplotypes"].compute_haplotypes(genotypes)
+        result["haplotypes"] = haplotypes
+        if self.has("categories"):
+            for category_name in self.get("categories").get_entries():
+                category = self.get("categories").get_entries()[category_name]
+                category_result = category.compute(haplotypes["score"])
+                if category_result["match"]:
+                    result["category"] = category_name
+                    result["value"] = category_result["value"]
+        
+        return result
 
 class Haplotypes(SeqqlOperator):
     def __init__(self, entries):
@@ -206,35 +227,92 @@ class Haplotypes(SeqqlOperator):
         for haplotype in entries:
             self._entries[haplotype] = Haplotype(haplotype, entries[haplotype])
 
-    def compute(self, data_accessor: DataAccessor):
-        result = {"haplotype": None, "category": None}
-        haplotypes_results = super(Haplotypes, self).compute(data_accessor)
-        result["genotypes"] = haplotypes_results.pop("genotypes")
-        for haplotype in haplotypes_results:
-            if haplotypes_results[haplotype]["haplotype_match"]:
-                result["haplotype"] = haplotype
-                result["category"] = haplotype
+    def compute_genotypes(self, data_accessor: DataAccessor, genotypes: dict):
+        for entry in self._entries:
+            genotypes = self._entries[entry].compute_genotypes(data_accessor, genotypes)
+        return genotypes
+
+    def compute_haplotypes(self, genotypes: dict):
+        haplotypes = {}
+        matching_haplotypes = {}
+        result = {}
+        for entry in self._entries:
+            haplotypes[entry] = self._entries[entry].compute_haplotype(genotypes)
+        for haplotype_id in haplotypes:
+            haplotype = haplotypes[haplotype_id]
+            if (sum(haplotype["alleles"]) > 0):
+                matching_haplotypes[haplotype_id] = {
+                    "id": haplotype_id,
+                    "allele_count": sum(haplotype["alleles"]),
+                    "af": haplotype["af"],
+                    "alleles": haplotype["alleles"],
+                    "score": haplotype["score"]
+                }
+        res = sorted(matching_haplotypes.items(), key = lambda x: x[1]['af'])
+        allele_count_sum = 0
+        result["match"] = []
+        score = 0
+        for item in res:
+            haplotype_id = item[0]
+            haplotype = item[1]
+            for i in range(int(haplotype["allele_count"])):
+                score += haplotype["score"]
+                result["match"].append(haplotype["id"])
+                allele_count_sum += 1
+                if allele_count_sum >= 2: break
+            if allele_count_sum >= 2: break
+        result["id"] = [result["match"][0] + "/" + result["match"][1], result["match"][1] + "/" + result["match"][0]]
+        result["score"] = score
+        result["haplotypes"] = haplotypes
         return result
 
 class Haplotype(SeqqlOperator):
     def __init__(self, key, entries):
-        super(Haplotype, self).__init__(entries)
+        super(Haplotype, self).__init__({})
+        for key in entries:
+            if key in ["af", "score"]:
+                self._entries[key] = entries[key]
+            else:
+                self._entries[key] = Variant(key, entries[key])
         self.id = key
 
-    def genotype(self, data_accessor: DataAccessor):
-        variants_genotypes = super(Haplotype, self).compute(data_accessor)["variants"]
+    def compute_genotypes(self, data_accessor: DataAccessor, genotypes: dict):
+        for entry in self._entries:
+            if entry not in ["af", "score"] and entry not in genotypes:
+                genotypes[entry] = self._entries[entry].compute(data_accessor)
+        return genotypes
 
-    def compute(self, data_accessor: DataAccessor):
-        result = {}
-        result["genotypes"] = {}
-        result["haplotype_match"] = True
-        variants_results = super(Haplotype, self).compute(data_accessor)["variants"]
-        for variant in variants_results:
-            variant_result = variants_results[variant]
-            result["genotypes"][variant_result["genotype"]["rsid"]] = variant_result["genotype"]
-            if not variant_result["haplotype_match"]:
-                result["haplotype_match"] = False
-        return result
+    def compute_haplotype(self, genotypes: dict):
+        haplotype = {'id': self.id}
+        haplotype_tupple = [True, True]
+        possible_haplotype_allele_count = 2
+        required_matches = [0, 0]
+        matched_variants = [0, 0]
+        for genotype_id in genotypes:
+            required_matches = [required_matches[0] + 1, required_matches[1] + 1]
+            genotype = genotypes[genotype_id]
+            alleles = [allele == genotype["effect_allele"] for allele in genotype["genotype"]["genotype"]]
+            if genotype_id not in self._entries:
+                alleles = [not allele for allele in alleles]
+            phased = genotype["genotype"]["phased"]
+            allele = alleles[0] or alleles[1]
+            possible_haplotype_allele_count = min(possible_haplotype_allele_count, sum(alleles))
+            if phased:
+                matched_variants = [matched_variants[0] + alleles[0], matched_variants[1] + alleles[1]]
+                haplotype_tupple[0] = haplotype_tupple[0] and alleles[0]
+                haplotype_tupple[1] = haplotype_tupple[1] and alleles[1]
+            else:
+                matched_variants = [matched_variants[0] + allele, matched_variants[1] + allele]
+                haplotype_tupple[0] = haplotype_tupple[0] and allele
+                haplotype_tupple[1] = haplotype_tupple[1] and allele
+        haplotype["possible_haplotype_allele_count"] = possible_haplotype_allele_count
+        haplotype["required_matches"] = required_matches
+        haplotype["matched_variants"] = matched_variants
+        haplotype["alleles"] = haplotype_tupple
+        haplotype["af"] = self._entries["af"] if "af" in self._entries else 0
+        haplotype["score"] = self._entries["score"] if "score" in self._entries else 0
+        return haplotype
+
 
 class ScoreModel(SeqqlOperator):
     def __init__(self, entries):
@@ -296,6 +374,10 @@ class Variant(SeqqlOperator):
 
     def compute(self, data_accessor: DataAccessor):
         result = {}
+        if not self._entries:
+            result["genotype"] = {'rsid': self.id, 'genotype': [None, None], 'phased': None, 'source': 'invalidmodelentry', 'ref': None}
+            result["effect_allele"] = self.get("alt")
+            return result
         result["genotype"] = data_accessor.get_genotype_by_rsid(self.id)
         if self.has("diplotype"):
             result["diplotype_match"] = (sorted(self.get("diplotype").split('/')) == sorted(result["genotype"]["genotype"]))
@@ -310,4 +392,10 @@ class Variant(SeqqlOperator):
             result["effect_size"] = self.get("effect_size")
         if self.has("symbol"):
             result["symbol"] = self.get("symbol")
+        if self.has("effect_allele"):
+            result["effect_allele"] = self.get("effect_allele")
+        elif self.has("alt"):
+            result["effect_allele"] = self.get("alt")
+        else:
+            result["effect_allele"] = None
         return result

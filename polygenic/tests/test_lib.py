@@ -7,6 +7,9 @@ from polygenic.data.vcf_accessor import VcfAccessor
 # CsvAccessor
 from polygenic.data.csv_accessor import CsvAccessor
 
+# DataAccessor
+from polygenic.data.data_accessor import DataAccessor
+
 # Utils
 import polygenic.tools.utils as utils
 
@@ -27,6 +30,21 @@ class VcfAccessorTest(TestCase):
         record = vcf.get_record_by_rsid("1:164507787_A_AC")
         self.assertEqual('A', record.get_ref())
 
+class DataAccessorTest(TestCase):
+
+    def testGetGenotypeByRsid(self):
+        vcf = VcfAccessor("polygenic/tests/resources/vcf/test.sample.vcf.gz")
+        data_accessor = DataAccessor(vcf)
+        genotype = data_accessor.get_genotype_by_rsid("rs201694901")
+        self.assertEqual(True, genotype["phased"])
+        self.assertEqual('T', genotype["genotype"][0])
+        genotype = data_accessor.get_genotype_by_rsid("rs1292226269")
+        self.assertEqual(False, genotype["phased"])
+        self.assertEqual('A', genotype["genotype"][0])
+        genotype = data_accessor.get_genotype_by_rsid("rs1570391830")
+        self.assertEqual(None, genotype["phased"])
+        self.assertEqual(None, genotype["genotype"][0])
+
 class CsvAccessorTest(TestCase):
 
     def testColumnNames(self):
@@ -41,7 +59,7 @@ class UtilsTest(TestCase):
     def testDownloadGzip(self):
         url = "https://github.com/marpiech/scalable-genomics/raw/main/test/resources/archive/gzip.gz"
         path = "/tmp/gzip"
-        return_path = download(url, path)
+        return_path = utils.download(url, path)
         self.assertEqual(return_path, path)
         url = "https://github.com/marpiech/scalable-genomics/raw/main/test/resources/archive/gzip.bgz"
         path = "/tmp/gzip"

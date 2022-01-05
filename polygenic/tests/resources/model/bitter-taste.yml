@@ -1,43 +1,49 @@
 haplotype_model:
   variants:
-    rs713598: {ref: "C", alt: "G"}
-    rs10246939: {ref: "T", alt: "C"}
-    rs1726866: {ref: "G", alt: "A"}
+    rs713598: {ref: "C", alt: "A", effect_allele: "A"}
+    rs10246939: {ref: "T", alt: "A", effect_allele: "A"}
+    rs1726866: {ref: "T", alt: "C", effect_allele: "C"}
   haplotypes:
     PAV:
+      score: 1
       af: 0.6451
       rs713598:
       rs10246939:
     AVI:
+      score: 1
       af: 0.3531
       rs1726866:
     AAV:
+      score: 0.5
       af: 0.0000
       rs10246939:
     AVV:
+      score: 0.2
       af: 0.0017
       rs10246939:
     PAI:
+      score: 0.1
       af: 0.0000
       rs713598:
     PVI:
+      score: 0.1
       af: 0.0000
+      rs713598:
       rs1726866:
     AAI:
+      score: 0.1
       af: 0.0000
     PVV:
+      score: 0.1
       af: 0.0000
       rs713598:
       rs1726866:
       rs10246939:
   categories:
-    HIGH:
-      - "PAV/PAV"
-      - "PAV/AVI"
-    MEDIUM:
-      - "AVI/AVI"
-    LOW:
-    OTHER:
+    HIGH: {from: 1, to: 2}
+    MEDIUM: {from: 0.5, to: 1}
+    LOW: {from: 0.2, to: 0.5}
+    OTHER: {from: 0, to: 0.2}
 description:
   name: bitter_taste
   title: Bitter Taste

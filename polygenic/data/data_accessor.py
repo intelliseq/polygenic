@@ -7,12 +7,14 @@ logger = logging.getLogger('description_language.' + __name__)
 class DataAccessor(object):
     def __init__(self, 
         genotypes: VcfAccessor,
-        allele_frequencies: VcfAccessor,
-        sample_name: str,
+        allele_frequencies: VcfAccessor = None,
+        sample_name: str = None,
         af_field_name: str = "AF_nfe",
         parameters = {}):
         self.__genotypes = genotypes
         self.__allele_frequencies = allele_frequencies
+        if sample_name is None:
+            sample_name = genotypes.get_sample_names()[0]
         self.__sample_name = sample_name
         self.__af_field_name = af_field_name
         self.__parameters = parameters
@@ -26,6 +28,7 @@ class DataAccessor(object):
             record = self.__genotypes.get_record_by_rsid(rsid)
             if not record is None:
                 genotype["genotype"] = record.get_genotype(self.__sample_name)
+                genotype["phased"] = record.is_phased(self.__sample_name)
                 if genotype["genotype"][0] == None:
                     record = None
                 else:    
@@ -36,10 +39,12 @@ class DataAccessor(object):
             record = self.__allele_frequencies.get_record_by_rsid(rsid)
             if not record is None:
                 genotype["genotype"] = record.get_genotype_by_af(self.__af_field_name)
+                genotype["phased"] = False
                 genotype["source"] = "af"
                 genotype["ref"] = record.get_ref()
                 return genotype
         genotype["genotype"] = [None, None]
+        genotype["phased"] = None
         genotype["source"] = "missing"
         genotype["ref"] = None
         return genotype
