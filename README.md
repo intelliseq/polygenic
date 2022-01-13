@@ -28,6 +28,8 @@
   * [Docker images](#docker_images)
   * [Building models](#building_models)
   * [Example models](#example_models)
+  * [Usecases](#usecases)
+    * [pgx](#pgx)
 * [License](#license)
 * [Updates](#updates)
 
@@ -413,23 +415,32 @@ description:
     - `diplotypes`
 - `description` - all properties to be included in the final results  
 
+### Usecases
+
+#### PGX
+
+```
+python3 -m pip install polygenic
+pgstk pgs-compute --vcf [PATH_TO_VCF_GZ] --model cyp2d6-pharmvar.yml --print | jq .haplotype_model.haplotypes.match
+```
+
+## License
+Proprietary (contact@intelliseq.pl).
+
 ## Updates
+### 2.1.3
+- FEATURE: added support for multiple models in pgs-compute
+- FEATURE: added missing variants count to haplotype in haplotype model
+- BUG: id field in haplotype model
+### 2.1.2
+- FEATURE: allow gnomadid for variant in yml models
+- FEATURE: added printing output option in pgs-compute
+### 2.1.1
+- BUG: Resolved NoneType bug with empty haplotype
+### 2.1.0
+- FEATURE: Haplotype model now works with phased data
 ### 2.0.0
-- switched to yaml model definitions
-- implemented formula, score, haplotype and diplotype model types
-- prepared docker image with resources for polygenicmaker
-- added gene symbols to description
-<<<<<<< HEAD
-#### 2.0.27
-- improved parsing of effect_size (whitespaces and quotes are accepted now)
-#### 2.0.28
-- `./.` alleles are now treated as missing genotypes
-#### 2.0.42
-- removed extra printing from download module
-- resolved pandas warning about keywords in read_csv
-#### 2.0.43
-- added `other_allele` to PGS catalog parser
-#### 2.0.44
-- removed logs from validation
-#### 2.0.46
-- 
+- FEATURE: switched to yaml model definitions
+- FEATURE: implemented formula, score, haplotype and diplotype model types
+- FEATURE: added gene symbols to description
+- DEVOPS: prepared docker image with resources for polygenicmaker

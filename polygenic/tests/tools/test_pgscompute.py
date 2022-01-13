@@ -36,7 +36,7 @@ class PgsComputeTest(TestCase):
         pgstk.main([
             'pgs-compute',
             '--vcf', 'polygenic/tests/resources/vcf/test.sample.vcf.gz',
-            '--model', 'polygenic/tests/resources/model/test.model.yml',
+            '--model', 'polygenic/tests/resources/model/test.model.yml', "polygenic/tests/resources/model/test.model.yml",
             '--output-name-appendix', appendix,
             '--output-directory', self.output_directory])
 
@@ -92,6 +92,17 @@ class PgsComputeTest(TestCase):
             '--af-field', 'AF_nfe',
             '--output-directory', self.output_directory])
 
+    def testPgsComputeHaplotypePgx(self):
+        appendix = "pgx"
+        pgstk.main([
+            'pgs-compute',
+            '--vcf', '/data/projects/pgx-genotyping/stars-17-52.vcf.gz',
+            '--model', '/tmp/marpiech/projects/polygenic/models/pgx/cyp2d6-pharmvar.yml',
+            '--output-name-appendix', appendix,
+            '--af', '/tmp/marpiech/polygenic/gnomad.3.1.vcf.gz',
+            '--af-field', 'AF_nfe',
+            '--output-directory', self.output_directory,
+            '--print'])
     # def testPolygenicMat(self):
     #     polygenic.main([
     #         "--vcf", "/tmp/marpiech/kenobi/polygenic/illu_merged-imputed.vcf.gz",

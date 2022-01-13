@@ -211,6 +211,7 @@ class HaplotypeModel(SeqqlOperator):
         genotypes = self._entries["haplotypes"].compute_genotypes(data_accessor, genotypes)
         haplotypes = self._entries["haplotypes"].compute_haplotypes(genotypes)
         result["haplotypes"] = haplotypes
+        result["genotypes"] = genotypes
         if self.has("categories"):
             for category_name in self.get("categories").get_entries():
                 category = self.get("categories").get_entries()[category_name]
@@ -269,12 +270,13 @@ class Haplotypes(SeqqlOperator):
 class Haplotype(SeqqlOperator):
     def __init__(self, key, entries):
         super(Haplotype, self).__init__({})
-        for key in entries:
-            if key in ["af", "score"]:
-                self._entries[key] = entries[key]
-            else:
-                self._entries[key] = Variant(key, entries[key])
         self.id = key
+        if entries:
+            for key in entries:
+                if key in ["af", "score"]:
+                    self._entries[key] = entries[key]
+                else:
+                    self._entries[key] = Variant(key, entries[key])
 
     def compute_genotypes(self, data_accessor: DataAccessor, genotypes: dict):
         for entry in self._entries:
@@ -288,9 +290,15 @@ class Haplotype(SeqqlOperator):
         possible_haplotype_allele_count = 2
         required_matches = [0, 0]
         matched_variants = [0, 0]
+        missing_genotypes = 0
+        missing_variants = 0
         for genotype_id in genotypes:
             required_matches = [required_matches[0] + 1, required_matches[1] + 1]
             genotype = genotypes[genotype_id]
+            if genotype["genotype"]["source"] == "missing":
+                missing_genotypes += 1
+                if genotype_id in self._entries:
+                    missing_variants += 1
             alleles = [allele == genotype["effect_allele"] for allele in genotype["genotype"]["genotype"]]
             if genotype_id not in self._entries:
                 alleles = [not allele for allele in alleles]
@@ -308,6 +316,8 @@ class Haplotype(SeqqlOperator):
         haplotype["possible_haplotype_allele_count"] = possible_haplotype_allele_count
         haplotype["required_matches"] = required_matches
         haplotype["matched_variants"] = matched_variants
+        haplotype["missing_genotypes"] = missing_genotypes
+        haplotype["missing_variants"] = missing_variants
         haplotype["alleles"] = haplotype_tupple
         haplotype["af"] = self._entries["af"] if "af" in self._entries else 0
         haplotype["score"] = self._entries["score"] if "score" in self._entries else 0

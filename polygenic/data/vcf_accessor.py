@@ -37,6 +37,19 @@ class VcfAccessor(object):
         #self.__rsidx_conn = sqlite3.connect(self.__path + '.idx.db')
         self.__data: Dict[str, Dict[str:SnpData]] = {}  # dictionary rsid:{sample_name:ModelSnpData}
 
+    def get_record_by_gnomadid(self, gnomadid) -> VcfRecord:
+        splitted_gnomadid = gnomadid.split("-")
+        chromosome = splitted_gnomadid[0]
+        position = splitted_gnomadid[1]
+        ref = splitted_gnomadid[2]
+        alt = splitted_gnomadid[3]
+        records = self.get_records_by_position(chromosome, position)
+        if records:
+            for record in records:
+                if record.get_ref() == ref and alt in record.get_alt():
+                    return record
+        return None
+
     def get_record_by_position(self, chromosome, position) -> VcfRecord:
         records = self.get_records_by_position(chromosome, position)
         if records:
@@ -64,6 +77,10 @@ class VcfAccessor(object):
         if ":" in rsid:
             position = (rsid.split("_")[0]).split(':')
             return self.get_records_by_position(position[0], position[1])
+        if rsid.count("-") == 3:
+            record = self.get_record_by_gnomadid(rsid)
+            if record:
+                return [record]
         vcf_records = []
         try:
             with sqlite3.connect(self.__path + '.idx.db') as dbconn:
@@ -89,6 +106,9 @@ class VcfAccessor(object):
                         return record
                     if allow_invert and alt == record.get_ref() and ref in record.get_alt():
                         return record
+            if rsid.count("-") == 3:
+                if records:
+                    return records[0]                      
         return None
 
     def __get_record_for_rsid(self, rsid) -> VcfRecord:

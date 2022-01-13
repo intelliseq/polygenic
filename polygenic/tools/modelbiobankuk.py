@@ -159,7 +159,7 @@ def run(args):
     description["pmid"] = ["25826379"]
     description["genes"] = genes
     name = re.sub("[^0-9a-zA-Z]+", "_", description["info"]["description"].lower()) # trait name
-    filename = "-".join(["biobankuk", name, args.code, args.sex, args.coding, args.population, str(args.pvalue_threshold)]) + ".yml"
+    filename = "-".join(["biobankuk", args.code, args.sex, args.coding, name, args.population, str(args.pvalue_threshold)]) + ".yml"
     model_path = "/".join([args.output_directory, filename]) # output path
     utils.write_model(data, description, model_path, included_fields_list = ['ref', 'gnomadid']) # writing model
     return

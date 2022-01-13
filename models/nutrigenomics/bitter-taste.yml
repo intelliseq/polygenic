@@ -31,13 +31,10 @@ haplotype_model:
       rs1726866:
       rs10246939:
   categories:
-    HIGH:
-      - "PAV/PAV"
-      - "PAV/AVI"
-    MEDIUM:
-      - "AVI/AVI"
-    LOW:
-    OTHER:
+    HIGH: {from: 1, to: 2}
+    MEDIUM: {from: 0.5, to: 1}
+    LOW: {from: 0.2, to: 0.5}
+    OTHER: {from: 0, to: 0.2}
 description:
   name: bitter_taste
   title: Bitter Taste

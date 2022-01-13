@@ -1,0 +1,49 @@
+diplotype_model:
+  diplotypes:
+    VERY_HIGH:
+      variants:
+        rs671: {diplotype: A/A}
+    HIGH:
+      variants:
+        rs671: {diplotype: A/G}
+    NORMAL:
+      variants:
+        rs671: {diplotype: G/G}
+description:
+  chapter: Nutrition
+  category: Food Responses
+  trait: Alcohol
+  title: Alcohol
+  value: None
+  description: "Drinking alcohol in moderation (one to two drinks per day for men and one drink per day for women) can reduce the risk of cardiovascular diseases by increasing good cholesterol (HDL). Several studies have shown that low to moderate alcohol consumption is associated with a decreased risk in, and mortality due to cardiovascular diseases, compared with abstention. However, there is a risk of cancer and liver damage due to alcohol consumption."
+  source_of_food:
+    - name: Beers
+      concentration: "4-5% ABV / 355 mL"
+    - name: Wine
+      concentration: "12-15% ABV / 148 mL"
+    - name: Distilled Spirits
+      concentration: "28-46% ABV / 45 mL"
+  reference:
+    - "Cho, Y. et al. Scientific Reports 8, 458 (2018)."
+  genetic_profile_choice:
+    VERY_HIGH:
+      criteria: "alcohol sensitivity"
+      recommendation: "Limit your alcohol intake to no more than 1 drink per day."
+      interpretation: "Based on your genetic profile, you are very likely to have flush response when drinking alcohol. You have inherited the risk allele A in ALDH2 rs671 which associated with slower alcohol metabolism. This may make you prone to side effects of alcohol consumption, such as nausea, vomiting, and Asian Flush."
+      population_frequency: "1 in 25"
+      tendency: "Very slow alcohol metabolism, likely to have flush response"
+      results_icon: "low.png"
+    HIGH:
+      criteria: "alcohol sensitivity"
+      recommendation: "Limit your alcohol intake to no more than 1 drink per day."
+      interpretation: "Based on your genetic profile, you are likely to have flush response when drinking alcohol. You have inherited the risk allele A in ALDH2 rs671 which associated with slower alcohol metabolism. This may make you prone to side effects of alcohol consumption, such as nausea, vomiting, and Asian Flush."
+      population_frequency: "1 in 5"
+      tendency: "Slower alcohol metabolism, likely to have flush response"
+      results_icon: "low.png"
+    NORMAL:
+      criteria: "alcohol sensitivity"
+      recommendation: "Limit your alcohol intake to no more than 1 drink per day."
+      interpretation: "Based on your genetic profile, you are less likely to have flush response when drinking alcohol. You have inherited the risk allele A in ALDH2 rs671 which associated with slower alcohol metabolism. This may make you prone to side effects of alcohol consumption, such as nausea, vomiting, and Asian Flush."
+      population_frequency: "4 in 5"
+      tendency: "Normal alcohol metabolism, less likely to have flush response"
+      results_icon: "normal.png"

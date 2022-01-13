@@ -55,8 +55,8 @@ class ModelPgscatTest(TestCase):
     def testModelPgscatCreateModel(self):
         pgstk.main([
             "model-pgscat",
-            "--code", "PGS000005",
-            "--output-directory", self.output_directory,
+            "--code", "PGS000007",
+            "--output-directory", "/tmp/marpiech/polygenic/models/",
             "--af", "polygenic/tests/resources/largefiles/gnomad.3.1.vcf.gz",
             "--af-field", "AF_nfe",
             "--origin-genome-build", "Grch37",
@@ -64,10 +64,3 @@ class ModelPgscatTest(TestCase):
             "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch38.norm.vcf.gz",
             "--gene-positions", "polygenic/tests/resources/largefiles/ensembl-genes.104.tsv"
         ])
-
-        result_path = self.output_directory + "/pgscat-breast_cancer-PGS000004-EUR.yml"
-
-        with open(result_path, 'r') as output:
-            data = output.read()
-            header = list(filter(lambda line: "score_model:" in line, data.split('\n')))
-            self.assertEqual(1, len(header))

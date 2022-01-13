@@ -15,7 +15,6 @@ def parse_args(args):
     parser.add_argument('--output-directory', type=str, default='.', help='output directory')
     parser.add_argument('--index-file', type=str, help='path to index file')
     parser.add_argument('--index-url', type=str, default='http://ftp.ebi.ac.uk/pub/databases/spot/pgs/metadata/pgs_all_metadata_scores.csv', help='url of index file for PAN UKBiobank.')
-    parser.add_argument('--population', type=str, default='EUR', help='population: meta, AFR, AMR, CSA, EUR, EAS, EUR, MID')
     parser.add_argument('--af', type=str, help='vcf file containing allele freq data', default='gnomad.3.1.vcf.gz')
     parser.add_argument('--af-field', type=str, default='AF',help='name of the INFO field to be used as allele frequency')
     parser.add_argument('--origin-genome-build', type=str)
@@ -95,13 +94,6 @@ def validate_paths(args):
     if args.source_ref_vcf and not utils.is_valid_path(args.source_ref_vcf): raise PolygenicException("GRCh37 reference vcf does not exists")
     if not utils.is_valid_path(args.target_ref_vcf): PolygenicException("GRCh38 reference vcf does not exists")
 
-def clump_variants(args):
-    return utils.clump(
-        gwas_file = args.gwas_file + ".validated", 
-        reference = os.path.abspath(os.path.expanduser(args.clumping_vcf)), 
-        clump_p1 = args.pvalue_threshold,
-        clump_field = "pval_" + args.population)
-
 def read_variants(args):
     data = utils.read_table(args.gwas_file)
     if "rsID" in data[0]:
@@ -170,7 +162,7 @@ def run(args):
     description["pmid"] = description["info"]['Publication (PMID)']
     description["genes"] = {"symbols": genes}
     name = re.sub("[^0-9a-zA-Z]+", "_", description["info"]["Reported Trait"].lower().replace(" ", "_")) # trait name
-    filename = "-".join(["pgscat", name, args.code, args.population]) + ".yml"
+    filename = "-".join(["pgscat", args.code, name, args.af_field]) + ".yml"
     model_path = "/".join([args.output_directory, filename]) # output path
     utils.write_model(data, description, model_path, included_fields_list = ['ref', 'gnomadid', 'af']) # writing model
     return

@@ -18,7 +18,7 @@ from polygenic.error.polygenic_exception import PolygenicException
 def parse_args(args):
     parser = argparse.ArgumentParser(description='pgs-compute computes polygenic scores for genotyped sample in vcf format')
     parser.add_argument('-i', '--vcf', required=True, help='vcf.gz file with genotypes')
-    parser.add_argument('-m', '--model', action='append', help="path to .yml model (can be specified multiple times)")
+    parser.add_argument('-m', '--model', nargs='+', help="path to .yml model (can be specified multiple times with space as separator)")
     parser.add_argument('-p', '--parameters', type=str, help="parameters json (to be used in formula models)")
     parser.add_argument('-s', '--sample-name', type=str, help='sample name in vcf.gz to calculate')
     parser.add_argument('-o', '--output-directory', type=str, default='.', help='output directory')
@@ -27,6 +27,7 @@ def parse_args(args):
     parser.add_argument('--af', type=str, help='vcf file containing allele freq data')
     parser.add_argument('--af-field', type=str, default='AF',help='name of the INFO field to be used as allele frequency')
     parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + version)
+    parser.add_argument('--print', default=False, action='store_true', help='Print output to stdout')
     parsed_args = parser.parse_args(args)
     return parsed_args
 
@@ -73,8 +74,11 @@ def run(args):
             # output file name 
             appendix = "-" + args.output_name_appendix if args.output_name_appendix else ""
             output_path = os.path.join(expand_path(args.output_directory), f'{sample_name}-{model_desc["name"]}{appendix}-result.json')
+            
             with open(output_path, 'w') as f:
                 json_dump(model.refine_results(), f, indent=2)
+            if args.print:
+                json_dump(model.refine_results(), sys.stdout, indent=2)
 
 
 def main(args = sys.argv[1:]):

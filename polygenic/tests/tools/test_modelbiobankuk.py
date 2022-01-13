@@ -22,14 +22,14 @@ class ModelBiobankukTest(TestCase):
             "--sex", "both_sexes",
             "--coding", "4", 
             "--output-directory", self.output_directory,
-            "--pvalue-threshold", "1e-60",
+            "--pvalue-threshold", "1e-08",
             "--clumping-vcf", "polygenic/tests/resources/largefiles/eur.phase3.biobank.set.vcf.gz",
             "--source-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch37.norm.vcf.gz",
             "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch38.norm.vcf.gz",
             "--gene-positions", "polygenic/tests/resources/largefiles/ensembl-genes.104.tsv"
         ])
 
-        result_path = self.output_directory + "/biobankuk-hair_balding_pattern-2395-both_sexes-4-EUR-1e-08.yml"
+        result_path = self.output_directory + "/biobankuk-2395-both_sexes-4-hair_balding_pattern-EUR-1e-08.yml"
 
         with open(result_path, 'r') as output:
             data = output.read()
