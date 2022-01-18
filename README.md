@@ -1,9 +1,12 @@
 # polygenic - the polygenic scores toolkit
-
-[![PyPI](https://img.shields.io/pypi/v/polygenic.svg)](https://pypi.python.org/pypi/polygenic)  
-[![PyPI download month](https://img.shields.io/pypi/dm/polygenic.svg)](https://pypi.python.org/pypi/polygenic/)    
-[![PyPI pyversions](https://img.shields.io/pypi/pyversions/polygenic.svg)](https://pypi.python.org/pypi/polygenic/)  
-![Maintainer](https://img.shields.io/badge/maintainer-marpiech-blue)  
+## Basic info
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/polygenic.svg)](https://pypi.python.org/pypi/polygenic/) 
+[![PyPI](https://img.shields.io/pypi/v/polygenic.svg)](https://pypi.python.org/pypi/polygenic) 
+[![Maintainer]](https://img.shields.io/badge/maintainer-marpiech-blue)  
+## Downloads
+- pip [![PyPI download month](https://img.shields.io/pypi/dm/polygenic.svg)](https://pypi.python.org/pypi/polygenic/) 
+- docker with data [![Docker](https://img.shields.io/docker/pulls/marpiech/polygenictk.svg)](https://hub.docker.com/repository/docker/marpiech/polygenictk) 
+- docker without data [![Docker](https://img.shields.io/docker/pulls/intelliseq/polygenic.svg)](https://hub.docker.com/repository/docker/intelliseq/polygenic)
 
 ## Index
 
@@ -428,6 +431,8 @@ pgstk pgs-compute --vcf [PATH_TO_VCF_GZ] --model cyp2d6-pharmvar.yml --print | j
 Proprietary (contact@intelliseq.pl).
 
 ## Updates
+### 2.1.6
+- DOC: added docker badges
 ### 2.1.5
 - BUG: biobankuk model output files now contain only alphanumeric characters
 - BUG: biobankuk model code names with special characters are now being downloaded
