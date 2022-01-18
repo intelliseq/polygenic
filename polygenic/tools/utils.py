@@ -84,9 +84,9 @@ def download(url: str, output_path: str, force: bool=False, progress: bool=False
     if file_size is None:
         progress = False
     if ".gz" in url or ".bgz" in url:
-        subprocess.call("wget " + url + " -O " + output_path + ".gz",
+        subprocess.call("wget '" + url + "' -O '" + output_path + ".gz'",
                     shell=True)
-        subprocess.call("gzip -d " + output_path + ".gz",
+        subprocess.call("gzip -d '" + output_path + ".gz'",
                     shell=True)
         return output_path
     else:
@@ -143,16 +143,30 @@ def clump(
     clumped_path = gwas_file + ".clumped"
 
     subprocess.call("plink" +
-                    " --clump " + gwas_file +
-                    " --clump-p1 " + str(clump_p1) +
-                    " --clump-r2 " + str(clump_r2) +
-                    " --clump-kb " + str(clump_kb) +
-                    " --clump-snp-field " + str(clump_snp_field) +
-                    " --clump-field " + str(clump_field) +
-                    " --vcf " + str(reference) + " " +
-                    " --allow-extra-chr",
-                    shell=True)
+                     " --clump " + gwas_file +
+                     " --clump-p1 " + str(clump_p1) +
+                     " --clump-r2 " + str(clump_r2) +
+                     " --clump-kb " + str(clump_kb) +
+                     " --clump-snp-field " + str(clump_snp_field) +
+                     " --clump-field " + str(clump_field) +
+                     " --vcf " + str(reference) + " " +
+                     " --allow-extra-chr",
+                     shell=True)
 
+    # process = subprocess.Popen("plink" +
+    #                 " --clump " + gwas_file +
+    #                 " --clump-p1 " + str(clump_p1) +
+    #                 " --clump-r2 " + str(clump_r2) +
+    #                 " --clump-kb " + str(clump_kb) +
+    #                 " --clump-snp-field " + str(clump_snp_field) +
+    #                 " --clump-field " + str(clump_field) +
+    #                 " --vcf " + str(reference) + " " +
+    #                 " --allow-extra-chr", stdout=subprocess.PIPE, stdin=subprocess.PIPE, shell=True, universal_newlines=True)
+
+    # for stdout_line in iter(process.stdout.readline, ""):
+    #     yield stdout_line
+
+    # stdout, stderr = process.communicate()
     clumped_rsids = []
 
     with open("plink.clumped", 'r') as plink_file:

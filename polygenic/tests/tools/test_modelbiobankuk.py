@@ -15,7 +15,7 @@ class ModelBiobankukTest(TestCase):
         self.output_directory = "/tmp/polygenic/test"
         path(self.output_directory).mkdir(parents=True, exist_ok=True)
 
-    def testModelBiobankuk(self):
+    def testModelBiobankukPgstk(self):
         pgstk.main([
             "model-biobankuk",
             "--code", "2395",
@@ -26,7 +26,29 @@ class ModelBiobankukTest(TestCase):
             "--clumping-vcf", "polygenic/tests/resources/largefiles/eur.phase3.biobank.set.vcf.gz",
             "--source-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch37.norm.vcf.gz",
             "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch38.norm.vcf.gz",
-            "--gene-positions", "polygenic/tests/resources/largefiles/ensembl-genes.104.tsv"
+            "--gene-positions", "polygenic/tests/resources/largefiles/ensembl-genes.104.tsv",
+            "--test"
+        ])
+
+        result_path = self.output_directory + "/biobankuk-2395-both_sexes-4-hair_balding_pattern-EUR-1e-08.yml"
+
+        with open(result_path, 'r') as output:
+            data = output.read()
+            header = list(filter(lambda line: "score_model:" in line, data.split('\n')))
+            self.assertEqual(1, len(header))
+
+    def testModelBiobankukCode(self):
+        pgstk.main([
+            "model-biobankuk",
+            "--code", "thiazolidinedione|diabetes",
+            "--sex", "both_sexes",
+            "--output-directory", self.output_directory,
+            "--pvalue-threshold", "1e-05",
+            "--clumping-vcf", "polygenic/tests/resources/largefiles/eur.phase3.biobank.set.vcf.gz",
+            "--source-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch37.norm.vcf.gz",
+            "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch38.norm.vcf.gz",
+            "--gene-positions", "polygenic/tests/resources/largefiles/ensembl-genes.104.tsv",
+            "--test", "true"
         ])
 
         result_path = self.output_directory + "/biobankuk-2395-both_sexes-4-hair_balding_pattern-EUR-1e-08.yml"

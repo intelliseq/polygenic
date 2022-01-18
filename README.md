@@ -428,6 +428,9 @@ pgstk pgs-compute --vcf [PATH_TO_VCF_GZ] --model cyp2d6-pharmvar.yml --print | j
 Proprietary (contact@intelliseq.pl).
 
 ## Updates
+### 2.1.5
+- BUG: biobankuk model output files now contain only alphanumeric characters
+- BUG: biobankuk model code names with special characters are now being downloaded
 ### 2.1.4
 - FEATURE: added model_name and sample_name to description
 ### 2.1.3
@@ -438,9 +441,9 @@ Proprietary (contact@intelliseq.pl).
 - FEATURE: allow gnomadid for variant in yml models
 - FEATURE: added printing output option in pgs-compute
 ### 2.1.1
-- BUG: Resolved NoneType bug with empty haplotype
+- BUG: resolved NoneType bug with empty haplotype
 ### 2.1.0
-- FEATURE: Haplotype model now works with phased data
+- FEATURE: haplotype model now works with phased data
 ### 2.0.0
 - FEATURE: switched to yaml model definitions
 - FEATURE: implemented formula, score, haplotype and diplotype model types

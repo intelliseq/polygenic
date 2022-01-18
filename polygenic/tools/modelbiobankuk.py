@@ -27,6 +27,7 @@ def parse_args(args):
     parser.add_argument('--target-ref-vcf', type=str, default='dbsnp155.grch38.norm.vcf.gz', help='')
     parser.add_argument('--gene-positions', type=str, default='ensembl-genes.104.tsv', help='table with ensembl genes')
     parser.add_argument('--ignore-warnings', type=bool, default='False', help='')
+    parser.add_argument('--test', type=bool, default='False', help='')
     parser.add_argument('-l', '--log-file', type=str, help='path to log file')
     parsed_args = parser.parse_args(args)
     parsed_args.pvalue_threshold = float(parsed_args.pvalue_threshold)
@@ -104,6 +105,7 @@ def filter_pval(args):
         anno_header = anno.readline().rstrip().split('\t')
         output.write('\t'.join(data_header + anno_header) + "\n")
         pbar = tqdm(total = 28987535)
+        snp_count = 0
         while True:
             pbar.update(1)
             try:
@@ -111,6 +113,10 @@ def filter_pval(args):
                 anno_line = anno.readline().rstrip().split('\t')
                 if float(data_line[data_header.index('pval_' + args.population)].replace('NA', '1', 1)) <= args.pvalue_threshold:
                     output.write('\t'.join(data_line + anno_line) + "\n")
+                    if args.test:
+                        snp_count += 1
+                        if snp_count > 50:
+                            break
             except:
                 break
         pbar.close()
@@ -159,7 +165,7 @@ def run(args):
     description["pmid"] = ["25826379"]
     description["genes"] = genes
     name = re.sub("[^0-9a-zA-Z]+", "_", description["info"]["description"].lower()) # trait name
-    filename = "-".join(["biobankuk", args.code, args.sex, args.coding, name, args.population, str(args.pvalue_threshold)]) + ".yml"
+    filename = "-".join(["biobankuk", re.sub("[^0-9a-zA-Z]+", "_", args.code.lower()), args.sex, args.coding, name, args.population, str(args.pvalue_threshold)]) + ".yml"
     model_path = "/".join([args.output_directory, filename]) # output path
     utils.write_model(data, description, model_path, included_fields_list = ['ref', 'gnomadid']) # writing model
     return
