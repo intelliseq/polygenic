@@ -9,6 +9,7 @@ class DataAccessor(object):
         genotypes: VcfAccessor,
         allele_frequencies: VcfAccessor = None,
         sample_name: str = None,
+        model_name: str = "",
         af_field_name: str = "AF_nfe",
         parameters = {}):
         self.__genotypes = genotypes

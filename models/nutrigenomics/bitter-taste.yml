@@ -1,31 +1,40 @@
 haplotype_model:
   variants:
-    rs713598: {ref: "C", alt: "G"}
-    rs10246939: {ref: "T", alt: "C"}
-    rs1726866: {ref: "G", alt: "A"}
+    rs713598: {ref: "C", alt: "A", effect_allele: "A"}
+    rs10246939: {ref: "T", alt: "A", effect_allele: "A"}
+    rs1726866: {ref: "T", alt: "C", effect_allele: "C"}
   haplotypes:
     PAV:
+      score: 1
       af: 0.6451
       rs713598:
       rs10246939:
     AVI:
+      score: 1
       af: 0.3531
       rs1726866:
     AAV:
+      score: 0.5
       af: 0.0000
       rs10246939:
     AVV:
+      score: 0.2
       af: 0.0017
       rs10246939:
     PAI:
+      score: 0.1
       af: 0.0000
       rs713598:
     PVI:
+      score: 0.1
       af: 0.0000
+      rs713598:
       rs1726866:
     AAI:
+      score: 0.1
       af: 0.0000
     PVV:
+      score: 0.1
       af: 0.0000
       rs713598:
       rs1726866:
@@ -50,23 +59,21 @@ description:
     concentration: "None"
   - name: "Green Tea"
     concentration: "None"
-  category_choice:
+  genetic_profile_choice:
     HIGH:
-      geneticProfile: "HIGH"
       criteria: "bitter taste sensitivity"
       recommendation: "If you don't like bitter taste then you may select less bitter vegetables, such as carrots, snaps, beansprouts, cabbage, or deploy food preparation techniques that reduce bitter taste. Hence you can maintain healthy diet. You can also consider fulfilling your needs for antioxidant by consuming supplements."
       interpretation: "Based on your genetic profile, you are likely to be a super taster. This means you can taste bitter with higher flavor intensity. Thus, you may tend to miss some healthy foods and can decrease some nutrient value of your diet such as antioxidant and vitamins. The advantage of being super taster is you are less likely to be a smoker."
-      populationFrequency: "9 in 10"
+      population_frequency: "9 in 10"
       tendency: "High bitter taste sensitivity, super taster"
-      resultsIcon: "super taster.png"
+      results_icon: "super taster.png"
     MEDIUM:
-      geneticProfile: "LOW"
       criteria: "bitter taste sensitivity"
       recommendation: "If you don't like bitter taste then you may select less bitter vegetables, such as carrots, snaps, beansprouts, cabbage, or deploy food preparation techniques that reduce bitter taste. Hence you can maintain healthy diet. You can also consider fulfilling your needs for antioxidant by consuming supplements."
       interpretation: "Based on your genetic profile, you are likely to be a super taster. This means you can taste bitter with higher flavor intensity. Thus, you may tend to miss some healthy foods and can decrease some nutrient value of your diet such as antioxidant and vitamins. The advantage of being super taster is you are less likely to be a smoker."
-      populationFrequency: "9 in 10"
+      population_frequency: "9 in 10"
       tendency: "Low bitter taste sensitivity"
-      resultsIcon: "super taster.png"
+      results_icon: "super taster.png"
   genes:
   - name: "TAS2R38"
     description: "TAS2R38 encodes a G-protein coupled receptor that functions as a taste receptor. PROP and phenylthiocarbamide ligands mediate the bitter taste sensing signaling by binding to the receptor, making it possible to confer various degrees of taste perception. Some vegetables, especially from Brassica family, such as collard greens, kale, broccoli, cabbage, and Brussels sprouts contain glucosinolates and isothiocyanates, which resemble PROP. Therefore, TAS2R38 plays role in the resulting “bitterness” of these vegetables. Rs713598, rs1726866, and rs10246939 polymorphisms in TAS2R38 gene affect the taste receptor function and might eliminate the bitter taste perception."

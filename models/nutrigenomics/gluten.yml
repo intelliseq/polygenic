@@ -1,0 +1,71 @@
+haplotype_model:
+  variants:
+    rs2395182: {ref: G, alt: T}
+    rs7775228: {ref: T, alt: C}
+    rs4713586: {ref: A, alt: G}
+    rs2187668: {ref: C, alt: T}
+    rs7454108: {ref: T, alt: C}
+  haplotypes:
+    HLA-DQ2.2:
+      score: 1
+      rs2395182:
+      rs7775228:
+      rs4713586:
+    HLA-DQ2.5:
+      score: 1
+      rs2187668:
+    HLA-DQ8:
+      score: 1
+      rs7454108:
+    OTHER:
+      score: 0
+  categories:
+    HIGH: {from: 0.5, to: 6}
+    NORMAL: {from: 0, to: 0.5}
+description:
+  chapter: Nutrition
+  category: Food Responses
+  trait: Gluten
+  title: Gluten
+  description: "Gluten is a family of proteins naturally found in grains like wheat, rye, spelt, and barley. Many foods that contain gluten provide fiber and have high nutritional value. However, gluten can cause serious adverse reaction and health problems in certain individuals. There are two forms of gluten intolerance, the severe form, celiac disease, and the milder form, non-celiac gluten sensitivity (NCGS). Gluten consumption in individuals at risk of celiac disease triggers immunological response in the intestines. Over time, this response might cause damage to the lining of the small intestine, leading to malabsorption of some nutrients. The intestinal damage often causes diarrhea, fatigue, weight loss, bloating and anemia, and can lead to serious complications. Individuals with NCGS also experience similar symptoms with celiac disease; however the underlying causes of NCGS are poorly understood. People with celiac disease require a gluten-free diet for life. Non-celiac gluten sensitivity is a milder form of gluten intolerance that may affect 5% of the population. Individuals with NCGS often experience diarrhea, abdominal pain, fatigue and headaches when they consume gluten-containing foods. However, these adverse effects of gluten in individuals who do not have celiac disease are poorly understood and NCGS remains controversial."
+  source_of_food:
+  - name: Rye
+    concentration: None
+  - name: Bread
+    concentration: None
+  - name: Pasta
+    concentration: None
+  - name: Cereal
+    concentration: None
+  - name: Crackers
+    concentration: None
+  - name: Wheat
+    concentration: None
+  - name: Baked Goods
+    concentration: None
+  genes:
+  - name: HLA-DQ2.2
+    description: "Celiac disease is an autoimmune disease caused by abnormal T cell response to gluten and is strongly associated with HLA class II genes. Multiple risk alleles are involved in this disease. Human leukocyte antigen (HLA)-DQA1 & HLA-DQB1 genes encode a & b-heterodimers respectively, in which both dimers form a cleft together on an antigen presenting cell. The HLA rs2395182 and rs7775228 genes encode DQ2.2 haplotype that elevates the risk of getting celiac disease. The HLA rs4713586 produces DQ4 that may increase your chance of acquiring celiac disease."
+  - name: HLA-DQ2.5
+    description: "The rs2187668 A allele alters HLA-DQB1 into HLA-DQB1*0301 which acts as configuration for HLA-DQ2.5 that increases the risk of acquiring Celiac disease."
+  - name: HLA-DQ8
+    description: "The rs7454108 C allele produces HLA-DQ8 which increases susceptibility to Celiac disease. HLA-DQ2.5 and HLA-DQ8 has been known as the two serotypes that show a strong association in acquiring Celiac disease."
+  genetic_profile_choice:
+    HIGH:
+      criteria: "gluten sensitivity"
+      recommendation: "Avoid consumption of food with high gluten, such as bread, pasta, cereal, crackers, and baked goods as they are made from wheat and rye. Gluten-free food include unprocessed vegetables, fresh meat and fish, poultry, nuts, legume, seeds. You may also consume gluten-free grains such as rice and corn."
+      interpretation: "Based on your genetic profile, you are likely to be gluten intolerant. This means you are at increased risk of acquiring Celiac disease due to gluten consumption."
+      population_frequency: "3 in 10"
+      tendency: "Increased risk of acquiring celiac disease"
+      results_icon: "low.png"
+    NORMAL:
+      criteria: "gluten sensitivity"
+      recommendation: "Avoid consumption of food with high gluten, such as bread, pasta, cereal, crackers, and baked goods as they are made from wheat and rye. Gluten-free food include unprocessed vegetables, fresh meat and fish, poultry, nuts, legume, seeds. You may also consume gluten-free grains such as rice and corn."
+      interpretation: "Based on your genetic profile, you are likely to be gluten intolerant. This means you are at increased risk of acquiring Celiac disease due to gluten consumption."
+      population_frequency: "7 in 10"
+      tendency: "Reduce risk of acquiring celiac disease"
+      results_icon: "low.png"
+  reference:
+  - "van Heel, D.A. et al. Nat Genet 39, 827–829 (2007)."
+  - "Al-Hussaini, A., Alharthi, H., Osman, A., Eltayeb-Elsheikh, N. & Chentoufi, A. Saudi J Gastroenterol 24, 268–273 (2018)."
+  - "Monsuur, A.J. et al. PLoS ONE 3, e2270 (2008)."

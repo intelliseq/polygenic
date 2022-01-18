@@ -67,10 +67,13 @@ def run(args):
                     genotypes = vcf_accessor,
                     allele_frequencies =  af_accessor,
                     sample_name = sample_name,
+                    model_name = model_desc["name"],
                     af_field_name = args.af_field,
                     parameters = parameters)
                 model = SeqqlOperator.fromYaml(model_path)
                 model.compute(data_accessor)
+                model.result["description"]["sample_name"] = sample_name
+                model.result["description"]["model_name"] = model_desc["name"].replace('.yml', '')
             # output file name 
             appendix = "-" + args.output_name_appendix if args.output_name_appendix else ""
             output_path = os.path.join(expand_path(args.output_directory), f'{sample_name}-{model_desc["name"]}{appendix}-result.json')

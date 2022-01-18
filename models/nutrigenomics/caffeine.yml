@@ -1,0 +1,57 @@
+haplotype_model:
+  variants:
+    rs762551: {ref: "C", alt: "A", effect_allele: "A"}
+    rs2472300: {ref: "A", alt: "G", effect_allele: "G"}
+  haplotypes:
+    CYP1A2*1F:
+      score: 1
+      af: 0.6547
+      rs762551:
+      rs2472300:
+    OTHER:
+      score: 0
+  categories:
+    HIGH: {from: 1.5, to: 2}
+    NORMAL: {from: 0, to: 1.5}
+description:
+  chapter: Nutrition
+  category: Food Responses
+  trait: Caffeine
+  title: Caffeine
+  description: "Caffeine is one of the most consumed substances in the world, consumed as coffee, tea, or other caffeinated food products. Caffeine is usually consumed to promote wakefulness, enhance mood and cognition, and produce stimulatory effects. However, caffeine is also known to cause cardiovascular diseases, since it increases blood pressure. The benefits and risks of caffeine consumption differ between individuals depending on individual’s genetic makeup."
+  source_of_food:
+    - name: Coffee
+      concentration: "73 mg / 100 mL"
+    - name: Cola
+      concentration: "9 mg / 100 mL"
+    - name: Energy Drink
+      concentration: "31 mg / 100 mL"
+    - name: Espresso
+      concentration: "24 mg / 100 mL"
+    - name: Green Tea
+      concentration: "11 mg / 100 mL"
+    - name: Iced Tea
+      concentration: "5 mg / 100 mL"
+    - name: Latte
+      concentration: "27 mg / 100 mL"
+  genes:
+    - name: CYP1A2
+      description: "CYP1A2 generates cytochrome enzyme P-450 1A2 that digest caffeine. Rs762551 CC and AC genotypes in CYP1A2 influence the enzyme activity, making caffeine metabolism slower. While the A allele in CYP1A2 is associated with an increased risk of hypertension and heart attack."
+  genetic_profile_choice:
+    HIGH:
+      criteria: "caffeine metabolism and sensitivity"
+      recommendation: "You should limit your caffeine intake to no more than 100-150 mg/day. You may try to substitute coffee to tea as it has lower levels of caffeine. Alternatively, you can consume decaffeinated coffee."
+      interpretation: "Based on your genetic profile, you are highly sensitive to caffeine and tend to be susceptible to higher blood pressure and heart attack if you consume >200 mg of coffee/day. Be aware as your low caffeine tolerance can easily cause high blood pressure, restlessness, irritability, anxiety, and sleep problems after caffeine consumption."
+      population_frequency: "1 in 2"
+      tendency: "Slow metabolism, increased risk of high blood pressure and heart attack"
+      results_icon: "low.png"
+    NORMAL:
+      criteria: "caffeine metabolism and sensitivity"
+      recommendation: "You can limit your caffeine intake to no more than 100-150 mg/day. You may try to substitute coffee to tea as it has lower levels of caffeine. Alternatively, you can consume decaffeinated coffee."
+      interpretation: "Based on your genetic profile, you are not sensitive to caffeine."
+      population_frequency: "1 in 2"
+      tendency: "Normal metabolism, increased risk of high blood pressure and heart attack"
+      results_icon: "normal.png"
+  reference:
+  - "Thorn, C.F., Aklillu, E., McDonagh, E.M., Klein, T.E. & Altman, R.B. Pharmacogenet Genomics 22, 389-395 (2012)."
+  - "Cornelis, M.C., El-Sohemy, A., Kabagambe, E.K. & Campos, H. JAMA 295, 1135-1141 (2006)."

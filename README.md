@@ -428,6 +428,8 @@ pgstk pgs-compute --vcf [PATH_TO_VCF_GZ] --model cyp2d6-pharmvar.yml --print | j
 Proprietary (contact@intelliseq.pl).
 
 ## Updates
+### 2.1.4
+- FEATURE: added model_name and sample_name to description
 ### 2.1.3
 - FEATURE: added support for multiple models in pgs-compute
 - FEATURE: added missing variants count to haplotype in haplotype model

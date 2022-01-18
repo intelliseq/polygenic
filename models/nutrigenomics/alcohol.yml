@@ -17,14 +17,14 @@ description:
   value: None
   description: "Drinking alcohol in moderation (one to two drinks per day for men and one drink per day for women) can reduce the risk of cardiovascular diseases by increasing good cholesterol (HDL). Several studies have shown that low to moderate alcohol consumption is associated with a decreased risk in, and mortality due to cardiovascular diseases, compared with abstention. However, there is a risk of cancer and liver damage due to alcohol consumption."
   source_of_food:
-    - name: Beers
-      concentration: "4-5% ABV / 355 mL"
-    - name: Wine
-      concentration: "12-15% ABV / 148 mL"
-    - name: Distilled Spirits
-      concentration: "28-46% ABV / 45 mL"
+  - name: Beers
+    concentration: "4-5% ABV / 355 mL"
+  - name: Wine
+    concentration: "12-15% ABV / 148 mL"
+  - name: Distilled Spirits
+    concentration: "28-46% ABV / 45 mL"
   reference:
-    - "Cho, Y. et al. Scientific Reports 8, 458 (2018)."
+  - "Cho, Y. et al. Scientific Reports 8, 458 (2018)."
   genetic_profile_choice:
     VERY_HIGH:
       criteria: "alcohol sensitivity"

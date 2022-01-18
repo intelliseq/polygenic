@@ -44,6 +44,8 @@ class PgsComputeTest(TestCase):
             results = json.load(output)
             self.assertTrue("score_model" in results)
             self.assertTrue("description" in results)
+            self.assertTrue("sample_name" in results["description"])
+            self.assertTrue("model_name" in results["description"])
             self.assertTrue("randomentry" not in results)
 
     # test if af is used
