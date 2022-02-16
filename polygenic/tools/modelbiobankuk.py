@@ -63,7 +63,7 @@ def get_data(args):
         output_directory = os.path.abspath(os.path.expanduser(args.output_directory))
         output_file_name = os.path.splitext(os.path.basename(url))[0]
         output_path = output_directory + "/" + output_file_name
-        utils.download(url=url, output_path=output_path, force=False, progress=True)
+        output_path = utils.download(url=url, output_path=output_path, force=False, progress=True)
         args.gwas_file = output_path
         return output_path
     return None
@@ -138,35 +138,51 @@ def read_filtered_variants(args):
 
 def read_clumped_variants(args):
     source_vcf = VcfAccessor(args.source_ref_vcf)
+    if not os.path.isfile(args.gwas_file + ".validated.clumped"):
+        return {}
     data = utils.read_table(args.gwas_file + ".validated.clumped")
     return data
 
 def run(args):
-    get_index(args) # download index
+    
+    # download index file
+    get_index(args)
+
+    # define description dictionary
+    description = dict()
+
+    # fill description with arguments
+    description["info"] = get_info(args)
+
+    # define trait name
+    trait_name = re.sub("[^0-9a-zA-Z]+", "_", description["info"]["description"].lower())
+
+    # define output filename and output path
+    filename = "-".join(["biobankuk", re.sub("[^0-9a-zA-Z]+", "_", args.code.lower()), args.sex, args.coding, trait_name, args.population, str(args.pvalue_threshold)]) + ".yml"
+    model_path = "/".join([args.output_directory, filename])
     gwas_file = get_data(args) # download gwas results
     validate_paths(args) # check if vcf files are correct
     args.logger.info("Filtering variants by p value")
     filter_pval(args) # filter results by pvalue
     data = read_filtered_variants(args) # read filtered variants
+    if not data: print("No variants passing p value found threshold. No model was produced"); return
     args.logger.info("Validating variants with GRCh37")
     data = utils.validate_with_source(data, args.source_ref_vcf, ignore_warnings = args.ignore_warnings) # validate if variants are present in hg19
     args.logger.info("Validating variants with GRCh38")
     data = utils.validate_with_source(data, args.target_ref_vcf, ignore_warnings = args.ignore_warnings, use_gnomadid = False) # validate if variants are present in hg38
+    if not data: print("No passing p value threshold and GRCh38 validation found. No model was produced"); return
     utils.write_data(data, gwas_file + ".validated") # write validated snps to file
     clump_variants(args) # clump variants
     data = read_clumped_variants(args) # read clumped variants
+    if not data: print("No variants were obtained from clumping. No model was produced"); return
     args.logger.info("Annotating with symbols")
     data = utils.annotate_with_symbols(data, args.gene_positions)
     genes = utils.get_gene_symbols(data)
-    description = dict() # generate description
-    description["info"] = get_info(args)
     description["arguments"] = utils.args_to_dict(args)
     description["parameters"] = utils.simulate_parameters(data)
     description["pmid"] = ["25826379"]
     description["genes"] = genes
-    name = re.sub("[^0-9a-zA-Z]+", "_", description["info"]["description"].lower()) # trait name
-    filename = "-".join(["biobankuk", re.sub("[^0-9a-zA-Z]+", "_", args.code.lower()), args.sex, args.coding, name, args.population, str(args.pvalue_threshold)]) + ".yml"
-    model_path = "/".join([args.output_directory, filename]) # output path
+    
     utils.write_model(data, description, model_path, included_fields_list = ['ref', 'gnomadid']) # writing model
     return
 

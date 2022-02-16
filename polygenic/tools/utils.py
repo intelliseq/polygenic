@@ -73,8 +73,13 @@ def download(url: str, output_path: str, force: bool=False, progress: bool=False
     progress -- flag whether to present progress
     """
     logger = logging.getLogger('utils')
-    #print(url)
-    #print(output_path)
+    
+    # replace apostrophe in url
+    url = url.replace("'", "%27")
+
+    # convert all nonalphanumeric characters to underscores except slashes, dots and dashes in output path
+    output_path = re.sub(r'[^a-zA-Z0-9/.-]', '_', output_path).lower()
+
     if os.path.isfile(output_path) and not force:
         logger.warning("File already exists: " + output_path)
         return output_path
@@ -131,6 +136,98 @@ def is_valid_path(path: str, is_directory: bool = False, create_directory: bool 
             return False
     return True
 
+### lasso helper function
+def is_in_the_same_window(first_snp, second_snp, window_size = 1000):
+    contig_field_name = 'chr'
+    if 'chrom' in first_snp:
+        contig_field_name = 'chrom'
+    return first_snp[contig_field_name] == second_snp[contig_field_name] and \
+           abs(int(first_snp['pos']) - int(second_snp['pos'])) <= window_size
+
+### lasso helper function
+def flatten(lst):
+    return sum(lst, [])
+
+### lasso helper function
+def local_minima(lst):
+    if len(lst) < 2:
+        return list(range(len(lst)))
+    
+    lmin = True
+    curr = list()
+    local_minima = list()
+    
+    for i, x in enumerate(lst[:-1]):
+        if lst[i + 1] == x and lmin:
+            curr.append(i)
+        if lst[i + 1] < x:
+            lmin = True
+            curr = list()
+        if lst[i + 1] > x:
+            if lmin:
+                local_minima.append(curr + [i])
+            lmin = False
+
+    if lst[-1] < lst[-2] or (lmin and lst[-1] == lst[-2]):
+        local_minima.append(curr + [len(lst) - 1])
+    
+    return flatten(local_minima)
+
+### lasso helper function
+def invert(a):
+    return [-x for x in a]
+
+### lasso helper function
+def local_maxima(a):
+    return local_minima(invert(a))
+
+def lasso_clump(
+    gwas_file, 
+    clump_p = "1e-08", 
+    clump_kb = "200",
+    clump_snp_field = "rsid",
+    clump_field = "pval_EUR",
+    return_file = True):
+
+    # define output path
+    clumped_path = gwas_file + ".clumped2"
+
+    # read gwas file into dictionary
+    gwas_dict = read_table(gwas_file)
+
+    # cluster snps into regions
+    clumped_rsids = []
+    region = []
+    for snp in gwas_dict:
+        if float(snp[clump_field]) > float(clump_p):
+            continue
+        if float(snp[clump_field]) == 0:
+            continue
+        if not region:
+            region.append(snp)
+            continue
+        if is_in_the_same_window(region[-1], snp, window_size = int(clump_kb) * 1000):
+            region.append(snp)
+            continue
+        pvalues = [float(x[clump_field]) for x in region]
+        min_index = pvalues.index(min(pvalues))
+        clumped_rsids.append(region[min_index][clump_snp_field])
+        region = []
+
+    with open(gwas_file, 'r') as filtered_file, open(clumped_path, 'w') as clumped_file:
+        filtered_header = filtered_file.readline().rstrip().split('\t')
+        clumped_file.write('\t'.join(filtered_header) + "\n")
+        while True:
+            try:
+                filtered_line = filtered_file.readline().rstrip().split('\t')
+                if filtered_line[filtered_header.index('rsid')] in clumped_rsids:
+                    clumped_file.write('\t'.join(filtered_line) + "\n")
+            except:
+                break
+    return clumped_path
+
+    
+
 def clump(
     gwas_file, 
     reference,  
@@ -168,6 +265,10 @@ def clump(
 
     # stdout, stderr = process.communicate()
     clumped_rsids = []
+
+    # if plink.clumped does not exist return None
+    if not os.path.isfile(clumped_path):
+        return None
 
     with open("plink.clumped", 'r') as plink_file:
         while(line := plink_file.readline()):

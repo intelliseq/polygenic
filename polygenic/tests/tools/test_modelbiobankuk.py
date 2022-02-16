@@ -57,3 +57,60 @@ class ModelBiobankukTest(TestCase):
             data = output.read()
             header = list(filter(lambda line: "score_model:" in line, data.split('\n')))
             self.assertEqual(1, len(header))
+
+    def testModel22046Bug(self):
+        pgstk.main([
+            "model-biobankuk",
+            "--code", "22406",
+            "--sex", "both_sexes",
+            "--output-directory", self.output_directory,
+            "--pvalue-threshold", "1e-12",
+            "--clumping-vcf", "polygenic/tests/resources/largefiles/eur.phase3.biobank.set.vcf.gz",
+            "--source-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch37.norm.vcf.gz",
+            "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch38.norm.vcf.gz",
+            "--gene-positions", "polygenic/tests/resources/largefiles/ensembl-genes.104.tsv",
+            "--test", "true"
+        ])
+
+    def testModelWhitespaceBug(self):
+        pgstk.main([
+            "model-biobankuk",
+            "--code", "vitamin D derivative",
+            "--sex", "both_sexes",
+            "--output-directory", self.output_directory,
+            "--pvalue-threshold", "1e-12",
+            "--clumping-vcf", "polygenic/tests/resources/largefiles/eur.phase3.biobank.set.vcf.gz",
+            "--source-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch37.norm.vcf.gz",
+            "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch38.norm.vcf.gz",
+            "--gene-positions", "polygenic/tests/resources/largefiles/ensembl-genes.104.tsv",
+            "--test", "true"
+        ])
+
+        result_path = self.output_directory + "/biobankuk-vitamin_d_derivative-both_sexes--na-EUR-1e-12.yml"
+
+        # check if result path exists
+        self.assertTrue(os.path.exists(result_path))
+
+    def testModelApostropheBug(self):
+        pgstk.main([
+            "model-biobankuk",
+            "--code", "acetylcholinesterase inhibitor|Alzheimer's",
+            "--sex", "both_sexes",
+            "--output-directory", self.output_directory,
+            "--pvalue-threshold", "1e-12",
+            "--clumping-vcf", "polygenic/tests/resources/largefiles/eur.phase3.biobank.set.vcf.gz",
+            "--source-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch37.norm.vcf.gz",
+            "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch38.norm.vcf.gz",
+            "--gene-positions", "polygenic/tests/resources/largefiles/ensembl-genes.104.tsv",
+            "--test", "true"
+        ])
+
+        result_path = self.output_directory + "/acetylcholinesterase_inhibitor_alzheimer_s-both_sexes--na-EUR-1e-12.yml"
+
+        # check if result path exists
+        self.assertTrue(os.path.exists(result_path))
+
+        # with open(result_path, 'r') as output:
+        #     data = output.read()
+        #     header = list(filter(lambda line: "score_model:" in line, data.split('\n')))
+        #     self.assertEqual(1, len(header))            

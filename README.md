@@ -1,15 +1,16 @@
 # polygenic - the polygenic scores toolkit
+
 ## Basic info
 [![PyPI pyversions](https://img.shields.io/pypi/pyversions/polygenic.svg)](https://pypi.python.org/pypi/polygenic/) 
 [![PyPI](https://img.shields.io/pypi/v/polygenic.svg)](https://pypi.python.org/pypi/polygenic) 
 [![Maintainer]](https://img.shields.io/badge/maintainer-marpiech-blue)  
+
 ## Downloads
 - pip [![PyPI download month](https://img.shields.io/pypi/dm/polygenic.svg)](https://pypi.python.org/pypi/polygenic/) 
 - docker with data [![Docker](https://img.shields.io/docker/pulls/marpiech/polygenictk.svg)](https://hub.docker.com/repository/docker/marpiech/polygenictk) 
 - docker without data [![Docker](https://img.shields.io/docker/pulls/intelliseq/polygenic.svg)](https://hub.docker.com/repository/docker/intelliseq/polygenic)
 
 ## Index
-
 * [Summary](#summary)
 * [Installation](#installation)
   * [With pip](#with-pip)
@@ -43,12 +44,10 @@ Polygenic is a toolkit for a wide range of polygenic scores analysis tasks. The 
 ### With pip
 #### Install for user account
 ```
-pip3 install polygenic
+python3 -m pip install --upgrade polygenic
 ```
 #### Install globally
 ```
-sudo -H pip3 install polygenic
-# or
 sudo -H python3 -m pip install polygenic
 ```
 ### With conda
@@ -73,11 +72,11 @@ pip install polygenic
 ### With docker
 #### Large image with all data included
 ```
-docker run intelliseq:polygenictk:2.0.36 *command*
+docker run intelliseq:polygenictk:2.1.0 *command*
 ```
 #### Thin image with just polygenic package installed
 ```
-docker run intelliseq:polygenic:2.0.36 *command*
+docker run intelliseq:polygenic:2.1.0 *command*
 ```
 ## Quick start guide
 ```
@@ -90,9 +89,32 @@ docker run -v $(pwd):/data intelliseq/polygenic:latest --vcf /data/illu_merged-i
 ```
 ## Manual
 ### Tools
-#### pgs
+#### pgs-compute
 ```
-polygenic --vcf [your_vcf_gz] --model [your_model] [other raguments]
+usage: pgstk [-h] -i VCF [-m MODEL [MODEL ...]] [-p PARAMETERS] [-s SAMPLE_NAME] [-o OUTPUT_DIRECTORY] [-n OUTPUT_NAME_APPENDIX] [-l LOG_FILE] [--af AF] [--af-field AF_FIELD]
+             [-v] [--print]
+
+pgs-compute computes polygenic scores for genotyped sample in vcf format
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i, --vcf VCF         vcf.gz file with genotypes
+  -m, --model MODEL [MODEL ...]
+                        path to .yml model (can be specified multiple times with space as separator)
+  -p, --parameters PARAMETERS
+                        parameters json (to be used in formula models)
+  -s, --sample-name SAMPLE_NAME
+                        sample name in vcf.gz to calculate
+  -o, --output-directory OUTPUT_DIRECTORY
+                        output directory
+  -n, --output-name-appendix OUTPUT_NAME_APPENDIX
+                        appendix for output file names
+  -l, --log-file LOG_FILE
+                        path to log file
+  --af AF               vcf file containing allele freq data
+  --af-field AF_FIELD   name of the INFO field to be used as allele frequency
+  -v, --version         show program's version number and exit
+  --print               Print output to stdout
 ```
 ### Arguments
 #### Required
@@ -428,11 +450,20 @@ pgstk pgs-compute --vcf [PATH_TO_VCF_GZ] --model cyp2d6-pharmvar.yml --print | j
 ```
 
 ## License
-Proprietary (contact@intelliseq.pl).
+Proprietary (contact@intelliseq.pl). Free for personal use.
 
 ## Updates
+### 2.1.9
+- BUG: resolved bug with missing index in biobankuk model
+### 2.1.8
+- BUG: resolved bug with biobankuk model for codenames with special characters
+### 2.1.7
+- BUG: resolved bug with haplotype model where none of haplotypes matched genotype. Most probable genotype is provided
 ### 2.1.6
 - DOC: added docker badges
+- FEATURE: added posibility to output all pgs results in one json file `--merge-outputs`
+- FEATURE: added category to diplotype model
+- FEATURE: added caching in genotyping module
 ### 2.1.5
 - BUG: biobankuk model output files now contain only alphanumeric characters
 - BUG: biobankuk model code names with special characters are now being downloaded
@@ -453,4 +484,4 @@ Proprietary (contact@intelliseq.pl).
 - FEATURE: switched to yaml model definitions
 - FEATURE: implemented formula, score, haplotype and diplotype model types
 - FEATURE: added gene symbols to description
-- DEVOPS: prepared docker image with resources for polygenicmaker
+- DEVOPS: prepared docker image with resources for building models

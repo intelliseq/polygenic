@@ -131,9 +131,15 @@ class Category(SeqqlOperator):
     def __init__(self, key, entries):
         super(Category, self).__init__(entries)
         self.id = key
-        if self._entries and not isinstance(self._entries, list):
-            self.require("from")
-            self.require("to")
+        #if self._entries and not isinstance(self._entries, list):
+        #    self.require("from")
+        #    self.require("to")
+
+    def assign_category(self, category_name):
+        result = {"id": self.id, "match": False, "category": self._entries}
+        if (str(category_name) == str(self.id)):
+            result["match"] = True
+        return result
 
     def compute(self, score: float):
         result = {"id": self.id, "match": False, "value": score}
@@ -146,10 +152,19 @@ class Category(SeqqlOperator):
 
 class DiplotypeModel(SeqqlOperator):
     def compute(self, data_accessor: DataAccessor):
-        diplotypes_results = super(DiplotypeModel, self).compute(data_accessor)
-        results = diplotypes_results["diplotypes"]
-        results["genotypes"] = diplotypes_results["genotypes"]
-        return results
+        #diplotypes_results = super(DiplotypeModel, self).compute(data_accessor)
+        result = {}
+        diplotype = self._entries["diplotypes"].compute(data_accessor)
+        result["diplotype"] = diplotype["diplotype"]
+        result["genotypes"] = diplotype["genotypes"]
+        if self.has("categories"):
+            for category_name in self.get("categories").get_entries():
+                category = self.get("categories").get_entries()[category_name]
+                category_result = category.assign_category(result["diplotype"])
+                if category_result["match"]:
+                    result["category"] = category_result["category"]
+        return result
+
 class Diplotypes(SeqqlOperator):
     def __init__(self, entries):
         super(Diplotypes, self).__init__({})
@@ -236,32 +251,46 @@ class Haplotypes(SeqqlOperator):
     def compute_haplotypes(self, genotypes: dict):
         haplotypes = {}
         matching_haplotypes = {}
+        final_haplotypes = [None, None]
         result = {}
         for entry in self._entries:
             haplotypes[entry] = self._entries[entry].compute_haplotype(genotypes)
         for haplotype_id in haplotypes:
             haplotype = haplotypes[haplotype_id]
-            if (sum(haplotype["alleles"]) > 0):
+            #if (sum(haplotype["alleles"]) > 0):
+            if (haplotype['max_percent_match'] > 0.9):
                 matching_haplotypes[haplotype_id] = {
                     "id": haplotype_id,
                     "allele_count": sum(haplotype["alleles"]),
                     "af": haplotype["af"],
                     "alleles": haplotype["alleles"],
-                    "score": haplotype["score"]
+                    "score": haplotype["score"],
+                    "percent_match": haplotype["percent_match"],
+                    "max_percent_match": haplotype["max_percent_match"],
+                    "percent_missing": haplotype["percent_missing"],
                 }
-        res = sorted(matching_haplotypes.items(), key = lambda x: x[1]['af'])
+        sorted_haplotypes = sorted(matching_haplotypes.items(), key = lambda x: x[1]['max_percent_match'] * 10 + x[1]['af'] - x[1]['percent_missing'], reverse = True)
+        final_matches = [0, 0]
+        for i in range(len(sorted_haplotypes)):
+            sorted_haplotype = sorted_haplotypes[i]
+            id = sorted_haplotype[0]
+            info = sorted_haplotype[1]
+            if info['percent_match'][0] > final_matches[0] and info['max_percent_match'] == info['percent_match'][0]:
+                final_matches[0] = info['max_percent_match']
+                final_haplotypes[0] = sorted_haplotype
+            if info['percent_match'][1] > final_matches[1] and info['max_percent_match'] == info['percent_match'][1]:
+                final_matches[1] = info['max_percent_match']
+                final_haplotypes[1] = sorted_haplotype
+            
         allele_count_sum = 0
         result["match"] = []
         score = 0
-        for item in res:
+        for item in final_haplotypes:
             haplotype_id = item[0]
             haplotype = item[1]
-            for i in range(int(haplotype["allele_count"])):
-                score += haplotype["score"]
-                result["match"].append(haplotype["id"])
-                allele_count_sum += 1
-                if allele_count_sum >= 2: break
-            if allele_count_sum >= 2: break
+            score += haplotype["score"]
+            result["match"].append(haplotype["id"])
+
         result["id"] = [result["match"][0] + "/" + result["match"][1], result["match"][1] + "/" + result["match"][0]]
         result["score"] = score
         result["haplotypes"] = haplotypes
@@ -292,6 +321,7 @@ class Haplotype(SeqqlOperator):
         matched_variants = [0, 0]
         missing_genotypes = 0
         missing_variants = 0
+        percent_match = 0
         for genotype_id in genotypes:
             required_matches = [required_matches[0] + 1, required_matches[1] + 1]
             genotype = genotypes[genotype_id]
@@ -313,6 +343,12 @@ class Haplotype(SeqqlOperator):
                 matched_variants = [matched_variants[0] + allele, matched_variants[1] + allele]
                 haplotype_tupple[0] = haplotype_tupple[0] and allele
                 haplotype_tupple[1] = haplotype_tupple[1] and allele
+        percent_match = [matched_variants[0] / (required_matches[0] - missing_genotypes), matched_variants[1] / (required_matches[1] - missing_genotypes)]
+        max_percent_match = max(percent_match)
+        percent_missing = missing_genotypes / required_matches[0]
+        haplotype["max_percent_match"] = max_percent_match
+        haplotype["percent_match"] = percent_match
+        haplotype["percent_missing"] = percent_missing
         haplotype["possible_haplotype_allele_count"] = possible_haplotype_allele_count
         haplotype["required_matches"] = required_matches
         haplotype["matched_variants"] = matched_variants

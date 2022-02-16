@@ -80,3 +80,9 @@ class UtilsTest(TestCase):
         self.assertEqual('T', utils.invert_nucleotides(nucleotide))
         nucleotides = ['A','G']
         self.assertEqual(['T', 'C'], utils.invert_nucleotides(nucleotides))
+
+    def testLassoClump(self):
+        test_directory = "/tmp/polygenic/test"
+        test_file = "polygenic/tests/resources/tsv/snps.validated"
+        utils.lasso_clump(test_file)
+        

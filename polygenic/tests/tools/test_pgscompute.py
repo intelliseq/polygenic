@@ -67,6 +67,37 @@ class PgsComputeTest(TestCase):
             self.assertTrue("description" in results)
             self.assertTrue("randomentry" not in results)
 
+    # test if af is used
+    def testPgsComputeMerge(self):
+        appendix = "merge"
+        pgstk.main([
+            'pgs-compute',
+            '--vcf', 'polygenic/tests/resources/vcf/test.sample.vcf.gz',
+            '--model', 'polygenic/tests/resources/model/test.model.yml',
+            '--output-name-appendix', appendix,
+            '--merge-outputs',
+            '--output-directory', self.output_directory])
+
+        with open(self.output_directory + "/testsample-test.model.yml-" + appendix + "-result.json", 'r') as output:
+            results = json.load(output)
+            self.assertTrue("test.model" in results)
+
+    # test diplotype model categories
+    def testPgsComputeDiplotype(self):
+        appendix = "diplotype"
+        pgstk.main([
+            'pgs-compute',
+            '--vcf', 'polygenic/tests/resources/vcf/test.sample.vcf.gz',
+            '--model', 'polygenic/tests/resources/model/diplotype_model.yml',
+            '--output-name-appendix', appendix,
+            '--af', 'polygenic/tests/resources/vcf/test.af.vcf.gz',
+            '--merge-outputs',
+            '--output-directory', self.output_directory])
+
+        with open(self.output_directory + "/testsample-diplotype_model.yml-" + appendix + "-result.json", 'r') as output:
+            results = json.load(output)
+            self.assertTrue("test.model" in results)
+
     # test error
     def testPgsComputeError(self):
         appendix = "error"
@@ -98,13 +129,41 @@ class PgsComputeTest(TestCase):
         appendix = "pgx"
         pgstk.main([
             'pgs-compute',
-            '--vcf', '/data/projects/pgx-genotyping/stars-17-52.vcf.gz',
-            '--model', '/tmp/marpiech/projects/polygenic/models/pgx/cyp2d6-pharmvar.yml',
+            '--vcf', 'polygenic/tests/resources/vcf/test-pgs-compute-cyp-bug.vcf.gz',
+            '--model', 'polygenic/models/pgx/cyp2d6-pharmvar.yml',
             '--output-name-appendix', appendix,
             '--af', '/tmp/marpiech/polygenic/gnomad.3.1.vcf.gz',
             '--af-field', 'AF_nfe',
             '--output-directory', self.output_directory,
             '--print'])
+
+    # test if can be executed through pgstk
+    def testPgsComputeWork(self):
+        appendix = "work"
+        pgstk.main([
+            'pgs-compute',
+            '--vcf', '/data/downloads/resources/prodia/samples/phased_203253100045_R01C01.vcf.gz',
+            '--model', "/tmp/marpiech/prodia/nutrigx/alcohol.yml", "/tmp/marpiech/prodia/nutrigx/lactose.yml", "/tmp/marpiech/prodia/nutrigx/antioxidants.yml", "/tmp/marpiech/prodia/nutrigx/liver_detoxification.yml", "/tmp/marpiech/prodia/nutrigx/benefit_of_exercise.yml", "/tmp/marpiech/prodia/nutrigx/low_iron_status.yml", "/tmp/marpiech/prodia/nutrigx/benefit_of_exercise_in_blood_pressure.yml", "/tmp/marpiech/prodia/nutrigx/monounsaturated_fat.yml", "/tmp/marpiech/prodia/nutrigx/benefit_of_exercise_in_bmi.yml", "/tmp/marpiech/prodia/nutrigx/omega_profile.yml", "/tmp/marpiech/prodia/nutrigx/benefit_of_exercise_in_hdl_cholesterol.yml", "/tmp/marpiech/prodia/nutrigx/power.yml", "/tmp/marpiech/prodia/nutrigx/benefit_of_exercise_in_insulin_sensitivity.yml", "/tmp/marpiech/prodia/nutrigx/protein.yml", "/tmp/marpiech/prodia/nutrigx/bitter_taste.yml", "/tmp/marpiech/prodia/nutrigx/saturated_fat.yml", "/tmp/marpiech/prodia/nutrigx/caffeine.yml", "/tmp/marpiech/prodia/nutrigx/sodium.yml", "/tmp/marpiech/prodia/nutrigx/calcium.yml", "/tmp/marpiech/prodia/nutrigx/vitamin_a.yml", "/tmp/marpiech/prodia/nutrigx/choline.yml", "/tmp/marpiech/prodia/nutrigx/vitamin_b12.yml", "/tmp/marpiech/prodia/nutrigx/endurance.yml", "/tmp/marpiech/prodia/nutrigx/vitamin_b6.yml", "/tmp/marpiech/prodia/nutrigx/energy_balance.yml", "/tmp/marpiech/prodia/nutrigx/vitamin_c.yml", "/tmp/marpiech/prodia/nutrigx/folate.yml", "/tmp/marpiech/prodia/nutrigx/vitamin_d.yml", "/tmp/marpiech/prodia/nutrigx/gluten.yml", "/tmp/marpiech/prodia/nutrigx/vitamin_e.yml", "/tmp/marpiech/prodia/nutrigx/individual_eating_motivation.yml", "/tmp/marpiech/prodia/nutrigx/weight_balance.yml", "/tmp/marpiech/prodia/nutrigx/iron_overload.yml", "/tmp/marpiech/prodia/nutrigx/whole_grain.yml",
+            '--output-name-appendix', appendix,
+            '--merge-outputs',
+            '--output-directory', self.output_directory])
+
+    # test bug in haplotype model with missing variant
+    def testPgcComputeCypBug(self):
+        appendix = "cypbug"
+        pgstk.main([
+            'pgs-compute',
+            '--vcf', 'polygenic/tests/resources/vcf/test-pgs-compute-cyp-bug.vcf.gz',
+            '--model', 'models/pgx/cyp2d6-pharmvar.yml',
+            '--output-name-appendix', appendix,
+            '--merge-outputs',
+            '--output-directory', self.output_directory])
+
+        with open(self.output_directory + "/2824-" + appendix + "-result.json", 'r') as output:
+            results = json.load(output)
+            self.assertTrue("cyp2d6-pharmvar" in results)
+            self.assertTrue("haplotype_model" in results["cyp2d6-pharmvar"])
+
     # def testPolygenicMat(self):
     #     polygenic.main([
     #         "--vcf", "/tmp/marpiech/kenobi/polygenic/illu_merged-imputed.vcf.gz",
