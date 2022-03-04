@@ -453,6 +453,8 @@ pgstk pgs-compute --vcf [PATH_TO_VCF_GZ] --model cyp2d6-pharmvar.yml --print | j
 Proprietary (contact@intelliseq.pl). Free for personal use.
 
 ## Updates
+### 2.1.10
+- BUG: resolved bug with wrong plink.clumped path in clumping
 ### 2.1.9
 - BUG: resolved bug with missing index in biobankuk model
 ### 2.1.8
