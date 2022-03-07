@@ -1,0 +1,12 @@
+haplotype_model:
+  variants:
+    CYP3A43*1.001:
+    CYP3A43*1.002:
+      7-99861633-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    CYP3A43*2.001:
+      7-99836454-TA-T: {ref: "TA", alt: "T", effect_allele: "T"}
+    CYP3A43*2.002:
+      7-99836454-TA-T: {ref: "TA", alt: "T", effect_allele: "T"}
+      7-99859982-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    CYP3A43*3.001:
+      7-99859982-C-G: {ref: "C", alt: "G", effect_allele: "G"}

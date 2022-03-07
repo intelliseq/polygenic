@@ -1,0 +1,922 @@
+haplotype_model:
+  variants:
+    DPYD*1.001:
+    DPYD*rs1801158:
+      1-97515865-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs1801159:
+      1-97515839-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs1801160:
+      1-97305364-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs1801265:
+      1-97883329-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs1801266:
+      1-97691776-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs1801267:
+      1-97098598-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs1801268:
+      1-97079071-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs2297595:
+      1-97699535-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs3918289:
+      1-97450059-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs3918290:
+      1-97450058-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs6670886:
+      1-97699506-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs17376848:
+      1-97450068-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs45589337:
+      1-97679170-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs55674432:
+      1-97098616-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs55886062.1:
+      1-97515787-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs55886062.2:
+      1-97515787-A-T: {ref: "A", alt: "T", effect_allele: "T"}
+    DPYD*rs55971861:
+      1-97382461-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs56005131:
+      1-97234991-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs57918000:
+      1-97549713-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs59086055:
+      1-97450190-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs60139309:
+      1-97193109-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs60511679:
+      1-97305363-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs61622928:
+      1-97573881-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs61757362:
+      1-97079106-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs67376798:
+      1-97082391-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs72547601:
+      1-97079121-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs72547602:
+      1-97079133-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs72549303:
+      1-97450066-GG-G: {ref: "GG", alt: "G", effect_allele: "G"}
+    DPYD*rs72549304:
+      1-97549609-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs72549305:
+      1-97593238-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs72549306.1:
+      1-97593343-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs72549306.2:
+      1-97593343-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs72549307:
+      1-97699399-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs72549308:
+      1-97699430-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs72549309:
+      1-97106278-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      1-97328808-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+      1-97740414-AATGA-A: {ref: "AATGA", alt: "A", effect_allele: "A"}
+    DPYD*rs72549310:
+      1-97883353-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs72975710.1:
+      1-97549735-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs72975710.2:
+      1-97549735-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs56038477:
+      1-97573863-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      1-97579893-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs78060119:
+      1-97573943-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs80081766:
+      1-97883352-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs111858276:
+      1-97549600-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs112766203.1:
+      1-97305279-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs112766203.2:
+      1-97305279-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs114096998.1:
+      1-97078987-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs114096998.2:
+      1-97078987-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs115232898:
+      1-97699474-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs116364703:
+      1-97549590-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs137878450:
+      1-97082431-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs137999090:
+      1-97373598-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs138391898:
+      1-97549565-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs138545885:
+      1-97373629-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs138616379:
+      1-97450189-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs139459586:
+      1-97079076-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs139834141:
+      1-97699533-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs140039091:
+      1-97515821-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs140114515:
+      1-97079005-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs140602333:
+      1-97573919-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs140989814:
+      1-97079073-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs141044036:
+      1-97082365-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs141439344:
+      1-97549637-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs141462178:
+      1-97721650-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs141726921:
+      1-97679173-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs142512579:
+      1-97573805-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs142619737:
+      1-97515851-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs143154602:
+      1-97593289-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs143815742.1:
+      1-97573918-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs143815742.2:
+      1-97573918-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs143879757.1:
+      1-97595124-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs143879757.2:
+      1-97595124-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs143986398:
+      1-97740439-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs144395748.1:
+      1-97549726-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs144395748.2:
+      1-97549726-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs144935781:
+      1-97573970-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs145112791:
+      1-97595083-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs145529148:
+      1-97079139-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs145548112:
+      1-97306195-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs145773863:
+      1-97450187-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs146356975:
+      1-97595149-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs146529561:
+      1-97305372-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs147545709:
+      1-97098599-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs147601618:
+      1-97450168-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs148799944:
+      1-97078993-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs148994843:
+      1-97515923-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs150036960:
+      1-97883368-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs150385342.1:
+      1-97740400-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs150385342.2:
+      1-97740400-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs150437414:
+      1-97595088-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs151074666:
+      1-97079056-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs183105782:
+      1-97595107-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs183385770:
+      1-97593322-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs186169810:
+      1-97573785-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs187713395:
+      1-97373580-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs188052243:
+      1-97098577-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs190577302:
+      1-97593292-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs190951787:
+      1-97515889-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs199549923:
+      1-97549681-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs199634007:
+      1-97234958-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs199646142:
+      1-97573870-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs199777072:
+      1-97193206-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs200064537:
+      1-97573839-A-T: {ref: "A", alt: "T", effect_allele: "T"}
+    DPYD*rs200296941:
+      1-97450063-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs200562975:
+      1-97721542-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs200643089:
+      1-97234970-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs200687447.1:
+      1-97193209-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs200687447.2:
+      1-97193209-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs200693895:
+      1-97573819-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs200709381:
+      1-97573762-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs201018345:
+      1-97593379-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs201035051:
+      1-97098632-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs201268750:
+      1-97079120-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs201433243:
+      1-97450099-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs201615754.1:
+      1-97515784-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs201615754.2:
+      1-97515784-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs201648613:
+      1-97573967-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs201785202:
+      1-97593226-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs202144771:
+      1-97079077-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs202212118:
+      1-97306285-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs267598785:
+      1-97234929-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs267598786:
+      1-97305282-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs267598789:
+      1-97691770-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs367619008:
+      1-97828160-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs368146607:
+      1-97450118-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs368152149:
+      1-97699463-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs368327291:
+      1-97305346-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs368519011:
+      1-97193071-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs368970772:
+      1-97699542-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs369103276:
+      1-97679103-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs369575517:
+      1-97593367-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs370569731.1:
+      1-97573792-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs370569731.2:
+      1-97573792-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs370615432:
+      1-97721651-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs370707404:
+      1-97549693-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs371258350:
+      1-97450156-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs371313778:
+      1-97234860-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs371587702.1:
+      1-97828153-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs371587702.2:
+      1-97828153-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs371792178.1:
+      1-97699507-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs371792178.2:
+      1-97699507-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs372058915:
+      1-97193164-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs372307932:
+      1-97082394-A-T: {ref: "A", alt: "T", effect_allele: "T"}
+    DPYD*rs372909322:
+      1-97193087-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs374527058:
+      1-97450207-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs374531732:
+      1-97699478-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs374825099.1:
+      1-97234964-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs374825099.2:
+      1-97234964-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs374827081:
+      1-97699510-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs375436137:
+      1-97306281-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs375990187:
+      1-97740423-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs376073289.1:
+      1-97699408-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs376073289.2:
+      1-97699408-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs376128878:
+      1-97691740-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs376273539:
+      1-97920887-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs377143350:
+      1-97593276-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs377169736:
+      1-97721648-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs527580106:
+      1-97828118-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs528152707:
+      1-97740453-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs528430685:
+      1-97573871-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs528768620:
+      1-97883328-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs529019871:
+      1-97382404-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs532341730:
+      1-97573827-A-T: {ref: "A", alt: "T", effect_allele: "T"}
+    DPYD*rs536577604:
+      1-97721526-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs538336580:
+      1-97721599-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs538703919:
+      1-97306282-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs547099198:
+      1-97234916-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs548783838:
+      1-97382436-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs556933127:
+      1-97679177-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs557220418:
+      1-97193092-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs558354142:
+      1-97515748-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs559427764:
+      1-97098594-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs568169006:
+      1-97082448-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs568367673:
+      1-97234994-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs569661196:
+      1-97306215-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs570122671:
+      1-97305348-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs571114616:
+      1-97193163-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs573299212:
+      1-97593273-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs575763449:
+      1-97593369-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs575853463:
+      1-97373592-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs576409484:
+      1-97573942-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs672601273:
+      1-97079067-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs672601273.1:
+      1-97079067-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs672601273.2:
+      1-97079067-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs672601275:
+      1-97193159-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs672601276:
+      1-97234965-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs672601282:
+      1-97515911-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs672601284:
+      1-97595130-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs672601285:
+      1-97595148-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs672601287:
+      1-97699489-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs672601288:
+      1-97740444-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs745512069:
+      1-97573885-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs745704371:
+      1-97593266-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs745833535:
+      1-97515914-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs745911874:
+      1-97549646-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs745982505.1:
+      1-97079062-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs745982505.2:
+      1-97079062-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs746115989:
+      1-97373583-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs746329786:
+      1-97679104-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs746777181:
+      1-97593306-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs747132274:
+      1-97234946-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs747161261:
+      1-97549628-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs747627716:
+      1-97515740-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs747633945:
+      1-97593351-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs747858350:
+      1-97515808-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs747872037:
+      1-97373568-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs748214188:
+      1-97193181-A-T: {ref: "A", alt: "T", effect_allele: "T"}
+    DPYD*rs748235192.1:
+      1-97450105-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs748235192.2:
+      1-97450105-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs748266854:
+      1-97595142-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs748320430:
+      1-97721607-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs748620513:
+      1-97573799-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs748639205:
+      1-97082415-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs748853941:
+      1-97699487-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs748958293:
+      1-97593277-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs748974194:
+      1-97883319-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs749157068:
+      1-97595070-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs749269410:
+      1-97699412-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs749354734:
+      1-97573791-A-T: {ref: "A", alt: "T", effect_allele: "T"}
+    DPYD*rs749586100:
+      1-97193081-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs749699298:
+      1-97740401-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs749982106:
+      1-97373628-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs750147471:
+      1-97549715-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs750224169:
+      1-97721598-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs750423752:
+      1-97234902-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs750687600:
+      1-97691764-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs750721736:
+      1-97593270-A-T: {ref: "A", alt: "T", effect_allele: "T"}
+    DPYD*rs751049055:
+      1-97595114-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs751104498:
+      1-97549577-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs751113340:
+      1-97595161-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs751190912:
+      1-97306270-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs751340819:
+      1-97573822-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs751374989:
+      1-97573828-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs751399062:
+      1-97193238-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs751841116.1:
+      1-97699450-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs751841116.2:
+      1-97699450-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs751848058:
+      1-97515780-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs752020412:
+      1-97593262-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs752228747:
+      1-97193124-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs752388408:
+      1-97193224-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs752518145:
+      1-97382439-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs752985272:
+      1-97593249-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs753166888:
+      1-97699439-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs753217888:
+      1-97883355-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs753296078:
+      1-97306265-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs753419296:
+      1-97193107-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs753527420:
+      1-97382417-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs753707032:
+      1-97450114-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs753710779:
+      1-97549727-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs753820482:
+      1-97079110-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs753950237:
+      1-97082400-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs754028972:
+      1-97573930-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs754125729.1:
+      1-97515796-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs754125729.2:
+      1-97515796-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs754467630:
+      1-97593279-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs754786483:
+      1-97079044-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs755155824:
+      1-97699361-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs755407188:
+      1-97515800-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs755416212:
+      1-97691775-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs755428442:
+      1-97082407-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs755645831:
+      1-97699475-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs755692084:
+      1-97306296-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs755729055:
+      1-97098587-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs756020314:
+      1-97450177-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs756372042:
+      1-97593339-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs756613407:
+      1-97515791-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs756684474:
+      1-97883277-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs756890859:
+      1-97306276-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs756992995:
+      1-97193143-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs757155354:
+      1-97573834-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs757227327:
+      1-97193241-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs757342874:
+      1-97740460-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs757376267:
+      1-97079134-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs757695236:
+      1-97098548-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs757954074:
+      1-97193128-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs757958938:
+      1-97828189-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs757994597:
+      1-97593352-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs758154803:
+      1-97515893-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs758489611:
+      1-97450186-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs758514990:
+      1-97721614-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs758649719:
+      1-97234935-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs758699471:
+      1-97699378-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs759082282:
+      1-97573820-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs759249769:
+      1-97450183-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs759424419:
+      1-97515774-A-T: {ref: "A", alt: "T", effect_allele: "T"}
+    DPYD*rs759479759:
+      1-97699436-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs759562628:
+      1-97079113-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs759766897:
+      1-97098610-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs759967863:
+      1-97595079-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs760038956:
+      1-97306255-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs760222167:
+      1-97679167-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs760235888:
+      1-97079104-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs760485592:
+      1-97079026-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs760553268:
+      1-97740435-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs760570391:
+      1-97593237-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs760663364:
+      1-97515928-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs761302217:
+      1-97193202-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs761351410:
+      1-97234979-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs761479700:
+      1-97679143-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs761555670:
+      1-97549579-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs761609256:
+      1-97234883-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs762083671:
+      1-97373612-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs762102298:
+      1-97828129-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs762198241:
+      1-97920916-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs762430779:
+      1-97721669-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs762446803:
+      1-97193235-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs762468894:
+      1-97721562-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs762523739:
+      1-97450132-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs762533012:
+      1-97721661-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs762598766:
+      1-97573910-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs762779297:
+      1-97082373-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs762858106:
+      1-97082455-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs762911226:
+      1-97098623-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs763008163:
+      1-97593254-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs763061658:
+      1-97699534-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs763449831:
+      1-97234871-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs763506271:
+      1-97373596-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs763557204:
+      1-97549678-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs763572567:
+      1-97450138-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs763623595:
+      1-97721569-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs763784786:
+      1-97373604-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs763862486:
+      1-97082389-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs763893877:
+      1-97082462-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs763984510:
+      1-97573765-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs764111543:
+      1-97593325-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs764270260:
+      1-97515778-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs764555085:
+      1-97883367-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs764635955:
+      1-97699442-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs764666241:
+      1-97573821-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs764679468:
+      1-97098524-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs764945792:
+      1-97679175-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs765001324:
+      1-97305294-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs765034707:
+      1-97691725-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs765075551:
+      1-97193142-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs765131182:
+      1-97828120-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs765247038:
+      1-97082352-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs765309287:
+      1-97699438-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs765465250:
+      1-97450181-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs765640386:
+      1-97306259-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs765990958:
+      1-97382415-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs766411970:
+      1-97306239-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs766438205:
+      1-97079029-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs766635900:
+      1-97883338-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs766700777:
+      1-97573835-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs766761199:
+      1-97515858-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs766833304:
+      1-97193101-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs766885021:
+      1-97549586-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs767200577:
+      1-97234986-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs767376585:
+      1-97450167-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs767437717:
+      1-97573929-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs767464878:
+      1-97234889-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs767468952:
+      1-97234989-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs767482279:
+      1-97721583-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs767547827:
+      1-97305337-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs767818267:
+      1-97828138-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs767836989:
+      1-97691746-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs767986711:
+      1-97373617-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs768117152:
+      1-97593265-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs768157853:
+      1-97193095-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs768200107:
+      1-97098596-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs768288280:
+      1-97740403-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs768501828:
+      1-97883323-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs768507975:
+      1-97306217-A-T: {ref: "A", alt: "T", effect_allele: "T"}
+    DPYD*rs768680499:
+      1-97699498-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs768915005:
+      1-97679139-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs769190350:
+      1-97920900-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs769306962:
+      1-97573886-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs769466648.1:
+      1-97450127-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs769466648.2:
+      1-97450127-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs769514867:
+      1-97515919-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs769696395:
+      1-97373587-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs769709846:
+      1-97593321-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs769820114:
+      1-97920886-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs769847078:
+      1-97883314-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs769932607:
+      1-97098613-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs770229152:
+      1-97883335-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs770566506:
+      1-97593370-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs770958862:
+      1-97234947-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs771194906:
+      1-97595163-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs771534236:
+      1-97721634-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs771536388:
+      1-97595062-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs771573678:
+      1-97740426-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs771646887:
+      1-97305270-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs771648776:
+      1-97515812-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs771885007:
+      1-97593298-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs771930534.1:
+      1-97098493-A-T: {ref: "A", alt: "T", effect_allele: "T"}
+    DPYD*rs771930534.2:
+      1-97098493-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs772097379:
+      1-97920910-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs772264512:
+      1-97515925-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs772320654:
+      1-97595145-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs772358811:
+      1-97573802-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs772544099:
+      1-97079100-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    DPYD*rs772826416:
+      1-97098502-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs772906420:
+      1-97593229-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs773159364:
+      1-97740427-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs773407491:
+      1-97306219-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs773584401:
+      1-97193199-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs773652644:
+      1-97382403-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs773815814.1:
+      1-97193098-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs773815814.2:
+      1-97193098-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs773868825:
+      1-97079007-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs773983635:
+      1-97679142-A-T: {ref: "A", alt: "T", effect_allele: "T"}
+    DPYD*rs774134971:
+      1-97082464-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs774500505:
+      1-97515848-A-T: {ref: "A", alt: "T", effect_allele: "T"}
+    DPYD*rs774579695.1:
+      1-97193091-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs774799003:
+      1-97549688-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs774883578:
+      1-97573888-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs775494607:
+      1-97082454-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs775526810:
+      1-97699531-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs775570841:
+      1-97193072-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs775601164:
+      1-97883341-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs775926386:
+      1-97679136-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs776082092:
+      1-97549669-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs776236081:
+      1-97082428-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs776289153:
+      1-97082349-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs776321529:
+      1-97515769-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs776662759:
+      1-97883340-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs776973423:
+      1-97699435-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs776984091:
+      1-97450115-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs777220476.1:
+      1-97595166-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs777220476.2:
+      1-97595166-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs777238016:
+      1-97883272-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs777347164:
+      1-97595067-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs777368221:
+      1-97515894-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs777425216:
+      1-97515815-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs777560627:
+      1-97593357-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs777673186:
+      1-97234937-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    DPYD*rs777902288:
+      1-97595147-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs778022685:
+      1-97721626-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs778054451:
+      1-97082416-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs778141885:
+      1-97699385-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs778298325:
+      1-97306269-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs778601245:
+      1-97593288-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs778754188:
+      1-97515733-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs778760295:
+      1-97593348-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    DPYD*rs778776264:
+      1-97549619-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs778867644:
+      1-97573858-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs778911905:
+      1-97079053-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    DPYD*rs779465366:
+      1-97573798-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    DPYD*rs779557503:
+      1-97593274-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs779573574:
+      1-97098591-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    DPYD*rs779728902:
+      1-97699486-A-T: {ref: "A", alt: "T", effect_allele: "T"}
+    DPYD*rs779925747:
+      1-97595140-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    DPYD*rs779967271:
+      1-97549603-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs780025995:
+      1-97691769-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    DPYD*rs780047918:
+      1-97234917-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs780120302:
+      1-97382430-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs780813130:
+      1-97193248-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs780873985:
+      1-97883287-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs780885126:
+      1-97573883-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs781184141:
+      1-97699375-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    DPYD*rs866110709:
+      1-97515761-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs866869468:
+      1-97373644-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs867143119:
+      1-97079042-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    DPYD*rs867226255:
+      1-97699493-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs867232786:
+      1-97082392-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs867600987:
+      1-97082470-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs868047175:
+      1-97573894-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs868235016:
+      1-97082354-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    DPYD*rs1180771326:
+      1-97515884-T-C: {ref: "T", alt: "C", effect_allele: "C"}
