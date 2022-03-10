@@ -1,5 +1,5 @@
 haplotype_model:
-  variants:
+  haplotypes:
     CYP3A4*1.001:
     CYP3A4*1G:
       7-99763843-C-T: {ref: "C", alt: "T", effect_allele: "T"}

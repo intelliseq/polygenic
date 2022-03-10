@@ -1,5 +1,5 @@
 haplotype_model:
-  variants:
+  haplotypes:
     CYP2J2*1.001:
     CYP2J2*2.001:
       1-59912258-T-C: {ref: "T", alt: "C", effect_allele: "C"}

@@ -1,5 +1,5 @@
 haplotype_model:
-  variants:
+  haplotypes:
     NUDT15*1.001:
     NUDT15*1.002:
       13-48037782-A-C: {ref: "A", alt: "C", effect_allele: "C"}

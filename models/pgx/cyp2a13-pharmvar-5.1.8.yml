@@ -1,5 +1,5 @@
 haplotype_model:
-  variants:
+  haplotypes:
     CYP2A13*1.001:
     CYP2A13*1.002:
       19-41088460-C-A: {ref: "C", alt: "A", effect_allele: "A"}

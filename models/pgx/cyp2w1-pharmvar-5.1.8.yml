@@ -1,5 +1,5 @@
 haplotype_model:
-  variants:
+  haplotypes:
     CYP2W1*1.001:
     CYP2W1*1.002:
       7-983377-C-T: {ref: "C", alt: "T", effect_allele: "T"}

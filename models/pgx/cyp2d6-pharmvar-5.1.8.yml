@@ -1,5 +1,5 @@
 haplotype_model:
-  variants:
+  haplotypes:
     CYP2D6*1.001:
     CYP2D6*1.002:
       22-42126963-C-T: {ref: "C", alt: "T", effect_allele: "T"}

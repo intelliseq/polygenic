@@ -1,5 +1,5 @@
 haplotype_model:
-  variants:
+  haplotypes:
     CYP4F2*1.001:
     CYP4F2*2.001:
       19-15897578-A-C: {ref: "A", alt: "C", effect_allele: "C"}

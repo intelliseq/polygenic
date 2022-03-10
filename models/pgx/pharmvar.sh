@@ -44,7 +44,7 @@ function parse_gene {
     local GENE_LOWERCASE=$(echo $GENE | tr '[:upper:]' '[:lower:]')
     local MODEL_FILE="$GENE_LOWERCASE-pharmvar-$VERSION.yml"
     echo "haplotype_model:" > $MODEL_FILE
-    echo "  variants:" >> $MODEL_FILE
+    echo "  haplotypes:" >> $MODEL_FILE
     echo "    $GENE*1.001:" >> $MODEL_FILE
     ls /tmp/pharmvar-$VERSION/$GENE/GRCh38/*.vcf | \
       sort -k1,1V | \

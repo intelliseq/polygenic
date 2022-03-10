@@ -1,5 +1,5 @@
 haplotype_model:
-  variants:
+  haplotypes:
     SLCO1B1*1.001:
     SLCO1B1*1.002:
       12-21178665-T-C: {ref: "T", alt: "C", effect_allele: "C"}

@@ -1,5 +1,5 @@
 haplotype_model:
-  variants:
+  haplotypes:
     CYP3A7*1.001:
     CYP3A7*1.002:
       7-99735407-G-A: {ref: "G", alt: "A", effect_allele: "A"}

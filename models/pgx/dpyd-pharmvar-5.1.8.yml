@@ -1,5 +1,5 @@
 haplotype_model:
-  variants:
+  haplotypes:
     DPYD*1.001:
     DPYD*rs1801158:
       1-97515865-C-T: {ref: "C", alt: "T", effect_allele: "T"}

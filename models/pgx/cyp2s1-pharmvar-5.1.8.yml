@@ -1,5 +1,5 @@
 haplotype_model:
-  variants:
+  haplotypes:
     CYP2S1*1.001:
     CYP2S1*1.002:
       19-41194564-G-A: {ref: "G", alt: "A", effect_allele: "A"}

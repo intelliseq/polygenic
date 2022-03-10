@@ -1,5 +1,5 @@
 haplotype_model:
-  variants:
+  haplotypes:
     CYP2C8*1.001:
     CYP2C8*1.002:
       10-95069673-G-T: {ref: "G", alt: "T", effect_allele: "T"}

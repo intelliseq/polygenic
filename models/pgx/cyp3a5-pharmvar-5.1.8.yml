@@ -1,5 +1,5 @@
 haplotype_model:
-  variants:
+  haplotypes:
     CYP3A5*1.001:
     CYP3A5*1.002:
       7-99648291-A-G: {ref: "A", alt: "G", effect_allele: "G"}

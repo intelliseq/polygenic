@@ -1,5 +1,5 @@
 haplotype_model:
-  variants:
+  haplotypes:
     CYP2C9*1.001:
     CYP2C9*1.002:
       10-94937495-T-C: {ref: "T", alt: "C", effect_allele: "C"}
