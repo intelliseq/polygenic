@@ -1,5 +1,5 @@
 haplotype_model:
-  variants:
+  haplotypes:
     CYP2C19*1.001:
     CYP2C19*1:
       10-94842866-A-G: {ref: "A", alt: "G", effect_allele: "G"}
