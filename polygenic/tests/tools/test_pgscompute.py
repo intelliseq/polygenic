@@ -174,7 +174,7 @@ class PgsComputeTest(TestCase):
             '--af-field', 'AF_nfe',
             '--output-directory', self.output_directory])
 
-        with open(self.output_directory + "/2824-" + appendix + "-result.json", 'r') as output:
+        with open(self.output_directory + "/2824-cyp2c19-pharmvar-5.1.8.yml-cyp2c19-result", 'r') as output:
             results = json.load(output)
             self.assertTrue("cyp2c19-pharmvar" in results)
             self.assertTrue("haplotype_model" in results["cyp2c19-pharmvar"])

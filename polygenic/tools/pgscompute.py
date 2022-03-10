@@ -73,6 +73,8 @@ def run(args):
                     parameters = parameters)
                 model = SeqqlOperator.fromYaml(model_path)
                 model.compute(data_accessor)
+                if "description" not in model.result:
+                    model.result["description"] = {}
                 model.result["description"]["sample_name"] = sample_name
                 model.result["description"]["model_name"] = model_desc["name"].replace('.yml', '')
             # output file name 
