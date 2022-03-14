@@ -1,0 +1,97 @@
+haplotype_model:
+  haplotypes:
+    NUDT15*1.001:
+    NUDT15*1.002:
+      13-48037782-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    NUDT15*1.003:
+      13-48037668-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    NUDT15*1.004:
+      13-48037727-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    NUDT15*1.005:
+      13-48045806-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    NUDT15*1.006:
+      13-48037869-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    NUDT15*1.007:
+      13-48037626-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      13-48037668-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    NUDT15*1.008:
+      13-48037696-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    NUDT15*2:
+      13-48037801-G-GGAGTCG: {ref: "G", alt: "GGAGTCG", effect_allele: "GGAGTCG"}
+      13-48045719-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    NUDT15*2.001:
+      13-48037801-G-GGAGTCG: {ref: "G", alt: "GGAGTCG", effect_allele: "GGAGTCG"}
+      13-48045719-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    NUDT15*3:
+      13-48045719-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    NUDT15*3.001:
+      13-48045719-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    NUDT15*4:
+      13-48045720-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    NUDT15*4.001:
+      13-48045720-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    NUDT15*5:
+      13-48037798-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    NUDT15*5.001:
+      13-48037798-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    NUDT15*6:
+      13-48037801-G-GGAGTCG: {ref: "G", alt: "GGAGTCG", effect_allele: "GGAGTCG"}
+    NUDT15*6.001:
+      13-48037801-G-GGAGTCG: {ref: "G", alt: "GGAGTCG", effect_allele: "GGAGTCG"}
+    NUDT15*7:
+      13-48037847-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    NUDT15*7.001:
+      13-48037847-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    NUDT15*8:
+      13-48037849-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    NUDT15*8.001:
+      13-48037849-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    NUDT15*9:
+      13-48037795-GGAGTCG-G: {ref: "GGAGTCG", alt: "G", effect_allele: "G"}
+    NUDT15*9.001:
+      13-48037795-GGAGTCG-G: {ref: "GGAGTCG", alt: "G", effect_allele: "G"}
+    NUDT15*10:
+      13-48037748-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    NUDT15*10.001:
+      13-48037748-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    NUDT15*11:
+      13-48037885-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    NUDT15*11.001:
+      13-48037885-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    NUDT15*12:
+      13-48037902-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    NUDT15*12.001:
+      13-48037902-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    NUDT15*13:
+      13-48041104-G-GG: {ref: "G", alt: "GG", effect_allele: "GG"}
+    NUDT15*13.001:
+      13-48041104-G-GG: {ref: "G", alt: "GG", effect_allele: "GG"}
+    NUDT15*14:
+      13-48037826-G-GCGGG: {ref: "G", alt: "GCGGG", effect_allele: "GCGGG"}
+    NUDT15*14.001:
+      13-48037826-G-GCGGG: {ref: "G", alt: "GCGGG", effect_allele: "GCGGG"}
+    NUDT15*15:
+      13-48045771-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    NUDT15*15.001:
+      13-48045771-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    NUDT15*16:
+      13-48037834-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    NUDT15*16.001:
+      13-48037834-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    NUDT15*17:
+      13-48041113-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    NUDT15*17.001:
+      13-48041113-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    NUDT15*18:
+      13-48040981-AA-A: {ref: "AA", alt: "A", effect_allele: "A"}
+    NUDT15*18.001:
+      13-48040981-AA-A: {ref: "AA", alt: "A", effect_allele: "A"}
+    NUDT15*19:
+      13-48037749-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    NUDT15*19.001:
+      13-48037749-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    NUDT15*20:
+      13-48045690-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    NUDT15*20.001:
+      13-48045690-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      13-48045806-G-A: {ref: "G", alt: "A", effect_allele: "A"}

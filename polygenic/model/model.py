@@ -1,3 +1,4 @@
+from email.policy import Policy
 import logging
 import math
 import yaml
@@ -5,7 +6,7 @@ from dotmap import DotMap
 
 from polygenic.data.data_accessor import DataAccessor
 from polygenic.model.utils import merge
-from polygenic.error import polygenic_exception
+from polygenic.error.polygenic_exception import PolygenicException
 
 #tmp
 import json
@@ -16,6 +17,7 @@ class SeqqlOperator:
 
     def __init__(self, entries):
         self._entries = entries
+        self.__type__ = self.__class__.__name__
         self.result = {}
         self._instantiate_subclass("model", Model)
         self._instantiate_subclass("description", Description)
@@ -82,6 +84,7 @@ class SeqqlOperator:
         if type(self._entries) is list:
             result = []
             for item in self._entries:
+                print(self.__type__ + " list ")
                 if issubclass(item.__class__, SeqqlOperator):
                     result.append(item.compute(data_accessor))
         ### move genotypes to top
@@ -131,9 +134,6 @@ class Category(SeqqlOperator):
     def __init__(self, key, entries):
         super(Category, self).__init__(entries)
         self.id = key
-        #if self._entries and not isinstance(self._entries, list):
-        #    self.require("from")
-        #    self.require("to")
 
     def assign_category(self, category_name):
         result = {"id": self.id, "match": False, "category": self._entries}
@@ -219,6 +219,8 @@ class Model(SeqqlOperator):
 
 class HaplotypeModel(SeqqlOperator):
     def compute(self, data_accessor: DataAccessor):
+        if "haplotypes" not in self._entries:
+            raise PolygenicException("HaplotypeModel requires genotypes field")
         genotypes = {}
         if "variants" in self._entries:
             genotypes = self._entries["variants"].compute(data_accessor)
@@ -422,7 +424,7 @@ class Variant(SeqqlOperator):
         result = {}
         if not self._entries:
             result["genotype"] = {'rsid': self.id, 'genotype': [None, None], 'phased': None, 'source': 'invalidmodelentry', 'ref': None}
-            result["effect_allele"] = self.get("alt")
+            result["effect_allele"] = None
             return result
         result["genotype"] = data_accessor.get_genotype_by_rsid(self.id)
         if self.has("diplotype"):

@@ -4,7 +4,6 @@ from polygenic import pgstk
 
 from pathlib import Path as path
 
-import tabix
 import os
 import json
 
@@ -163,6 +162,22 @@ class PgsComputeTest(TestCase):
             results = json.load(output)
             self.assertTrue("cyp2d6-pharmvar" in results)
             self.assertTrue("haplotype_model" in results["cyp2d6-pharmvar"])
+
+    def testCyp2c19(self):
+        appendix = "cyp2c19"
+        pgstk.main([
+            'pgs-compute',
+            '--vcf', 'polygenic/tests/resources/vcf/2824.vcf.gz',
+            '--model', 'models/pgx/cyp2c19-pharmvar-5.1.8.yml',
+            '--output-name-appendix', appendix,
+            '--af', 'polygenic/tests/resources/vcf/test.af.vcf.gz',
+            '--af-field', 'AF_nfe',
+            '--output-directory', self.output_directory])
+
+        with open(self.output_directory + "/2824-cyp2c19-pharmvar-5.1.8.yml-cyp2c19-result", 'r') as output:
+            results = json.load(output)
+            self.assertTrue("cyp2c19-pharmvar" in results)
+            self.assertTrue("haplotype_model" in results["cyp2c19-pharmvar"])
 
     # def testPolygenicMat(self):
     #     polygenic.main([

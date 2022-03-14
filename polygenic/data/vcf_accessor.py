@@ -61,10 +61,13 @@ class VcfAccessor(object):
         try:
             records = self.__tabix.query(chromosome, int(position) - 1, int(position))
         except:
-            if "chr" in chromosome:
-                records = self.__tabix.query(chromosome.replace("chr",""), int(position) - 1, int(position))
-            else:
-                records = self.__tabix.query("chr" + chromosome, int(position) - 1, int(position))
+            try:
+                if "chr" in chromosome:
+                    records = self.__tabix.query(chromosome.replace("chr",""), int(position) - 1, int(position))
+                else:
+                    records = self.__tabix.query("chr" + chromosome, int(position) - 1, int(position))
+            except:
+                pass
         vcf_records = []
         if records:
             for record in records:

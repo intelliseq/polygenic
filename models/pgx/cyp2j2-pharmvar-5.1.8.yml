@@ -1,0 +1,21 @@
+haplotype_model:
+  haplotypes:
+    CYP2J2*1.001:
+    CYP2J2*2.001:
+      1-59912258-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    CYP2J2*3.001:
+      1-59912213-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    CYP2J2*4.001:
+      1-59911717-A-T: {ref: "A", alt: "T", effect_allele: "T"}
+    CYP2J2*5.001:
+      1-59905038-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    CYP2J2*6.001:
+      1-59901085-T-A: {ref: "T", alt: "A", effect_allele: "A"}
+    CYP2J2*7.001:
+      1-59926822-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    CYP2J2*8.001:
+      1-59907855-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    CYP2J2*9.001:
+      1-59905010-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    CYP2J2*10.001:
+      1-59915967-G-A: {ref: "G", alt: "A", effect_allele: "A"}

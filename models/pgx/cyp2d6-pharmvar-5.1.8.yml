@@ -145,7 +145,6 @@ haplotype_model:
     CYP2D6*1.044:
       22-42131543-C-G: {ref: "C", alt: "G", effect_allele: "G"}
     CYP2D6*1.045:
-      22-42127084-C-T: {ref: "C", alt: "T", effect_allele: "T"}
       22-42128160-G-A: {ref: "G", alt: "A", effect_allele: "A"}
       22-42129726-A-C: {ref: "A", alt: "C", effect_allele: "C"}
       22-42129950-A-C: {ref: "A", alt: "C", effect_allele: "C"}
@@ -154,6 +153,10 @@ haplotype_model:
       22-42127074-CAC-C: {ref: "CAC", alt: "C", effect_allele: "C"}
       22-42129950-A-C: {ref: "A", alt: "C", effect_allele: "C"}
       22-42130482-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    CYP2D6*1.047:
+      22-42128216-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+      22-42130834-A-AC: {ref: "A", alt: "AC", effect_allele: "AC"}
+      22-42130839-C-CC: {ref: "C", alt: "CC", effect_allele: "CC"}
     CYP2D6*2:
       22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
       22-42127941-G-A: {ref: "G", alt: "A", effect_allele: "A"}
@@ -1192,6 +1195,34 @@ haplotype_model:
       22-42130692-G-A: {ref: "G", alt: "A", effect_allele: "A"}
       22-42131791-C-T: {ref: "C", alt: "T", effect_allele: "T"}
       22-42132217-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    CYP2D6*10.006:
+      22-42126390-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42127209-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      22-42127407-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+      22-42128694-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      22-42129130-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42129513-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+      22-42129754-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42129950-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+      22-42130482-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+      22-42130692-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42131791-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42132217-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    CYP2D6*10.007:
+      22-42126390-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42127209-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      22-42127407-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+      22-42128300-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42128694-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      22-42129130-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42129754-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42129950-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+      22-42130482-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+      22-42130692-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42131791-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42132217-G-A: {ref: "G", alt: "A", effect_allele: "A"}
     CYP2D6*11:
       22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
       22-42127941-G-A: {ref: "G", alt: "A", effect_allele: "A"}
@@ -1288,6 +1319,7 @@ haplotype_model:
       22-42130469-C-T: {ref: "C", alt: "T", effect_allele: "T"}
       22-42130475-T-C: {ref: "T", alt: "C", effect_allele: "C"}
       22-42130522-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42130538-C-A: {ref: "C", alt: "A", effect_allele: "A"}
       22-42130547-T-C: {ref: "T", alt: "C", effect_allele: "C"}
       22-42130559-T-G: {ref: "T", alt: "G", effect_allele: "G"}
       22-42130560-C-G: {ref: "C", alt: "G", effect_allele: "G"}
@@ -1399,6 +1431,7 @@ haplotype_model:
       22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
       22-42127941-G-A: {ref: "G", alt: "A", effect_allele: "A"}
       22-42128812-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      22-42128813-G-A: {ref: "G", alt: "A", effect_allele: "A"}
       22-42128817-C-CC: {ref: "C", alt: "CC", effect_allele: "CC"}
     CYP2D6*20.001:
       22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
@@ -1559,12 +1592,10 @@ haplotype_model:
     CYP2D6*30:
       22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
       22-42127941-G-A: {ref: "G", alt: "A", effect_allele: "A"}
-      22-42128936-A-AGGGGCGAAA: {ref: "A", alt: "AGGGGCGAAA", effect_allele: "AGGGGCGAAA"}
       22-42128942-G-GAAAGGGGCG: {ref: "G", alt: "GAAAGGGGCG", effect_allele: "GAAAGGGGCG"}
     CYP2D6*30.001:
       22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
       22-42127941-G-A: {ref: "G", alt: "A", effect_allele: "A"}
-      22-42128936-A-AGGGGCGAAA: {ref: "A", alt: "AGGGGCGAAA", effect_allele: "AGGGGCGAAA"}
       22-42128942-G-GAAAGGGGCG: {ref: "G", alt: "GAAAGGGGCG", effect_allele: "GAAAGGGGCG"}
       22-42129130-C-G: {ref: "C", alt: "G", effect_allele: "G"}
     CYP2D6*31:
@@ -1620,11 +1651,15 @@ haplotype_model:
       22-42130571-G-T: {ref: "G", alt: "T", effect_allele: "T"}
       22-42130578-C-G: {ref: "C", alt: "G", effect_allele: "G"}
       22-42131469-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42131531-G-A: {ref: "G", alt: "A", effect_allele: "A"}
       22-42132026-T-C: {ref: "T", alt: "C", effect_allele: "C"}
     CYP2D6*33:
       22-42128308-C-A: {ref: "C", alt: "A", effect_allele: "A"}
     CYP2D6*33.001:
       22-42128308-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    CYP2D6*33.002:
+      22-42128308-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+      22-42128802-C-A: {ref: "C", alt: "A", effect_allele: "A"}
     CYP2D6*34:
       22-42127941-G-A: {ref: "G", alt: "A", effect_allele: "A"}
     CYP2D6*34.001:
@@ -1908,6 +1943,35 @@ haplotype_model:
       22-42130692-G-A: {ref: "G", alt: "A", effect_allele: "A"}
       22-42131791-C-T: {ref: "C", alt: "T", effect_allele: "T"}
       22-42132217-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    CYP2D6*36.004:
+      22-42126347-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      22-42126395-CCT-C: {ref: "CCT", alt: "C", effect_allele: "C"}
+      22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42126619-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42126622-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      22-42126623-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+      22-42126624-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42126625-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      22-42126627-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+      22-42126633-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42126635-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+      22-42126636-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42126658-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      22-42126660-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      22-42126663-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+      22-42126667-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42127209-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      22-42127407-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+      22-42128694-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      22-42129130-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42129174-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+      22-42129180-A-T: {ref: "A", alt: "T", effect_allele: "T"}
+      22-42129754-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42129950-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+      22-42130482-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+      22-42130692-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42131791-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42132217-G-A: {ref: "G", alt: "A", effect_allele: "A"}
     CYP2D6*37:
       22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
       22-42128848-C-T: {ref: "C", alt: "T", effect_allele: "T"}
@@ -1948,7 +2012,6 @@ haplotype_model:
     CYP2D6*40:
       22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
       22-42127941-G-A: {ref: "G", alt: "A", effect_allele: "A"}
-      22-42128936-A-AGGGGCGAAAGGGGCGAAA: {ref: "A", alt: "AGGGGCGAAAGGGGCGAAA", effect_allele: "AGGGGCGAAAGGGGCGAAA"}
       22-42128942-G-GAAAGGGGCGAAAGGGGCG: {ref: "G", alt: "GAAAGGGGCGAAAGGGGCG", effect_allele: "GAAAGGGGCGAAAGGGGCG"}
       22-42129770-G-A: {ref: "G", alt: "A", effect_allele: "A"}
     CYP2D6*40.001:
@@ -1957,7 +2020,6 @@ haplotype_model:
       22-42127207-C-T: {ref: "C", alt: "T", effect_allele: "T"}
       22-42127407-T-G: {ref: "T", alt: "G", effect_allele: "G"}
       22-42127941-G-A: {ref: "G", alt: "A", effect_allele: "A"}
-      22-42128936-A-AGGGGCGAAAGGGGCGAAA: {ref: "A", alt: "AGGGGCGAAAGGGGCGAAA", effect_allele: "AGGGGCGAAAGGGGCGAAA"}
       22-42128942-G-GAAAGGGGCGAAAGGGGCG: {ref: "G", alt: "GAAAGGGGCGAAAGGGGCG", effect_allele: "GAAAGGGGCGAAAGGGGCG"}
       22-42129130-C-G: {ref: "C", alt: "G", effect_allele: "G"}
       22-42129770-G-A: {ref: "G", alt: "A", effect_allele: "A"}
@@ -2458,7 +2520,6 @@ haplotype_model:
     CYP2D6*58:
       22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
       22-42127941-G-A: {ref: "G", alt: "A", effect_allele: "A"}
-      22-42128936-A-AGGGGCGAAA: {ref: "A", alt: "AGGGGCGAAA", effect_allele: "AGGGGCGAAA"}
       22-42128942-G-GAAAGGGGCG: {ref: "G", alt: "GAAAGGGGCG", effect_allele: "GAAAGGGGCG"}
       22-42129770-G-A: {ref: "G", alt: "A", effect_allele: "A"}
     CYP2D6*58.001:
@@ -2467,7 +2528,6 @@ haplotype_model:
       22-42127207-C-T: {ref: "C", alt: "T", effect_allele: "T"}
       22-42127407-T-G: {ref: "T", alt: "G", effect_allele: "G"}
       22-42127941-G-A: {ref: "G", alt: "A", effect_allele: "A"}
-      22-42128936-A-AGGGGCGAAA: {ref: "A", alt: "AGGGGCGAAA", effect_allele: "AGGGGCGAAA"}
       22-42128942-G-GAAAGGGGCG: {ref: "G", alt: "GAAAGGGGCG", effect_allele: "GAAAGGGGCG"}
       22-42129130-C-G: {ref: "C", alt: "G", effect_allele: "G"}
       22-42129770-G-A: {ref: "G", alt: "A", effect_allele: "A"}
@@ -2653,6 +2713,9 @@ haplotype_model:
       22-42126746-C-T: {ref: "C", alt: "T", effect_allele: "T"}
     CYP2D6*75.001:
       22-42126746-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    CYP2D6*75.002:
+      22-42126746-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42131289-G-T: {ref: "G", alt: "T", effect_allele: "T"}
     CYP2D6*81:
       22-42128181-A-T: {ref: "A", alt: "T", effect_allele: "T"}
       22-42128185-C-T: {ref: "C", alt: "T", effect_allele: "T"}
@@ -3296,6 +3359,10 @@ haplotype_model:
     CYP2D6*124.001:
       22-42126980-TGA-T: {ref: "TGA", alt: "T", effect_allele: "T"}
       22-42126981-GAG-G: {ref: "GAG", alt: "G", effect_allele: "G"}
+    CYP2D6*124.002:
+      22-42126980-TGA-T: {ref: "TGA", alt: "T", effect_allele: "T"}
+      22-42126981-GAG-G: {ref: "GAG", alt: "G", effect_allele: "G"}
+      22-42128813-G-A: {ref: "G", alt: "A", effect_allele: "A"}
     CYP2D6*125:
       22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
       22-42126719-C-T: {ref: "C", alt: "T", effect_allele: "T"}
@@ -3672,15 +3739,111 @@ haplotype_model:
       22-42131531-G-A: {ref: "G", alt: "A", effect_allele: "A"}
       22-42132375-G-C: {ref: "G", alt: "C", effect_allele: "C"}
     CYP2D6*145:
-      22-42128936-A-AGGGGCGAAA: {ref: "A", alt: "AGGGGCGAAA", effect_allele: "AGGGGCGAAA"}
       22-42128942-G-GAAAGGGGCG: {ref: "G", alt: "GAAAGGGGCG", effect_allele: "GAAAGGGGCG"}
     CYP2D6*145.001:
-      22-42128936-A-AGGGGCGAAA: {ref: "A", alt: "AGGGGCGAAA", effect_allele: "AGGGGCGAAA"}
       22-42128942-G-GAAAGGGGCG: {ref: "G", alt: "GAAAGGGGCG", effect_allele: "GAAAGGGGCG"}
       22-42129726-A-C: {ref: "A", alt: "C", effect_allele: "C"}
       22-42129950-A-C: {ref: "A", alt: "C", effect_allele: "C"}
       22-42130482-C-A: {ref: "C", alt: "A", effect_allele: "A"}
-description:
-  symbol: CYP2D6
-  source: pharmvar
-  version: 5.1.0.1
+    CYP2D6*146:
+      22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42127941-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42130715-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    CYP2D6*146.001:
+      22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42127239-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42127245-C-CT: {ref: "C", alt: "CT", effect_allele: "CT"}
+      22-42127246-T-TT: {ref: "T", alt: "TT", effect_allele: "TT"}
+      22-42127407-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+      22-42127941-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42128216-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+      22-42128576-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      22-42128668-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42129008-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+      22-42129422-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42129950-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+      22-42130047-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+      22-42130048-TG-T: {ref: "TG", alt: "T", effect_allele: "T"}
+      22-42130051-GG-G: {ref: "GG", alt: "G", effect_allele: "G"}
+      22-42130482-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+      22-42130715-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42130967-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42131379-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42131531-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42132117-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    CYP2D6*147:
+      22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42128942-G-GAAAGGGGCGAAAGGGGCG: {ref: "G", alt: "GAAAGGGGCGAAAGGGGCG", effect_allele: "GAAAGGGGCGAAAGGGGCG"}
+      22-42130692-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    CYP2D6*147.001:
+      22-42126390-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42127209-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      22-42127407-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+      22-42128694-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      22-42128942-G-GAAAGGGGCGAAAGGGGCG: {ref: "G", alt: "GAAAGGGGCGAAAGGGGCG", effect_allele: "GAAAGGGGCGAAAGGGGCG"}
+      22-42129130-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42129754-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42129950-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+      22-42130482-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+      22-42130692-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42131791-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42132217-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    CYP2D6*148:
+      22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42126938-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42127941-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42130715-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    CYP2D6*148.001:
+      22-42126310-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42126938-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42127001-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42127207-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42127407-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+      22-42127941-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42129130-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42129950-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+      22-42130047-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+      22-42130482-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+      22-42130547-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      22-42130559-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+      22-42130560-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42130565-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      22-42130569-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+      22-42130571-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+      22-42130578-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42130715-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42130809-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+      22-42131469-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42131528-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      22-42131610-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    CYP2D6*149:
+      22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42127608-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42127608-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42127941-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42129130-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42129132-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42129799-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    CYP2D6*149.001:
+      22-42126611-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42127407-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+      22-42127608-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42127941-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42128321-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      22-42128576-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      22-42128668-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42129130-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      22-42129132-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42129799-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+      22-42129950-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+      22-42130047-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+      22-42130048-TG-T: {ref: "TG", alt: "T", effect_allele: "T"}
+      22-42130051-GG-G: {ref: "GG", alt: "G", effect_allele: "G"}
+      22-42130482-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+      22-42130967-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42131531-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      22-42132199-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      22-42132209-A-T: {ref: "A", alt: "T", effect_allele: "T"}
+      22-42132385-A-G: {ref: "A", alt: "G", effect_allele: "G"}

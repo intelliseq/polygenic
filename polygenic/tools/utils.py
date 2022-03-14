@@ -250,24 +250,11 @@ def clump(
                      " --allow-extra-chr",
                      shell=True)
 
-    # process = subprocess.Popen("plink" +
-    #                 " --clump " + gwas_file +
-    #                 " --clump-p1 " + str(clump_p1) +
-    #                 " --clump-r2 " + str(clump_r2) +
-    #                 " --clump-kb " + str(clump_kb) +
-    #                 " --clump-snp-field " + str(clump_snp_field) +
-    #                 " --clump-field " + str(clump_field) +
-    #                 " --vcf " + str(reference) + " " +
-    #                 " --allow-extra-chr", stdout=subprocess.PIPE, stdin=subprocess.PIPE, shell=True, universal_newlines=True)
-
-    # for stdout_line in iter(process.stdout.readline, ""):
-    #     yield stdout_line
-
     # stdout, stderr = process.communicate()
     clumped_rsids = []
 
     # if plink.clumped does not exist return None
-    if not os.path.isfile(clumped_path):
+    if not os.path.isfile("plink.clumped"):
         return None
 
     with open("plink.clumped", 'r') as plink_file:

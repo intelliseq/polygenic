@@ -1,0 +1,331 @@
+haplotype_model:
+  haplotypes:
+    SLCO1B1*1.001:
+    SLCO1B1*1.002:
+      12-21178665-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    SLCO1B1*1.003:
+      12-21178665-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21239235-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    SLCO1B1*1.004:
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21239356-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    SLCO1B1*1.005:
+      12-21130885-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    SLCO1B1*2:
+      12-21172782-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    SLCO1B1*2.001:
+      12-21172782-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    SLCO1B1*3:
+      12-21174595-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21176883-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*3.001:
+      12-21174595-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21176883-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*4:
+      12-21176879-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    SLCO1B1*4.001:
+      12-21176879-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    SLCO1B1*5:
+      12-21178615-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    SLCO1B1*5.001:
+      12-21178615-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    SLCO1B1*6:
+      12-21200595-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    SLCO1B1*6.001:
+      12-21200595-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    SLCO1B1*7:
+      12-21202649-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*7.001:
+      12-21202649-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*8:
+      12-21205921-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*8.001:
+      12-21205921-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*9:
+      12-21205999-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    SLCO1B1*9.001:
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21205999-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    SLCO1B1*10:
+      12-21239077-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*10.001:
+      12-21239077-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*11:
+      12-21239113-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*11.001:
+      12-21239113-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*12:
+      12-21172782-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21239077-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*12.001:
+      12-21172782-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21239077-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*13:
+      12-21174595-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21176883-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21239113-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*13.001:
+      12-21174595-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21176883-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21239113-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*14:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21176879-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    SLCO1B1*14.001:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21176879-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    SLCO1B1*14.002:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21176827-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      12-21176879-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+      12-21178665-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    SLCO1B1*14.003:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21176879-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    SLCO1B1*15:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178615-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    SLCO1B1*15.001:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178615-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    SLCO1B1*15.002:
+      12-21131076-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178615-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    SLCO1B1*16:
+      12-21176868-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*16.001:
+      12-21176868-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    SLCO1B1*19:
+      12-21239042-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    SLCO1B1*19.001:
+      12-21178665-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21239042-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    SLCO1B1*19.002:
+      12-21239042-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    SLCO1B1*20:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21239042-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    SLCO1B1*20.001:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21239042-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    SLCO1B1*20.002:
+      12-21130885-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21239042-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    SLCO1B1*23:
+      12-21172776-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    SLCO1B1*23.001:
+      12-21172776-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    SLCO1B1*24:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21196951-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*24.001:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21196951-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*25:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21176879-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+      12-21196951-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21196976-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    SLCO1B1*25.001:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21176879-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+      12-21196951-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21196976-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    SLCO1B1*26:
+      12-21202664-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    SLCO1B1*26.001:
+      12-21202664-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    SLCO1B1*27:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21202555-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    SLCO1B1*27.001:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178665-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21200623-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21202555-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+      12-21202603-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    SLCO1B1*28:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21196951-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21196976-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    SLCO1B1*28.001:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21196951-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21196976-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    SLCO1B1*29:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21239158-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    SLCO1B1*29.001:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21239158-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    SLCO1B1*30:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178957-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*30.001:
+      12-21130885-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21178957-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*31:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21205999-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    SLCO1B1*31.001:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21205999-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+      12-21239390-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    SLCO1B1*32:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21176879-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+      12-21196951-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*32.001:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21176879-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+      12-21196951-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*33:
+      12-21172734-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21196951-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21196976-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    SLCO1B1*33.001:
+      12-21172734-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21196951-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21196976-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    SLCO1B1*34:
+      12-21239145-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    SLCO1B1*34.001:
+      12-21239145-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    SLCO1B1*36:
+      12-21202553-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    SLCO1B1*36.001:
+      12-21202553-T-G: {ref: "T", alt: "G", effect_allele: "G"}
+    SLCO1B1*37:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*37.001:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*37.002:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    SLCO1B1*37.003:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21239356-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    SLCO1B1*37.004:
+      12-21130885-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    SLCO1B1*37.005:
+      12-21130885-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*37.006:
+      12-21130885-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21239271-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    SLCO1B1*38:
+      12-21176871-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    SLCO1B1*38.001:
+      12-21176871-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      12-21179014-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    SLCO1B1*39:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21196975-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    SLCO1B1*39.001:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21196975-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21239356-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+    SLCO1B1*40:
+      12-21178615-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21239042-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    SLCO1B1*40.001:
+      12-21178615-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21239042-A-C: {ref: "A", alt: "C", effect_allele: "C"}
+    SLCO1B1*41:
+      12-21176898-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    SLCO1B1*41.001:
+      12-21176898-G-T: {ref: "G", alt: "T", effect_allele: "T"}
+    SLCO1B1*42:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178612-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*42.001:
+      12-21130885-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178612-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21200623-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21202603-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+    SLCO1B1*43:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21176879-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+      12-21196951-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21206031-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*43.001:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21176879-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+      12-21178665-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21196951-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21197100-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      12-21202603-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      12-21205988-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21206031-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*43.002:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21176879-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+      12-21178665-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21196951-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21197100-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      12-21202603-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      12-21205988-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21206031-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21239310-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    SLCO1B1*44:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21196951-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21206031-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+    SLCO1B1*44.001:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178665-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21196951-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21197100-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      12-21202603-G-A: {ref: "G", alt: "A", effect_allele: "A"}
+      12-21205988-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21206031-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21239310-G-C: {ref: "G", alt: "C", effect_allele: "C"}
+    SLCO1B1*45:
+      12-21222355-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    SLCO1B1*45.001:
+      12-21178665-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21222355-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    SLCO1B1*46:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178615-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21222355-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    SLCO1B1*46.001:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178615-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21222355-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+    SLCO1B1*47:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178615-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21200544-C-G: {ref: "C", alt: "G", effect_allele: "G"}
+    SLCO1B1*47.001:
+      12-21176804-A-G: {ref: "A", alt: "G", effect_allele: "G"}
+      12-21178615-T-C: {ref: "T", alt: "C", effect_allele: "C"}
+      12-21178691-C-T: {ref: "C", alt: "T", effect_allele: "T"}
+      12-21200544-C-G: {ref: "C", alt: "G", effect_allele: "G"}

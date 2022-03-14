@@ -1,0 +1,9 @@
+haplotype_model:
+  haplotypes:
+    CYP26A1*1.001:
+    CYP26A1*2.001:
+      10-93074881-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    CYP26A1*3.001:
+      10-93074922-C-A: {ref: "C", alt: "A", effect_allele: "A"}
+    CYP26A1*4.001:
+      10-93076616-T-C: {ref: "T", alt: "C", effect_allele: "C"}

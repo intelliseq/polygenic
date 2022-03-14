@@ -113,10 +113,6 @@ def filter_pval(args):
                 anno_line = anno.readline().rstrip().split('\t')
                 if float(data_line[data_header.index('pval_' + args.population)].replace('NA', '1', 1)) <= args.pvalue_threshold:
                     output.write('\t'.join(data_line + anno_line) + "\n")
-                    if args.test:
-                        snp_count += 1
-                        if snp_count > 50:
-                            break
             except:
                 break
         pbar.close()
