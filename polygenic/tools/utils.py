@@ -40,27 +40,33 @@ def error_exit(e):
 def expand_path(path: str) -> str:
     return os.path.abspath(os.path.expanduser(path)) if path else ''
 
-def setup_logger(path):
-    logger = logging.getLogger('pgstk')
+def setup_logger(path: str = None, level: int = logging.INFO):
 
-    log_directory = os.path.dirname(os.path.abspath(os.path.expanduser(path)))
-    if log_directory:
-        try:
+    # configure logging
+    logger = logging.getLogger()
+    # set logger level
+    logger.level = logging.DEBUG
+    #set logger format
+    formatter = logging.Formatter("%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)")    
+    # get handlers for logger
+    handlers = logger.handlers
+    # remove all handlers
+    for handler in handlers:
+        logger.removeHandler(handler)
+    # add new handler
+    if path:
+        path = os.path.abspath(os.path.expanduser(path))
+        log_directory = os.path.dirname(path)
+        if log_directory and not os.path.exists(log_directory):
             os.makedirs(log_directory)
-        except OSError:
-            pass
-    logger.setLevel(logging.DEBUG)
-    logging_file_handler = logging.FileHandler(path)
-    logging_file_handler.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    logging_file_handler.setFormatter(formatter)
-    logger.addHandler(logging_file_handler)
-
-    consoleHandler = logging.StreamHandler()
-    consoleHandler.setFormatter(formatter)
-    logger.addHandler(consoleHandler)
-
-    return logger
+        file_handler = logging.FileHandler(path)
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
+    else:
+        stream_handler = logging.StreamHandler(sys.stdout)
+        stream_handler.setFormatter(formatter)
+        logger.addHandler(stream_handler)
+    return None
 
 ### model tools
 def download(url: str, output_path: str, force: bool=False, progress: bool=False):
