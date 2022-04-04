@@ -1,11 +1,12 @@
 import sys
 import polygenic.tools as tools
+import logging
 
 from polygenic.error.polygenic_exception import PolygenicException
 
 def main(args=sys.argv[1:]):
 
-
+    tools.utils.init_logger()
 
     try:
         if args[0] == 'pgs-compute':
@@ -31,10 +32,9 @@ def main(args=sys.argv[1:]):
             plot-gwas               manhattan plot for gwas results
             """)
     except PolygenicException as e:
-        print("Analysis failed")
-        print("ERROR: " + str(e))
+        tools.utils.error_exit(e)
     except RuntimeError as e:
-        print("ERROR: " + str(e))
+        tools.utils.error_exit(e)
 
 if __name__ == '__main__':
     main(sys.argv[1:])

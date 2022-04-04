@@ -40,6 +40,9 @@ def error_exit(e):
 def expand_path(path: str) -> str:
     return os.path.abspath(os.path.expanduser(path)) if path else ''
 
+def init_logger(path: str = None, level: int = logging.INFO):
+    return setup_logger(path, level)
+
 def setup_logger(path: str = None, level: int = logging.INFO):
 
     # configure logging
@@ -66,7 +69,7 @@ def setup_logger(path: str = None, level: int = logging.INFO):
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.setFormatter(formatter)
         logger.addHandler(stream_handler)
-    return None
+    return logger
 
 ### model tools
 def download(url: str, output_path: str, force: bool=False, progress: bool=False):

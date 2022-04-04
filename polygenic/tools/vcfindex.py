@@ -18,17 +18,14 @@ def parse_args(args):
     return parsed_args
 
 def run(args):
-    logging.getLogger().debug("vcf-index")
+    logging.getLogger().debug("running vcf-index")
     VcfAccessor(args.vcf)
     return
 
 def main(args = sys.argv[1:]):
 
     args = parse_args(args) 
-    try:
-        run(args)
-    except PolygenicException as e:
-        utils.error_exit(e)
+    run(args)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
