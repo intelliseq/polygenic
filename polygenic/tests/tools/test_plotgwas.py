@@ -1,5 +1,6 @@
 from unittest import TestCase
 from polygenic import pgstk
+from pathlib import Path as path
 
 class PlotGwasTest(TestCase):
 
@@ -10,7 +11,7 @@ class PlotGwasTest(TestCase):
 
     def testPlotGwas(self):
         pgstk.main([
-            "model-gbe",
+            "plot-gwas",
             "--code", "2395",
             "--sex", "both_sexes",
             "--coding", "4", 

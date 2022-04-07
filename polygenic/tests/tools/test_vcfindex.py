@@ -11,6 +11,8 @@ class VcfIndexTest(TestCase):
 
         ### run vcf-index
         pgstk.main([
+            "--log-stdout",
+            "--log-level", "DEBUG",
             "vcf-index",
             "--vcf", "polygenic/tests/resources/vcf/test.vcf.gz"
         ])

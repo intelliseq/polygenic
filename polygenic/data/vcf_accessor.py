@@ -15,8 +15,6 @@ import polygenic.rsidx as rsidx
 import sqlite3
 import tabix
 
-logger = logging.getLogger('description_language.' + __name__)
-
 class VcfAccessor(object):
     def __init__(self, vcf_path:str):
         super().__init__()
@@ -118,7 +116,7 @@ class VcfAccessor(object):
         return VcfRecord(self.__get_vcf_line_for_rsid(rsid), self.__sample_names)
 
     def get_sample_names(self) -> List[str]:
-        logger.info('Getting sample names')
+        logging.debug('Getting sample names')
         sample_names_for_all_files = []
         with gzopen(self.__path) as vcf_file:
             for line in vcf_file:
