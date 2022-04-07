@@ -18,8 +18,21 @@ def main(args=sys.argv[1:]):
     parser.add_argument('-v', '--version', action='version', version='%(prog)s ' + version)
     subparsers = parser.add_subparsers(dest = 'tool')
 
+    ### utils ###
+    # vcf-index
     vcf_index_parser = subparsers.add_parser('vcf-index', description='vcf-index creates index for vcf file')
     vcf_index_parser.add_argument('-i', '--vcf', required=True, help='path to vcf.gz')
+
+    ### plots ###
+    # plot-manhattan
+    plot_manhattan_parser = subparsers.add_parser('plot-manhattan', description='plot-manhattan draws manhattan plot')
+    plot_manhattan_parser.add_argument('-i', '--tsv', required=True, help='tsv or tsv.gz file with gwas data')
+    plot_manhattan_parser.add_argument('-g', '--genome-version', default="GRCh38", help="genome version GRCh37 or GRCh38 (default: GRCh38)")
+    plot_manhattan_parser.add_argument('-c', '--chromosome-column', default="chr", help="column name for chromosome (default: chr)")
+    plot_manhattan_parser.add_argument('-s', '--position-column', default="pos", help="column name for position (default: pos)")
+    plot_manhattan_parser.add_argument('-p', '--pvalue-column', default="pval_meta", help="column name for pvalue (default: pos)")
+    plot_manhattan_parser.add_argument('-f', '--format', default="png", help="output format {png, pdf} (default: png)")
+    plot_manhattan_parser.add_argument('-o', '--output', help="output (default: {tsv}.{format}})")
 
     parsed_args = parser.parse_args(args)
 
@@ -50,9 +63,16 @@ def main(args=sys.argv[1:]):
         logger.addHandler(stream_handler)
 
     logging.debug("running " + parsed_args.tool)
-    
-    if parsed_args.tool == 'vcf-index':
-        tools.vcfindex.run(parsed_args)
+
+    try:    
+        if parsed_args.tool == 'vcf-index':
+            tools.vcfindex.run(parsed_args)
+        elif parsed_args.tool == 'plot-manhattan':
+            tools.plotmanhattan.run(parsed_args)
+    except PolygenicException as e:
+        tools.utils.error_exit(e)
+    except RuntimeError as e:
+        tools.utils.error_exit(e)
 
     
     # args[0] == 'pgs-compute':
@@ -78,10 +98,7 @@ def main(args=sys.argv[1:]):
     #         plot-gwas               manhattan plot for gwas results
     #         """)
             
-    # except PolygenicException as e:
-    #     tools.utils.error_exit(e)
-    # except RuntimeError as e:
-    #     tools.utils.error_exit(e)
+
 
     return 0
 

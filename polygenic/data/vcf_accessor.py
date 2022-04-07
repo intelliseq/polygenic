@@ -5,7 +5,6 @@ from typing import List
 from typing import Union
 from polygenic.data import mobigen_utils
 from polygenic.data.snp_data import SnpData
-from polygenic.data.snp_data import SnpDataManySamples
 from polygenic.data.vcf_record import VcfRecord
 
 # rsidx
@@ -26,14 +25,20 @@ class VcfAccessor(object):
             raise RuntimeError('Can not access tabix index for {path}'.format(path = self.__path))
         self.__tabix = tabix.open(self.__path)
         if not self.__is_remote and not os.path.exists(self.__path + '.idx.db'):
-            with sqlite3.connect(self.__path + '.idx.db') as dbconn, gzopen(self.__path, 'rt') as vcffh:
-                rsidx.index.index(dbconn, vcffh)
+            logging.debug('Creating index for {path}'.format(path = self.__path))
+            self.create_rsidx_index(self.__path)
         if not self.__is_remote:
             self.__sample_names = self.get_sample_names()
         else:
             self.__sample_names = []
         #self.__rsidx_conn = sqlite3.connect(self.__path + '.idx.db')
         self.__data: Dict[str, Dict[str:SnpData]] = {}  # dictionary rsid:{sample_name:ModelSnpData}
+
+    ### create rsidx index
+    @staticmethod
+    def create_rsidx_index(path):
+        with sqlite3.connect(path + '.idx.db') as vcf_index, gzopen(path, 'rt') as vcf_file:
+            rsidx.index.index(vcf_index, vcf_file)
 
     def get_record_by_gnomadid(self, gnomadid) -> VcfRecord:
         splitted_gnomadid = gnomadid.split("-")
@@ -133,7 +138,7 @@ class VcfAccessor(object):
     def __get_data_for_given_rsid(self, rsid, imputed:bool = False) -> Dict[str, SnpData]:
         line = self.__get_vcf_line_for_rsid(rsid)
         if not line:
-            logger.debug(f'No line for rsid {rsid} found')
+            logging.debug(f'No line for rsid {rsid} found')
             raise DataNotPresentError
         if VcfRecord(line).is_imputed() == imputed:
             data = mobigen_utils.get_genotypes(line, self.__sample_names)
@@ -172,7 +177,7 @@ class VcfAccessor(object):
         alt_allele = record.get_alt()
         alt_allele_freq = record.get_af_by_pop(population_name)
         if not len(alt_allele) == 1:
-            logger.info(
+            logging.info(
                 f'{rsid} is multiallelic but only two alleles are provided. Only {ref_allele} and {alt_allele} were considered')
         return {alt_allele: alt_allele_freq, ref_allele: 1 - alt_allele_freq}
 

@@ -7,7 +7,7 @@ class VcfIndexTest(TestCase):
     def __init__(self, *args, **kwargs):
         super(VcfIndexTest, self).__init__(*args, **kwargs)
 
-    def testVcfIndex(self):
+    def test_vcf_index(self):
 
         ### run vcf-index
         pgstk.main([

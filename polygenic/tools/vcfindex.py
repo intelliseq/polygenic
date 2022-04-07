@@ -1,6 +1,5 @@
-import logging
-from polygenic.data.vcf_accessor import VcfAccessor
+from polygenic.data.vcf_accessor import VcfAccessor as vcf_accessor
 
 def run(args):
-    VcfAccessor(args.vcf)
-    return
+    vcf_accessor.create_rsidx_index(args.vcf)
+    return 0

@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 class PgstkTest(TestCase):
 
-    def testHelp(self):
+    def test_help(self):
 
         ### test help
         with patch('sys.stdout', new=io()) as helpOutput:
