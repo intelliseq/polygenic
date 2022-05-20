@@ -21,55 +21,8 @@ from polygenic.data.vcf_accessor import VcfAccessor
 from polygenic.data.csv_accessor import CsvAccessor
 from tqdm import tqdm
 
-def error_print(*args, **kwargs):
-    print(*args, file=sys.stderr, **kwargs)
-
-def error_exit(e):
-    time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    error_print("")
-    error_print("  polygenic ERROR ")
-    error_print("  version: " + version)
-    error_print("  time: " + time)
-    error_print("  command: pgstk " + (" ").join(sys.argv))
-    error_print("  message: ")
-    error_print("")
-    error_print("  " + str(e))
-    error_print("")
-    exit(1)
-
 def expand_path(path: str) -> str:
     return os.path.abspath(os.path.expanduser(path)) if path else ''
-
-def init_logger(path: str = None, level: int = logging.INFO):
-    return setup_logger(path, level)
-
-def setup_logger(path: str = None, level: int = logging.INFO):
-
-    # configure logging
-    logger = logging.getLogger()
-    # set logger level
-    logger.level = logging.DEBUG
-    #set logger format
-    formatter = logging.Formatter("%(asctime)s [%(levelname)8s] %(message)s (%(filename)s:%(lineno)s)")    
-    # get handlers for logger
-    handlers = logger.handlers
-    # remove all handlers
-    for handler in handlers:
-        logger.removeHandler(handler)
-    # add new handler
-    if path:
-        path = os.path.abspath(os.path.expanduser(path))
-        log_directory = os.path.dirname(path)
-        if log_directory and not os.path.exists(log_directory):
-            os.makedirs(log_directory)
-        file_handler = logging.FileHandler(path)
-        file_handler.setFormatter(formatter)
-        logger.addHandler(file_handler)
-    else:
-        stream_handler = logging.StreamHandler(sys.stdout)
-        stream_handler.setFormatter(formatter)
-        logger.addHandler(stream_handler)
-    return logger
 
 ### model tools
 def download(url: str, output_path: str, force: bool=False, progress: bool=False):

@@ -10,6 +10,7 @@ class VcfRecord(object):
 
     def __init__(self, vcf_line:str, sample_names:List[str] = []):
         super().__init__()
+        self.__vcf_line = vcf_line
         self.__dict = self.__parse(vcf_line)
         self.__sample_names = sample_names
 
@@ -37,6 +38,14 @@ class VcfRecord(object):
 
         return parsed_line
 
+    def __str__(self):
+        return (str(self.__dict["CHROM"]) + " " + 
+        str(self.__dict["POS"]) + " " + 
+        str(self.__dict["REF"]) + " " + 
+        str(self.__dict["ALT"]) + " " +
+        str(self.__dict["INFO"]))
+
+
     def is_phased(self, sample_name) -> list:
         phased = None
         samples = self.__dict["SAMPLES"]
@@ -44,7 +53,7 @@ class VcfRecord(object):
             idx = self.__sample_names.index(sample_name)
         else:
             idx = None
-        if not samples is None and not idx is None:
+        if not samples is None and samples and not idx is None:
             sample = samples[idx]
             sample = sample.split(":")[0]
             if "|" in sample:
@@ -59,7 +68,7 @@ class VcfRecord(object):
             idx = self.__sample_names.index(sample_name)
         else:
             idx = None
-        if not samples is None and not idx is None:
+        if not samples is None and samples and not idx is None:
             sample = samples[idx]
             sample = sample.split(":")[0]
             alleles = [sample[:1], sample[2:]]
@@ -111,7 +120,7 @@ class VcfRecord(object):
 
     def get_af_by_pop(self, af_field_name) -> Dict[str, float]:
         if self.get_info_field(af_field_name) is None:
-            raise PolygenicException("No {field} field in allele frequency vcf ".format(field = af_field_name))
+            raise PolygenicException("No {field} field in allele frequency vcf for {line}".format(field = af_field_name, line = str(self)))
         af = {}
         counter = 0
         sumfreq = 0

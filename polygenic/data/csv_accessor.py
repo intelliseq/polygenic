@@ -20,6 +20,9 @@ class CsvAccessor(object):
     def get_column_names(self):
         return self.__data.columns
 
+    def get_data(self):
+        return self.__data
+
     def read_data(self):
         return pd.read_csv(filepath_or_buffer = self.__path, sep = self.__delimiter)
 

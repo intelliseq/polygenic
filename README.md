@@ -450,9 +450,12 @@ pgstk pgs-compute --vcf [PATH_TO_VCF_GZ] --model cyp2d6-pharmvar.yml --print | j
 ```
 
 ## License
-Proprietary (contact@intelliseq.pl). Free for personal use.
+Proprietary (contact@intelliseq.pl)
 
 ## Updates
+### 2.2.0
+- ENHANCEMENT: better computing of haplotype models. First one haplotype is identified and further the second haplotype is identified from leftover genotypes
+- ENHANCEMENT: moved argparse from tools to pgstk
 ### 2.1.10
 - BUG: resolved bug with wrong plink.clumped path in clumping
 ### 2.1.9

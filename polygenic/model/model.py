@@ -1,6 +1,7 @@
 from email.policy import Policy
 import logging
 import math
+import copy
 import yaml
 from dotmap import DotMap
 
@@ -228,7 +229,7 @@ class HaplotypeModel(SeqqlOperator):
         genotypes = self._entries["haplotypes"].compute_genotypes(data_accessor, genotypes)
         haplotypes = self._entries["haplotypes"].compute_haplotypes(genotypes)
         result["haplotypes"] = haplotypes
-        result["genotypes"] = genotypes
+        #result["genotypes"] = genotypes
         if self.has("categories"):
             for category_name in self.get("categories").get_entries():
                 category = self.get("categories").get_entries()[category_name]
@@ -252,47 +253,79 @@ class Haplotypes(SeqqlOperator):
 
     def compute_haplotypes(self, genotypes: dict):
         haplotypes = {}
-        matching_haplotypes = {}
-        final_haplotypes = [None, None]
-        result = {}
-        for entry in self._entries:
-            haplotypes[entry] = self._entries[entry].compute_haplotype(genotypes)
-        for haplotype_id in haplotypes:
-            haplotype = haplotypes[haplotype_id]
-            #if (sum(haplotype["alleles"]) > 0):
-            if (haplotype['max_percent_match'] > 0.9):
-                matching_haplotypes[haplotype_id] = {
-                    "id": haplotype_id,
-                    "allele_count": sum(haplotype["alleles"]),
-                    "af": haplotype["af"],
-                    "alleles": haplotype["alleles"],
-                    "score": haplotype["score"],
-                    "percent_match": haplotype["percent_match"],
-                    "max_percent_match": haplotype["max_percent_match"],
-                    "percent_missing": haplotype["percent_missing"],
-                }
-        sorted_haplotypes = sorted(matching_haplotypes.items(), key = lambda x: x[1]['max_percent_match'] * 10 + x[1]['af'] - x[1]['percent_missing'], reverse = True)
-        final_matches = [0, 0]
-        for i in range(len(sorted_haplotypes)):
-            sorted_haplotype = sorted_haplotypes[i]
-            id = sorted_haplotype[0]
-            info = sorted_haplotype[1]
-            if info['percent_match'][0] > final_matches[0] and info['max_percent_match'] == info['percent_match'][0]:
-                final_matches[0] = info['max_percent_match']
-                final_haplotypes[0] = sorted_haplotype
-            if info['percent_match'][1] > final_matches[1] and info['max_percent_match'] == info['percent_match'][1]:
-                final_matches[1] = info['max_percent_match']
-                final_haplotypes[1] = sorted_haplotype
-            
-        allele_count_sum = 0
-        result["match"] = []
-        score = 0
-        for item in final_haplotypes:
-            haplotype_id = item[0]
-            haplotype = item[1]
-            score += haplotype["score"]
-            result["match"].append(haplotype["id"])
 
+        # compute best matching haplotype
+        for haplotype_id in self._entries:
+            haplotypes[haplotype_id] = self._entries[haplotype_id].compute_haplotype(genotypes)
+            #print("COMPUTING 1: " + haplotype_id + " " + str(haplotypes[haplotype_id]['max_percent_match']))
+
+        # sort and filter results by match
+        sorted_haplotypes = sorted(haplotypes.items(), key = lambda x: x[1]['max_percent_match'], reverse = True)
+        best_matching_haplotypes = {}
+        FIRST_SORTED_ELEMENT = 0 # index of first element
+        ID_IDX = 0
+        HAPLOTYPE_IDX = 1 # haplotype is a tupple [ID, HAPLOTYPE]
+        max_percent_match = sorted_haplotypes[FIRST_SORTED_ELEMENT][HAPLOTYPE_IDX]['max_percent_match']
+        for haplotype in sorted_haplotypes:
+            if haplotype[1]['max_percent_match'] >= (max_percent_match):
+                best_matching_haplotypes[haplotype[ID_IDX]] = haplotype[HAPLOTYPE_IDX]
+
+        # compute second haplotype
+        matched_haplotypes = {}
+        for first_haplotype_id in best_matching_haplotypes:
+            computed_haplotypes = {}
+            for second_haplotype_id in best_matching_haplotypes:
+                leftover_genotypes = best_matching_haplotypes[first_haplotype_id]['leftover_genotypes'][0]
+                computed_haplotypes[second_haplotype_id] = self._entries[second_haplotype_id].compute_haplotype(leftover_genotypes)
+                #print("COMPUTING 2: " + first_haplotype_id + "_" + second_haplotype_id + " " + str(computed_haplotypes[second_haplotype_id]['max_percent_match']))
+            sorted_haplotypes = sorted(computed_haplotypes.items(), key = lambda x: x[1]['max_percent_match'], reverse = True)
+            max_percent_match = sorted_haplotypes[FIRST_SORTED_ELEMENT][HAPLOTYPE_IDX]['max_percent_match']
+            sorted_haplotypes = sorted(computed_haplotypes.items(), key = lambda x: x[1]['min_percent_variants_missing'], reverse = False)
+            for haplotype in sorted_haplotypes:
+                if haplotype[1]['max_percent_match'] >= (max_percent_match):
+                    id = first_haplotype_id + "_" + haplotype[0]
+                    match = [best_matching_haplotypes[first_haplotype_id]['max_percent_match'],haplotype[1]['max_percent_match']]
+                    missing = [best_matching_haplotypes[first_haplotype_id]['min_percent_variants_missing'],haplotype[1]['min_percent_variants_missing']]
+                    first_haplotype = copy.deepcopy(best_matching_haplotypes[first_haplotype_id])
+                    del first_haplotype['leftover_genotypes']
+                    second_haplotype = copy.deepcopy(haplotype[1])
+                    del second_haplotype['leftover_genotypes']
+                    matched_haplotypes[id] = {
+                        "id": id,
+                        "match": match,
+                        "missing": missing,
+                        "match_sum": sum(match),
+                        "missing_sum": sum(missing)
+                    }
+        sorted_haplotypes = sorted(matched_haplotypes.items(), key = lambda x: x[1]['match_sum'], reverse = True)
+        match_sum = sorted_haplotypes[FIRST_SORTED_ELEMENT][HAPLOTYPE_IDX]['match_sum']
+        match_filtered_haplotypes = {}
+        for haplotype in sorted_haplotypes:
+            if haplotype[1]['match_sum'] >= (match_sum):
+                match_filtered_haplotypes[haplotype[0]] = haplotype[1] 
+        sorted_haplotypes = sorted(match_filtered_haplotypes.items(), key = lambda x: x[1]['missing_sum'], reverse = False)
+        missing_sum = sorted_haplotypes[FIRST_SORTED_ELEMENT][HAPLOTYPE_IDX]['missing_sum']
+        missing_filtered_haplotypes = {}
+        missing_unfiltered_haplotypes = {}
+        for haplotype in sorted_haplotypes:
+            if haplotype[1]['missing_sum'] <= (missing_sum):
+                missing_filtered_haplotypes[haplotype[0]] = haplotype[1]
+            else:
+                missing_unfiltered_haplotypes[haplotype[0]] = haplotype[1]
+
+        
+        result = {}
+        if max_percent_match >= 0.5:
+            result["haplotype_id"] = list(missing_filtered_haplotypes.keys())[0]
+        else:
+            result["haplotype_id"] = None
+        result["matching_haplotypes"] = [hap for hap in missing_filtered_haplotypes]
+        result["unexcluded_haplotypes"] = [hap for hap in missing_unfiltered_haplotypes]
+        result["id"] = result["haplotype_id"]
+        result["haplotypes"] = matched_haplotypes
+        return result
+
+        
         result["id"] = [result["match"][0] + "/" + result["match"][1], result["match"][1] + "/" + result["match"][0]]
         result["score"] = score
         result["haplotypes"] = haplotypes
@@ -317,46 +350,74 @@ class Haplotype(SeqqlOperator):
 
     def compute_haplotype(self, genotypes: dict):
         haplotype = {'id': self.id}
-        haplotype_tupple = [True, True]
-        possible_haplotype_allele_count = 2
-        required_matches = [0, 0]
-        matched_variants = [0, 0]
-        missing_genotypes = 0
-        missing_variants = 0
-        percent_match = 0
+        required_matches = [0, 0] # total matches required
+        matched_variants = [0, 0] # total variants matched
+        missing_genotypes = [0, 0] # total missing variants
+        missing_variants = [0, 0] # total missing haplotype specific variants
+        percent_match = [0, 0] # percent of variants matched
+        percent_genotypes_missing = [0, 0] # percent of genotypes missing
+        percent_variants_missing = [0, 0] # percent of variants missing
+        leftover_genotypes = [copy.deepcopy(genotypes), copy.deepcopy(genotypes)] # genotypes left to match in econd round
+
+        # iterate over genotypes
         for genotype_id in genotypes:
-            required_matches = [required_matches[0] + 1, required_matches[1] + 1]
+
+            # increment required matches
+            required_matches = [value + 1 for value in required_matches]
+
+            # get genotype by id
             genotype = genotypes[genotype_id]
+
+            # increment missing genotype counter
             if genotype["genotype"]["source"] == "missing":
-                missing_genotypes += 1
+                missing_genotypes = [value + 1 for value in missing_genotypes]
                 if genotype_id in self._entries:
-                    missing_variants += 1
-            alleles = [allele == genotype["effect_allele"] for allele in genotype["genotype"]["genotype"]]
-            if genotype_id not in self._entries:
-                alleles = [not allele for allele in alleles]
-            phased = genotype["genotype"]["phased"]
-            allele = alleles[0] or alleles[1]
-            possible_haplotype_allele_count = min(possible_haplotype_allele_count, sum(alleles))
-            if phased:
-                matched_variants = [matched_variants[0] + alleles[0], matched_variants[1] + alleles[1]]
-                haplotype_tupple[0] = haplotype_tupple[0] and alleles[0]
-                haplotype_tupple[1] = haplotype_tupple[1] and alleles[1]
+                    missing_variants = [value + 1 for value in missing_variants]
+
+            # boolean allele match
+            alleles = genotype["genotype"]["genotype"]
+            if genotype_id in self._entries:
+                alleles_match = [allele is not None and allele == genotype["effect_allele"] for allele in alleles]
             else:
-                matched_variants = [matched_variants[0] + allele, matched_variants[1] + allele]
-                haplotype_tupple[0] = haplotype_tupple[0] and allele
-                haplotype_tupple[1] = haplotype_tupple[1] and allele
-        percent_match = [matched_variants[0] / (required_matches[0] - missing_genotypes), matched_variants[1] / (required_matches[1] - missing_genotypes)]
-        max_percent_match = max(percent_match)
-        percent_missing = missing_genotypes / required_matches[0]
-        haplotype["max_percent_match"] = max_percent_match
+                alleles_match = [allele is not None and allele != genotype["effect_allele"] for allele in alleles]
+            if genotype["genotype"]["phased"]:
+                matched_variants = [matched_variants[0] + alleles_match[0], matched_variants[1] + alleles_match[1]]
+                leftover_genotypes[0][genotype_id]["genotype"]["genotype"] = [alleles[0], None]
+                leftover_genotypes[1][genotype_id]["genotype"]["genotype"] = [alleles[1], None]
+            else:
+                if alleles_match[0]:
+                    matched_variants = [matched_variants[0] + 1, matched_variants[1] + 1]
+                    leftover_genotypes[0][genotype_id]["genotype"]["genotype"] = [alleles[1], None]
+                    leftover_genotypes[1][genotype_id]["genotype"]["genotype"] = [alleles[1], None]
+                elif alleles_match[1]:
+                    matched_variants = [matched_variants[0] + 1, matched_variants[1] + 1]
+                    leftover_genotypes[0][genotype_id]["genotype"]["genotype"] = [alleles[0], None]
+                    leftover_genotypes[1][genotype_id]["genotype"]["genotype"] = [alleles[0], None]
+                else:
+                    leftover_genotypes[0][genotype_id]["genotype"]["genotype"] = [alleles[0], None]
+                    leftover_genotypes[1][genotype_id]["genotype"]["genotype"] = [alleles[0], None]
+
+        # compute percent match
+        if (required_matches[0] - missing_genotypes[0]) > 0:
+            percent_match[0] = matched_variants[0] / (required_matches[0] - missing_genotypes[0])
+        if (required_matches[1] - missing_genotypes[1]) > 0:
+            percent_match[1] = matched_variants[1] / (required_matches[1] - missing_genotypes[1])
+        percent_match_order = sorted(range(len(percent_match)), key=lambda k: percent_match[k])
+        percent_genotypes_missing[0] = missing_genotypes[0] / required_matches[0]
+        percent_genotypes_missing[1] = missing_genotypes[1] / required_matches[1]
+        percent_variants_missing[0] = missing_variants[0] / required_matches[0]
+        percent_variants_missing[1] = missing_variants[1] / required_matches[1]
         haplotype["percent_match"] = percent_match
-        haplotype["percent_missing"] = percent_missing
-        haplotype["possible_haplotype_allele_count"] = possible_haplotype_allele_count
+        haplotype["percent_genotypes_missing"] = percent_genotypes_missing
+        haplotype["percent_variants_missing"] = percent_variants_missing
+        haplotype["max_percent_match"] = percent_match[percent_match_order[1]]
+        haplotype["min_percent_genotypes_missing"] = percent_genotypes_missing[percent_match_order[1]]
+        haplotype["min_percent_variants_missing"] = percent_variants_missing[percent_match_order[1]]
         haplotype["required_matches"] = required_matches
         haplotype["matched_variants"] = matched_variants
         haplotype["missing_genotypes"] = missing_genotypes
         haplotype["missing_variants"] = missing_variants
-        haplotype["alleles"] = haplotype_tupple
+        haplotype["leftover_genotypes"] = leftover_genotypes
         haplotype["af"] = self._entries["af"] if "af" in self._entries else 0
         haplotype["score"] = self._entries["score"] if "score" in self._entries else 0
         return haplotype

@@ -5,7 +5,7 @@ import setuptools
 from typing import List
 from setuptools import setup, find_packages
 
-PACKAGE_VERSION = '2.1.11'
+PACKAGE_VERSION = '2.2.0'
 
 def write_version_py(filename='polygenic/version.py'):
     cnt = """
@@ -51,7 +51,8 @@ setuptools.setup(
         'kaleido==0.2.1',
         'DotMap==1.3.24',
         'pyyaml==6.0',
-        'tqdm'
+        'tqdm',
+        'plotnine'
     ],
     python_requires='>=3.8',
     entry_points={
