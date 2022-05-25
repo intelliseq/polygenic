@@ -58,8 +58,7 @@ def run(args):
                 model.result["description"]["model_name"] = model_desc["name"].replace('.yml', '')
             # output file name 
             appendix = "-" + args.output_name_appendix if args.output_name_appendix else ""
-            output_path = os.path.join(expand_path(args.output_directory), f'{sample_name}-{model_desc["name"]}{appendix}-result.json')
-            
+            output_path = os.path.join(expand_path(args.output_directory), f'{sample_name}-{model_desc["name"]}{appendix}-result.json').replace('.yml', '')
             if args.merge_outputs:
                 results_representations[model_desc["name"].replace('.yml', '')] = model.refine_results()
             else:

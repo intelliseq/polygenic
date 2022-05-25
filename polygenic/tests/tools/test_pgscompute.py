@@ -24,7 +24,7 @@ class PgsComputeTest(TestCase):
             '--output-name-appendix', appendix,
             '--output-directory', self.output_directory])
 
-        with open(self.output_directory + "/testsample-test.model.yml-" + appendix + "-result.json", 'r') as output:
+        with open(self.output_directory + "/testsample-test.model-" + appendix + "-result.json", 'r') as output:
             results = json.load(output)
             self.assertTrue("score_model" in results)
             self.assertTrue("description" in results)
@@ -40,7 +40,7 @@ class PgsComputeTest(TestCase):
             '--output-name-appendix', appendix,
             '--output-directory', self.output_directory])
 
-        with open(self.output_directory + "/testsample-test.model.yml-" + appendix + "-result.json", 'r') as output:
+        with open(self.output_directory + "/testsample-test.model-" + appendix + "-result.json", 'r') as output:
             results = json.load(output)
             self.assertTrue("score_model" in results)
             self.assertTrue("description" in results)
@@ -60,7 +60,7 @@ class PgsComputeTest(TestCase):
             '--af-field', 'AF_nfe',
             '--output-directory', self.output_directory])
 
-        with open(self.output_directory + "/testsample-test.model.yml-" + appendix + "-result.json", 'r') as output:
+        with open(self.output_directory + "/testsample-test.model-" + appendix + "-result.json", 'r') as output:
             results = json.load(output)
             self.assertTrue("score_model" in results)
             self.assertEquals("af", results["genotypes"]["rs1570391830"]["genotype"]["source"])
@@ -88,20 +88,36 @@ class PgsComputeTest(TestCase):
             '--output-directory', self.output_directory,
             '--print'])
 
-    # # test if af is used
-    # def testPgsComputeMerge(self):
-    #     appendix = "merge"
-    #     pgstk.main([
-    #         'pgs-compute',
-    #         '--vcf', 'polygenic/tests/resources/vcf/test.sample.vcf.gz',
-    #         '--model', 'polygenic/tests/resources/model/test.model.yml',
-    #         '--output-name-appendix', appendix,
-    #         '--merge-outputs',
-    #         '--output-directory', self.output_directory])
+    def testPgsComputeDiplotype(self):
+        appendix = "diplotype"
+        pgstk.main([
+            'pgs-compute',
+            '--vcf', 'polygenic/tests/resources/vcf/test.sample.vcf.gz',
+            '--model', 'polygenic/tests/resources/model/diplotype_model.yml',
+            '--output-name-appendix', appendix,
+            '--af', 'polygenic/tests/resources/vcf/test.af.vcf.gz',
+            '--output-directory', self.output_directory])
 
-    #     with open(self.output_directory + "/testsample-test.model.yml-" + appendix + "-result.json", 'r') as output:
-    #         results = json.load(output)
-    #         self.assertTrue("test.model" in results)
+        with open(self.output_directory + "/testsample-diplotype_model-" + appendix + "-result.json", 'r') as output:
+            results = json.load(output)
+            self.assertTrue("diplotype_model" in results)
+            self.assertTrue("genotypes" in results)
+            self.assertTrue("qc" in results["diplotype_model"])
+
+    # test if af is used
+    def testPgsComputeMerge(self):
+        appendix = "merge"
+        pgstk.main([
+            'pgs-compute',
+            '--vcf', 'polygenic/tests/resources/vcf/test.sample.vcf.gz',
+            '--model', 'polygenic/tests/resources/model/test.model.yml',
+            '--output-name-appendix', appendix,
+            '--merge-outputs',
+            '--output-directory', self.output_directory])
+
+        with open(self.output_directory + "/testsample-" + appendix + "-result.json", 'r') as output:
+            results = json.load(output)
+            self.assertTrue("test.model" in results)
 
     # # test diplotype model categories
     # def testPgsComputeDiplotype(self):
@@ -134,40 +150,7 @@ class PgsComputeTest(TestCase):
 
     #     self.assertEqual(cm.exception.code, 1)
 
-    # test haplotype
-    def testPgsComputeHaplotype(self):
-        appendix = "haplotype"
-        pgstk.main([
-            'pgs-compute',
-            '--vcf', 'polygenic/tests/resources/vcf/test.sample.vcf.gz',
-            '--model', 'polygenic/tests/resources/model/bitter-taste.yml',
-            '--output-name-appendix', appendix,
-            '--af', 'polygenic/tests/resources/vcf/test.af.vcf.gz',
-            '--af-field', 'AF_nfe',
-            '--output-directory', self.output_directory])
 
-    # def testPgsComputeHaplotypePgx(self):
-    #     appendix = "pgx"
-    #     pgstk.main([
-    #         'pgs-compute',
-    #         '--vcf', 'polygenic/tests/resources/vcf/test-pgs-compute-cyp-bug.vcf.gz',
-    #         '--model', 'polygenic/models/pgx/cyp2d6-pharmvar.yml',
-    #         '--output-name-appendix', appendix,
-    #         '--af', '/tmp/marpiech/polygenic/gnomad.3.1.vcf.gz',
-    #         '--af-field', 'AF_nfe',
-    #         '--output-directory', self.output_directory,
-    #         '--print'])
-
-    # # test if can be executed through pgstk
-    # def testPgsComputeWork(self):
-    #     appendix = "work"
-    #     pgstk.main([
-    #         'pgs-compute',
-    #         '--vcf', '/data/downloads/resources/prodia/samples/phased_203253100045_R01C01.vcf.gz',
-    #         '--model', "/tmp/marpiech/prodia/nutrigx/alcohol.yml", "/tmp/marpiech/prodia/nutrigx/lactose.yml", "/tmp/marpiech/prodia/nutrigx/antioxidants.yml", "/tmp/marpiech/prodia/nutrigx/liver_detoxification.yml", "/tmp/marpiech/prodia/nutrigx/benefit_of_exercise.yml", "/tmp/marpiech/prodia/nutrigx/low_iron_status.yml", "/tmp/marpiech/prodia/nutrigx/benefit_of_exercise_in_blood_pressure.yml", "/tmp/marpiech/prodia/nutrigx/monounsaturated_fat.yml", "/tmp/marpiech/prodia/nutrigx/benefit_of_exercise_in_bmi.yml", "/tmp/marpiech/prodia/nutrigx/omega_profile.yml", "/tmp/marpiech/prodia/nutrigx/benefit_of_exercise_in_hdl_cholesterol.yml", "/tmp/marpiech/prodia/nutrigx/power.yml", "/tmp/marpiech/prodia/nutrigx/benefit_of_exercise_in_insulin_sensitivity.yml", "/tmp/marpiech/prodia/nutrigx/protein.yml", "/tmp/marpiech/prodia/nutrigx/bitter_taste.yml", "/tmp/marpiech/prodia/nutrigx/saturated_fat.yml", "/tmp/marpiech/prodia/nutrigx/caffeine.yml", "/tmp/marpiech/prodia/nutrigx/sodium.yml", "/tmp/marpiech/prodia/nutrigx/calcium.yml", "/tmp/marpiech/prodia/nutrigx/vitamin_a.yml", "/tmp/marpiech/prodia/nutrigx/choline.yml", "/tmp/marpiech/prodia/nutrigx/vitamin_b12.yml", "/tmp/marpiech/prodia/nutrigx/endurance.yml", "/tmp/marpiech/prodia/nutrigx/vitamin_b6.yml", "/tmp/marpiech/prodia/nutrigx/energy_balance.yml", "/tmp/marpiech/prodia/nutrigx/vitamin_c.yml", "/tmp/marpiech/prodia/nutrigx/folate.yml", "/tmp/marpiech/prodia/nutrigx/vitamin_d.yml", "/tmp/marpiech/prodia/nutrigx/gluten.yml", "/tmp/marpiech/prodia/nutrigx/vitamin_e.yml", "/tmp/marpiech/prodia/nutrigx/individual_eating_motivation.yml", "/tmp/marpiech/prodia/nutrigx/weight_balance.yml", "/tmp/marpiech/prodia/nutrigx/iron_overload.yml", "/tmp/marpiech/prodia/nutrigx/whole_grain.yml",
-    #         '--output-name-appendix', appendix,
-    #         '--merge-outputs',
-    #         '--output-directory', self.output_directory])
 
     # # test bug in haplotype model with missing variant
     # def testPgcComputeCypBug(self):

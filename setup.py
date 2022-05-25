@@ -5,7 +5,7 @@ import setuptools
 from typing import List
 from setuptools import setup, find_packages
 
-PACKAGE_VERSION = '2.2.0'
+PACKAGE_VERSION = '2.2.7'
 
 def write_version_py(filename='polygenic/version.py'):
     cnt = """
@@ -29,7 +29,7 @@ setuptools.setup(
     #long_description=long_description,
     #long_description_content_type="text/reStructuredText",
     url="https://github.com/marpiech/polygenic",
-    packages=setuptools.find_packages(include=['polygenic','polygenic.core','polygenic.data','polygenic.error','polygenic.rsidx','polygenic.lib','polygenic.tools','polygenic.model']),
+    packages=setuptools.find_packages(include=['polygenic','polygenic.core','polygenic.data','polygenic.error','polygenic.rsidx','polygenic.lib','polygenic.tools','polygenic.tools.data','polygenic.model']),
     package_data={'polygenic': ['*.cfg'], 'polygenic': ['resources/chromsizes/*.sizes']},
     license="Intelliseq dual licenses this package. For commercial use, please contact [contact @ intelliseq.com](mailto:contact@intelliseq.com). For non-commercial use, this license permits use of the software only by government agencies, schools, universities, non-profit organizations or individuals on projects that do not receive external funding other than government research grants and contracts. Any other use requires a commercial license. For the full license, please see [LICENSE.md](https://github.com/intelliseq/polygenic/blob/master/LICENSE.md), in this source repository.",
     classifiers=[
@@ -41,12 +41,12 @@ setuptools.setup(
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
     install_requires=[
-        'numpy==1.20.3',
+        'numpy==1.22.3',
         'progressbar2==3.53.1',
         'python-utils==2.5.6',
-        'pysam==0.16.0.1',
+        'pysam==0.19',
         'pytabix==0.1',
-        'pandas==1.3.0',
+        'pandas==1.4.2',
         'plotly==5.1.0',
         'kaleido==0.2.1',
         'DotMap==1.3.24',
@@ -57,8 +57,7 @@ setuptools.setup(
     python_requires='>=3.8',
     entry_points={
         'console_scripts': [
-            'polygenic=polygenic.tools.pgscompute:main',
-            'polygenicmaker=polygenic.pgstk:main',
+            'polygenic=polygenic.pgstk:main',
             'polygenictk=polygenic.pgstk:main',
             'pgstk=polygenic.pgstk:main'
         ],

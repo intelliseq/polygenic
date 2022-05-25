@@ -453,6 +453,12 @@ pgstk pgs-compute --vcf [PATH_TO_VCF_GZ] --model cyp2d6-pharmvar.yml --print | j
 Proprietary (contact@intelliseq.pl)
 
 ## Updates
+### 2.2.7
+- BUG: repaired bug with missing math library in eval
+### 2.2.6
+- FEATURE: added qc to model results
+### 2.2.5
+- ENHACEMENT: libraries updates
 ### 2.2.0
 - ENHANCEMENT: better computing of haplotype models. First one haplotype is identified and further the second haplotype is identified from leftover genotypes
 - ENHANCEMENT: moved argparse from tools to pgstk

@@ -1,8 +1,7 @@
-from email.policy import Policy
 import logging
-import math
 import copy
 import yaml
+import math
 from dotmap import DotMap
 
 from polygenic.data.data_accessor import DataAccessor
@@ -85,7 +84,7 @@ class SeqqlOperator:
         if type(self._entries) is list:
             result = []
             for item in self._entries:
-                print(self.__type__ + " list ")
+                #print(self.__type__ + " list ")
                 if issubclass(item.__class__, SeqqlOperator):
                     result.append(item.compute(data_accessor))
         ### move genotypes to top
@@ -122,6 +121,40 @@ class SeqqlOperator:
                     refined_description[item] = description[item]
             refined_result["description"] = refined_description
         return refined_result
+
+    def compute_qc(self, genotypes):
+        qc = {"variant_count": 0,
+              "variant_count_genotyping": 0,
+                "variant_count_imputing": 0,
+                "variant_count_af": 0,
+                "variant_count_missing": 0,
+                "variant_fraction_genotyping": 0,
+                "variant_fraction_imputing": 0,
+                "variant_fraction_af": 0,
+                "variant_fraction_missing": 0,
+              }
+        for variant_id in genotypes:
+            variant = genotypes[variant_id]
+            qc["variant_count"] += 1
+            if variant is not None and "source" in variant:
+                if variant["source"] == "genotyping":
+                    qc["variant_count_genotyping"] += 1
+                elif variant["source"] == "imputing":
+                    qc["variant_count_imputing"] += 1
+                elif variant["source"] == "af":
+                    qc["variant_count_af"] += 1
+                elif variant["source"] == "missing":
+                    qc["variant_count_missing"] += 1
+                else:
+                    raise PolygenicException("Unknown genotype source for " + variant_id)
+            else:
+                qc["variant_count_missing"] += 1
+            if qc["variant_count"] > 0:
+                qc["variant_fraction_genotyping"] = qc["variant_count_genotyping"] / qc["variant_count"]
+                qc["variant_fraction_imputing"] = qc["variant_count_imputing"] / qc["variant_count"]
+                qc["variant_fraction_af"] = qc["variant_count_af"] / qc["variant_count"]
+                qc["variant_fraction_missing"] = qc["variant_count_missing"] / qc["variant_count"]
+        return qc
 class Description(SeqqlOperator):
     pass
 
@@ -164,6 +197,7 @@ class DiplotypeModel(SeqqlOperator):
                 category_result = category.assign_category(result["diplotype"])
                 if category_result["match"]:
                     result["category"] = category_result["category"]
+        result["qc"] = self.compute_qc(result["genotypes"])
         return result
 
 class Diplotypes(SeqqlOperator):
@@ -229,7 +263,7 @@ class HaplotypeModel(SeqqlOperator):
         genotypes = self._entries["haplotypes"].compute_genotypes(data_accessor, genotypes)
         haplotypes = self._entries["haplotypes"].compute_haplotypes(genotypes)
         result["haplotypes"] = haplotypes
-        #result["genotypes"] = genotypes
+        result["genotypes"] = genotypes
         if self.has("categories"):
             for category_name in self.get("categories").get_entries():
                 category = self.get("categories").get_entries()[category_name]
@@ -237,7 +271,7 @@ class HaplotypeModel(SeqqlOperator):
                 if category_result["match"]:
                     result["category"] = category_name
                     result["value"] = category_result["value"]
-        
+        result["qc"] = self.compute_qc(result["genotypes"])
         return result
 
 class Haplotypes(SeqqlOperator):
@@ -465,7 +499,7 @@ class ScoreModel(SeqqlOperator):
                 if category_result["match"]:
                     result["category"] = category_name
                     result["value"] = category_result["value"]
-
+        result["qc"] = self.compute_qc(result["genotypes"])
         return result
 
 class Variants(SeqqlOperator):
