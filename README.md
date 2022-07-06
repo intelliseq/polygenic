@@ -453,6 +453,8 @@ pgstk pgs-compute --vcf [PATH_TO_VCF_GZ] --model cyp2d6-pharmvar.yml --print | j
 Proprietary (contact@intelliseq.pl)
 
 ## Updates
+### 2.2.8
+- BUG: imputed source is based on IMP tag in the INFO field or GT:DS in format field
 ### 2.2.7
 - BUG: repaired bug with missing math library in eval
 ### 2.2.6
