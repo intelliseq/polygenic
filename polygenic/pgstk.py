@@ -31,6 +31,20 @@ def main(args=sys.argv[1:]):
     pgs_compute_parser.add_argument('--af-field', type=str, default='AF',help='name of the INFO field to be used as allele frequency')
     pgs_compute_parser.add_argument('--print', default=False, action='store_true', help='print output to stdout')
 
+    ### build model ###
+    # model-gwas-file
+    model_gwas_file_parser = subparsers.add_parser('model-gwas-file', description='model-gwas-file builds a model from a gwas results')
+    model_gwas_file_parser.add_argument('-i', '--gwas-file', required=True, help='gwas results file')
+    model_gwas_file_parser.add_argument('-p', '--pvalue-column', type=str, default='PVALUE', help='name of the column containing p-values')
+    model_gwas_file_parser.add_argument('-c', '--chromosome-column', type=str, default='CHROM', help='name of the column containing chromosome')
+    model_gwas_file_parser.add_argument('-s', '--position-column', type=str, default='POS', help='name of the column containing position')
+    model_gwas_file_parser.add_argument('-r', '--ref-allele-column', type=str, default='REF', help='name of the column containing reference allele')
+    model_gwas_file_parser.add_argument('-a', '--alt-allele-column', type=str, default='ALT', help='name of the column containing alternate allele')
+    model_gwas_file_parser.add_argument('-e', '--effect-allele-column', type=str, default='EFFECT', help='name of the column containing effect allele')
+    model_gwas_file_parser.add_argument('-b', '--beta-column', type=str, default='BETA', help='name of the column containing beta')
+    model_gwas_file_parser.add_argument('-o', '--output', required=True, help='output file')
+    model_gwas_file_parser.add_argument('--print', default=False, action='store_true', help='print output to stdout')
+
     ### utils ###
     # vcf-index
     vcf_index_parser = subparsers.add_parser('vcf-index', description='vcf-index creates index for vcf file')
@@ -81,6 +95,8 @@ def main(args=sys.argv[1:]):
     try:    
         if parsed_args.tool == 'pgs-compute':
             tools.pgscompute.run(parsed_args)
+        elif parsed_args.tool == 'model-gwas-file':
+            tools.modelgwasfile.run(parsed_args)
         elif parsed_args.tool == 'vcf-index':
             tools.vcfindex.run(parsed_args)
         elif parsed_args.tool == 'plot-manhattan':
@@ -89,33 +105,6 @@ def main(args=sys.argv[1:]):
         error_exit(e)
     except RuntimeError as e:
         error_exit(e)
-
-    
-    # args[0] == 'pgs-compute':
-    #         tools.pgscompute.main(args[1:])
-    #     elif args[0] == 'model-biobankuk':
-    #         tools.modelbiobankuk.main(args[1:])
-    #     elif args[0] == 'model-pgscat':
-    #         tools.modelpgscat.main(args[1:])
-    #     elif args[0] == 'vcf-index':
-    #         tools.vcfindex.main(args[1:])
-    #     else:
-    # #         print('ERROR: Please select proper tool name"')
-    #         print("""
-    #         Program: polygenic toolkit (downloads gwas data, builds and computes polygenic scores)
-    #         Contact: Marcin Piechota <piechota@intelliseq.com>
-    #         Usage:   pgstk <command> [options]
-
-    #         Commands:
-    #         pgs-compute             computes pgs score for vcf file
-    #         model-biobankuk         prepare polygenic score model based on gwas results from biobankuk
-    #         model-pgscat            prepare polygenic score model based on gwas results from PGS Catalogue
-    #         vcf-index               prepare rsidx for vcf
-    #         plot-gwas               manhattan plot for gwas results
-    #         """)
-            
-
-
     return 0
 
 def error_print(*args, **kwargs):
