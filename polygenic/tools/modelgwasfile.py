@@ -8,3 +8,4 @@ def run(args):
 
     csv = csv_accessor.CsvAccessor(args.gwas_file)
     print(str(csv.get_column_names()))
+    print(str(csv.get_rsid_column_index(rsid_column_name=args.rsid_column)))

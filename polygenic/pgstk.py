@@ -42,6 +42,7 @@ def main(args=sys.argv[1:]):
     model_gwas_file_parser.add_argument('-a', '--alt-allele-column', type=str, default='ALT', help='name of the column containing alternate allele')
     model_gwas_file_parser.add_argument('-e', '--effect-allele-column', type=str, default='EFFECT', help='name of the column containing effect allele')
     model_gwas_file_parser.add_argument('-b', '--beta-column', type=str, default='BETA', help='name of the column containing beta')
+    model_gwas_file_parser.add_argument('-d', '--rsid-column', type=str, default='RSID', help='name of the column containing rsid')
     model_gwas_file_parser.add_argument('-o', '--output', required=True, help='output file')
     model_gwas_file_parser.add_argument('--print', default=False, action='store_true', help='print output to stdout')
 
