@@ -1,6 +1,8 @@
+"""
+high level support for csv files
+"""
 import logging
-import os 
-import math
+import os
 
 import pandas as pd
 import numpy as np
@@ -10,24 +12,35 @@ logger = logging.getLogger('polygenic.data.' + __name__)
 
 class CsvAccessor(object):
     """
-    high level support for csv files
+    class for reading csv files
     """
     def __init__(self, csv_path: str):
         super().__init__()
         self.__path = csv_path
         self.__delimiter = '\t'
         self.__rsid_column_index = None
+        self.__chrom_column_index = None
+        self.__pos_column_index = None
+        self.__ref_column_index = None
+        self.__alt_column_index = None
+        self.__effect_column_index = None
+        self.__pvalue_column_index = None
+        self.__beta_column_index = None
         if not os.path.exists(self.__path):
-            raise PolygenicException('Can not access {path}'.format(path = self.__path))
+            raise PolygenicException(f"Can not access {self.__path}")
         self.__data = self.read_data()
 
-    def __find_index_of_column_by_name(self, name):
+    def __find_index_of_column_by_name(self, name: str, equals_instead_of_contains: bool = False):
         """
         return the index of a column
         """
         for column_index, column_name in enumerate(self.__data.columns):
-            if name.lower() in column_name.lower():
-                return column_index
+            if equals_instead_of_contains:
+                if name.lower() == column_name.lower():
+                    return column_index
+            else:
+                if name.lower() in column_name.lower():
+                    return column_index
         return None
 
     def get_rsid_column_index(self, rsid_column_name: str = 'rsid'):
