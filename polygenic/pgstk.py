@@ -1,3 +1,7 @@
+"""
+toolkit for polygenic trait analysis
+"""
+
 import argparse
 import os
 import logging
@@ -8,7 +12,10 @@ import polygenic.tools as tools
 from polygenic.version import __version__ as version
 from polygenic.error.polygenic_exception import PolygenicException
 
-def main(args=sys.argv[1:]):
+def main(args):
+    """
+    pgstk argument parser
+    """
 
     parser = argparse.ArgumentParser(description='pgstk - the polygenic score toolkit')
     parser.add_argument('--log-level', type=str, default='INFO', help='logging level: DEBUG, INFO, WARNING, ERROR, CRITICAL (default: INFO)')
@@ -35,14 +42,14 @@ def main(args=sys.argv[1:]):
     # model-gwas-file
     model_gwas_file_parser = subparsers.add_parser('model-gwas-file', description='model-gwas-file builds a model from a gwas results')
     model_gwas_file_parser.add_argument('-i', '--gwas-file', required=True, help='gwas results file')
-    model_gwas_file_parser.add_argument('-p', '--pvalue-column', type=str, default='PVALUE', help='name of the column containing p-values')
-    model_gwas_file_parser.add_argument('-c', '--chromosome-column', type=str, default='CHROM', help='name of the column containing chromosome')
-    model_gwas_file_parser.add_argument('-s', '--position-column', type=str, default='POS', help='name of the column containing position')
-    model_gwas_file_parser.add_argument('-r', '--ref-allele-column', type=str, default='REF', help='name of the column containing reference allele')
-    model_gwas_file_parser.add_argument('-a', '--alt-allele-column', type=str, default='ALT', help='name of the column containing alternate allele')
-    model_gwas_file_parser.add_argument('-e', '--effect-allele-column', type=str, default='EFFECT', help='name of the column containing effect allele')
-    model_gwas_file_parser.add_argument('-b', '--beta-column', type=str, default='BETA', help='name of the column containing beta')
-    model_gwas_file_parser.add_argument('-d', '--rsid-column', type=str, default='RSID', help='name of the column containing rsid')
+    model_gwas_file_parser.add_argument('-p', '--pvalue-column-name', type=str, default='PVALUE', help='name of the column containing p-values')
+    model_gwas_file_parser.add_argument('-c', '--chromosome-column-name', type=str, default='CHROM', help='name of the column containing chromosome')
+    model_gwas_file_parser.add_argument('-s', '--position-column-name', type=str, default='POS', help='name of the column containing position')
+    model_gwas_file_parser.add_argument('-r', '--ref-allele-column-name', type=str, default='REF', help='name of the column containing reference allele')
+    model_gwas_file_parser.add_argument('-a', '--alt-allele-column-name', type=str, default='ALT', help='name of the column containing alternate allele')
+    model_gwas_file_parser.add_argument('-e', '--effect-allele-column-name', type=str, default='EFFECT', help='name of the column containing effect allele')
+    model_gwas_file_parser.add_argument('-b', '--beta-column-name', type=str, default='BETA', help='name of the column containing beta')
+    model_gwas_file_parser.add_argument('-d', '--rsid-column-name', type=str, default='RSID', help='name of the column containing rsid')
     model_gwas_file_parser.add_argument('-o', '--output', required=True, help='output file')
     model_gwas_file_parser.add_argument('--print', default=False, action='store_true', help='print output to stdout')
 
@@ -53,7 +60,8 @@ def main(args=sys.argv[1:]):
 
     ### plots ###
     # plot-manhattan
-    plot_manhattan_parser = subparsers.add_parser('plot-manhattan', description='plot-manhattan draws manhattan plot')
+    plot_manhattan_parser = subparsers.add_parser('plot-manhattan',
+        description='plot-manhattan draws manhattan plot')
     plot_manhattan_parser.add_argument('-i', '--tsv', required=True, help='tsv or tsv.gz file with gwas data')
     plot_manhattan_parser.add_argument('-d', '--delimiter', default='\t', help="tsv delimiter (default: '\\t')")
     plot_manhattan_parser.add_argument('-g', '--genome-version', default="GRCh38", choices=['GRCh37', 'GRCh38'], help="genome version GRCh37 or GRCh38 (default: GRCh38)")
@@ -91,9 +99,9 @@ def main(args=sys.argv[1:]):
         stream_handler.setFormatter(formatter)
         logger.addHandler(stream_handler)
 
-    logging.debug("running " + parsed_args.tool)
+    logging.debug("running %s", parsed_args.tool)
 
-    try:    
+    try:
         if parsed_args.tool == 'pgs-compute':
             tools.pgscompute.run(parsed_args)
         elif parsed_args.tool == 'model-gwas-file':
@@ -102,16 +110,22 @@ def main(args=sys.argv[1:]):
             tools.vcfindex.run(parsed_args)
         elif parsed_args.tool == 'plot-manhattan':
             tools.plotmanhattan.run(parsed_args)
-    except PolygenicException as e:
-        error_exit(e)
-    except RuntimeError as e:
-        error_exit(e)
+    except PolygenicException as exception:
+        error_exit(exception)
+    except RuntimeError as exception:
+        error_exit(exception)
     return 0
 
 def error_print(*args, **kwargs):
+    """
+    Prints error message to stderr
+    """
     print(*args, file=sys.stderr, **kwargs)
 
-def error_exit(e):
+def error_exit(exception):
+    """
+    Prints error message to stderr and exits with error code 1
+    """
     time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     error_print("")
     error_print("  polygenic ERROR ")
@@ -120,7 +134,7 @@ def error_exit(e):
     error_print("  command: pgstk " + (" ").join(sys.argv))
     error_print("  message: ")
     error_print("")
-    error_print("  " + str(e))
+    error_print("  " + str(exception))
     error_print("")
     exit(1)
 
