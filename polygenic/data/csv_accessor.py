@@ -25,7 +25,7 @@ class CsvAccessor(object):
             raise PolygenicException(f"Can not access {self.__path}")
         self.__data = self.read_data()
 
-<<<<<<< HEAD
+
     def __find_name_of_column_by_list_of_synonyms(self, names: list, equals_instead_of_contains: bool = True):
         for column_name in self.__data.columns:
             for name in names:
@@ -35,26 +35,12 @@ class CsvAccessor(object):
                 else:
                     if name.lower() in column_name.lower():
                         return column_name
-=======
-    def __find_index_of_column_by_name(self, name: str, equals_instead_of_contains: bool = True):
-        """
-        return the index of a column
-        """
-        for column_index, column_name in enumerate(self.__data.columns):
-            if equals_instead_of_contains:
-                if name.lower() == column_name.lower():
-                    return column_index
-            else:
-                if name.lower() in column_name.lower():
-                    return column_index
->>>>>>> 103769c2bcbe2c4590306fff77df1a249c059e78
         return None
 
     def __map_column_names(self, column_names: dict):
         """
         map the column names to the internal names
         """
-<<<<<<< HEAD
         self.__column_name_mapping.update({'rsid': self.__find_name_of_column_by_list_of_synonyms([column_names.get('rsid_column_name'), 'rsid'])})
         self.__column_name_mapping.update({'chromosome': self.__find_name_of_column_by_list_of_synonyms([column_names.get('chromosome_column_name'), 'chromosome', 'chrom', 'chr'])})
         self.__column_name_mapping.update({'position': self.__find_name_of_column_by_list_of_synonyms([column_names.get('position_column_name'), 'position', 'pos', 'bp'])})
@@ -85,99 +71,6 @@ class CsvAccessor(object):
             if 'effect' not in self.__data.columns:
                 self.__data['effect'] = self.__data['ref']
         
-=======
-        if self.__rsid_column_index is None:
-            self.__rsid_column_index = self.__find_index_of_column_by_name(rsid_column_name)
-        if self.__rsid_column_index is None:
-            self.__rsid_column_index = self.__find_index_of_column_by_name('rsid')
-        if self.__rsid_column_index is None:
-            self.__rsid_column_index = self.__find_index_of_column_by_name('id')
-        return self.__rsid_column_index
-
-    def get_chrom_column_index(self, chrom_column_name: str = 'chromosome'):
-        """
-        return the index of the chrom column
-        """
-        if self.__chrom_column_index is None:
-            self.__chrom_column_index = self.__find_index_of_column_by_name(chrom_column_name)
-        if self.__chrom_column_index is None:
-            self.__chrom_column_index = self.__find_index_of_column_by_name('chromosome')
-        if self.__chrom_column_index is None:
-            self.__chrom_column_index = self.__find_index_of_column_by_name('chrom')
-        if self.__chrom_column_index is None:
-            self.__chrom_column_index = self.__find_index_of_column_by_name('chr')
-        return self.__chrom_column_index
-
-    def get_pos_column_index(self, pos_column_name: str = 'position'):
-        """
-        return the index of the pos column
-        """
-        if self.__pos_column_index is None:
-            self.__pos_column_index = self.__find_index_of_column_by_name(pos_column_name)
-        if self.__pos_column_index is None:
-            self.__pos_column_index = self.__find_index_of_column_by_name('position')
-        if self.__pos_column_index is None:
-            self.__pos_column_index = self.__find_index_of_column_by_name('pos')
-        if self.__pos_column_index is None:
-            self.__pos_column_index = self.__find_index_of_column_by_name('bp')
-        return self.__pos_column_index
-
-    def get_ref_column_index(self, ref_column_name: str = 'ref'):
-        """
-        return the index of the ref column
-        """
-        if self.__ref_column_index is None:
-            self.__ref_column_index = self.__find_index_of_column_by_name(ref_column_name)
-        return self.__ref_column_index
-
-    def get_alt_column_index(self, alt_column_name: str = 'alt'):
-        """
-        return the index of the alt column
-        """
-        if self.__alt_column_index is None:
-            self.__alt_column_index = self.__find_index_of_column_by_name(alt_column_name)
-        return self.__alt_column_index
-    
-    def get_effect_column_index(self, effect_column_name: str = 'effect'):
-        """
-        return the index of the effect column
-        """
-        if self.__effect_column_index is None:
-            self.__effect_column_index = self.__find_index_of_column_by_name(effect_column_name)
-        return self.__effect_column_index
-    
-    def get_pvalue_column_index(self, pvalue_column_name: str = 'pvalue'):
-        """
-        return the index of the pvalue column
-        """
-        if self.__pvalue_column_index is None:
-            self.__pvalue_column_index = self.__find_index_of_column_by_name(pvalue_column_name)
-        return self.__pvalue_column_index
-
-    def get_beta_column_index(self, beta_column_name: str = 'beta'):
-        """
-        return the index of the beta column
-        """
-        if self.__beta_column_index is None:
-            self.__beta_column_index = self.__find_index_of_column_by_name(beta_column_name)
-        return self.__beta_column_index
-
-    def get_symbol_for_rsid(self, rsid):
-        """
-        return the symbol for a rsid
-        """
-        data = self.__data
-        data = data.loc[data["rsid"] == rsid]
-        if len(data.index) == 0:
-            return None
-        return data['symbol'].head(1).iloc[0]
-
-    def get_column_names(self):
-        """
-        return the column names of the csv file
-        """
-        return self.__data.columns
->>>>>>> 103769c2bcbe2c4590306fff77df1a249c059e78
 
     def get_data(self):
         """
@@ -193,7 +86,7 @@ class CsvAccessor(object):
         n = len(temp.to_csv(index=False))
         df = [temp[:0]]
         t = 500 * int(os.path.getsize(self.__path)/n*500*2.5/10**5) + 1
-        with tqdm(total = t, file = sys.stdout) as pbar:
+        with tqdm(total = t, file = sys.stdout, leave=False) as pbar:
             for i,chunk in enumerate(pd.read_csv(self.__path, sep = self.__delimiter, chunksize=10**5, low_memory=False)):
                 df.append(chunk)
                 pbar.set_description('Reading csv chunks (estimated): %d' % ((1 + i) * 500))

@@ -14,7 +14,7 @@ class ModelGwasFileTest(TestCase):
             "--log-stdout",
             "--log-level", "DEBUG",
             "model-gwas-file",
-            "--gwas-file", "/home/marpiech/downloads/EA4_additive_excl_23andMe.txt.gz",
+            "--gwas-file", "/home/marpiech/downloads/EA4_additive_excl_23andMe_2.txt.gz",
             "--output", "/home/marpiech/downloads/EA4_additive_excl_23andMe.yml"
         ])
 
