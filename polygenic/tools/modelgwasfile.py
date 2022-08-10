@@ -9,8 +9,9 @@ import polygenic.data.csv_accessor as csv_accessor
 def run(args):
     gwas = Gwas()
     gwas.load_gwas_data_from_csv(args.gwas_file, vars(args))
-    gwas.plot_manhattan()
-    
+    gwas.clump()
+    #gwas.plot_manhattan()
+
     # dbsnp37 = vcf_accessor.VcfAccessor("/home/marpiech/data/vcf/dbsnp155.grch37.norm.vcf.gz")
     # dbsnp38 = vcf_accessor.VcfAccessor("/home/marpiech/data/vcf/dbsnp155.grch38.norm.vcf.gz")
 

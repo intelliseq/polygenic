@@ -10,6 +10,7 @@ from tqdm import tqdm
 
 import pandas as pd
 import numpy as np
+from scipy.signal import argrelextrema
 
 from plotnine import ggplot
 from plotnine import geom_point, geom_hline
@@ -64,7 +65,7 @@ class GwasData(object):
         logging.debug("Organizing data")
 
         # organizing is implemente by array iteration in numpy for efficiency
-        with tqdm(total = csv.get_data().shape[0], file = sys.stdout, leave=False) as pbar:
+        with tqdm(total = csv.get_data().shape[0], file = sys.stdout, leave=True) as pbar:
             chromosome_vector = csv.get_data()['chromosome']
             position_vector = csv.get_data()['position']
             rsid_vector = csv.get_data()['rsid']
@@ -87,24 +88,40 @@ class GwasData(object):
                             'effect': effect_vector[index],
                             'pvalue': pvalue_vector[index],
                             'beta': beta_vector[index]}
-                self.__gwas[chromosome_vector[index]].update({position_vector[index]: GwasRow(values)})
+                self.__gwas[chromosome_vector[index]].update({int(position_vector[index]): GwasRow(values)})
                 pbar.set_description('Organizing records')
                 pbar.update(1)
-        
-        print(str(self.__gwas.keys()))
-        print(len(self.__get_filtered_data()))
-#                self.__count += 1
-#                self.__gwas[self.__count] = GwasRow(row)
-            # for index, row in csv.get_data().iterrows():
-            #     self.__count += 1
-            #     #if row.get("chromosome") not in self.__gwas:
-            #     #    self.__gwas.update({row.get("chromosome"): {}})
-            #     #self.__gwas.get(row.get("chromosome")).update({row.get("position"): GwasRow(row)})
-            #     pbar.set_description('Organizing gwas records (estimated): %d' % index)
-            #     pbar.update(1)
     
     def __get_size(self):
-        return self.__count
+        size = 0
+        for(positions) in self.__gwas.values():
+            size += len(positions)
+        return size
+
+    def clump(self):
+        print("clumping")
+        clumped_data = []
+        print(self.__get_size())
+        with tqdm(total = self.__get_size(), file = sys.stdout, leave=False) as pbar:
+            for chromosome, positions in self.__gwas.items():
+                print("chromosome: " + str(chromosome))
+                p_sequence = np.array([])
+                pos_sequence = np.array([])
+                for position in positions.values():
+                    pbar.set_description('Clumping records')
+                    pbar.update(1)
+                    p_sequence = np.append(p_sequence, -math.log(position.get("pvalue"),10))
+                    pos_sequence = np.append(pos_sequence, position.get("position"))
+                # print("hello")
+                # print(str(p_sequence[0:10]))
+                extrema = argrelextrema(p_sequence, np.greater_equal, order=int(len(positions) / 10))[0]
+                for extremum in extrema:
+                    print("extremum: " + str(extremum))
+                    print("position: " + str(pos_sequence[extremum]))
+                    print(str(positions[pos_sequence[extremum]]))
+
+
+        return clumped_data
 
     def __get_filtered_data(self, pvalue_threshold: float = 0.05):
         """
@@ -113,10 +130,10 @@ class GwasData(object):
         filtered_data = []
         
         with tqdm(total = self.__get_size(), file = sys.stdout, leave=False) as pbar:
-            for chromosome in self.__gwas:
-                for position in self.__gwas[chromosome]:
-                    if self.__gwas[chromosome][position].get("pvalue") < pvalue_threshold:
-                        filtered_data.append(self.__gwas[chromosome][position])
+            for chromosome, positions in self.__gwas.items():
+                for position, gwas_record in positions.items():
+                    if gwas_record.get("pvalue") < pvalue_threshold:
+                        filtered_data.append(gwas_record)
             pbar.set_description('Filtering records')
             pbar.update(1)            
         return filtered_data
