@@ -105,7 +105,10 @@ class PgsComputeTest(TestCase):
             self.assertTrue("qc" in results["diplotype_model"])
 
     # test if af is used
-    def testPgsComputeMerge(self):
+    def test_pgs_compute_merge(self):
+        """
+        Test if can merge results
+        """
         appendix = "merge"
         pgstk.main([
             'pgs-compute',
@@ -115,9 +118,28 @@ class PgsComputeTest(TestCase):
             '--merge-outputs',
             '--output-directory', self.output_directory])
 
-        with open(self.output_directory + "/testsample-" + appendix + "-result.json", 'r') as output:
+        output_file_name = "testsample-" + appendix + "-result.json"
+        with open(self.output_directory + "/" + output_file_name, mode='r', encoding="utf-8") as output:
             results = json.load(output)
             self.assertTrue("test.model" in results)
+
+    def test_pgs_compute_genotype_effect_allele(self):
+        """
+        Test if can output empty genotype effect allele
+        """
+        appendix = "effect_allele"
+        pgstk.main([
+            'pgs-compute',
+            '--vcf', 'polygenic/tests/resources/vcf/test.sample.vcf.gz',
+            '--model', 'polygenic/tests/resources/model/noeff.yml',
+            '--output-name-appendix', appendix,
+            '--merge-outputs',
+            '--output-directory', self.output_directory])
+
+        output_file_name = "testsample-" + appendix + "-result.json"
+        with open(self.output_directory + "/" + output_file_name, mode='r', encoding="utf-8") as output:
+            results = json.load(output)
+            self.assertTrue("genotypes" in results["noeff"])
 
     # # test diplotype model categories
     # def testPgsComputeDiplotype(self):

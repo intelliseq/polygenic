@@ -1,0 +1,86 @@
+description:
+  chapter: Nutrition
+  criteria: vitamin C absorption and transportation
+  general_information: Vitamin C (ascorbic acid) is a water-soluble vitamin that is
+    required for biosynthesis of collagen which makes it vital to our body for healing
+    process. Vitamin C also acts as antioxidant because it protects our cells against
+    harmful effects of free radicals. Deficiency of vitamin C can lead to anemia,
+    easy bruising, spontaneous bleeding, and sometimes, ulceration of the gums and
+    loss of teeth. Vitamin C is naturally present in some fruits and vegetables, such
+    as citrus, red and green peppers, tomatoes, broccoli, and leafy greens.
+  genes:
+    SLC23A1: SLC23A1 is a gene which encodes for a key protein for the transport and
+      accumulation of vitamin C. The protein is also involved in dietary absorption
+      and renal reabsorption of vitamin C. The presence of rare allele (T) of rs33972313
+      variant in the SLC23A1 gene is related to lower concentrations of circulating
+      vitamin C.
+  group: Nutrient Metabolism
+  interpretation_choice:
+    average: Based on your genetic profile, you are at average risk to have a lower
+      vitamin C levels in your blood.
+    low: Based on your genetic profile, you are at increased risk to have a lower
+      vitamin C levels in your blood.
+  notes: nan
+  recommendation_choice:
+    average: Meet the RDA for vitamin C of 90 mg for adult men and 75 mg for adult
+      women. Dietary sources of vitamin C are kiwi, papaya, strawberries, cooked broccoli,
+      and red or green pepper. Daily intake of these fruits and vegetables are recommended
+      as much as 5 servings.
+    low: Ensure that vitamin C intake is at least 200 mg (or higher but less than
+      1 g) per day in order to reduce the risk of deficiency. Foods that are naturally
+      high in vitamin C include kiwi, papaya, strawberries, cooked broccoli, and red
+      or green pepper. You can check your vitamin C status in blood to determine the
+      sufficiency of this nutrient in your body.
+  references:
+  - "1.Kobylecki, C.J., Afzal, S., Davey Smith, G. & Nordestgaard, B.G. Am. J. Clin.\
+    \ Nutr. 101, 1135\u20131143 (2015)."
+  result_icon_choice:
+    average: average
+    low: low
+  source_of_food:
+  - icon: Red or Green Pepper
+    note: 1.9 g / 100 g
+  sub_group: Vitamin C
+  tendency_choice:
+    average: Normal vitamin C absorption and transport, normal vitamin C level in
+      blood
+    low: Reduced vitamin C absorption and transport, lower vitamin C level in blood
+diplotype_model:
+  categories:
+    CC: average
+    CT: low
+    TC: low
+    TT: low
+  diplotypes:
+    CC:
+      category: average
+      frequency: 24 in 25
+      variants:
+        rs33972313:
+          diplotype: C/C
+          gene: SLC23A1
+          risk_allele: T
+    CT:
+      category: low
+      frequency: 1 in 25
+      variants:
+        rs33972313:
+          diplotype: C/T
+          gene: SLC23A1
+          risk_allele: T
+    TC:
+      category: low
+      frequency: 1 in 25
+      variants:
+        rs33972313:
+          diplotype: T/C
+          gene: SLC23A1
+          risk_allele: T
+    TT:
+      category: low
+      frequency: 1 in 25
+      variants:
+        rs33972313:
+          diplotype: T/T
+          gene: SLC23A1
+          risk_allele: T

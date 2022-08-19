@@ -523,7 +523,11 @@ class Variant(SeqqlOperator):
             return result
         result["genotype"] = data_accessor.get_genotype_by_rsid(self.id)
         if self.has("diplotype"):
-            result["diplotype_match"] = (sorted(self.get("diplotype").split('/')) == sorted(result["genotype"]["genotype"]))
+            if result["genotype"]["genotype"][0] is None:
+                result["diplotype_match"] = False
+            else:
+                result["diplotype_match"] = (sorted(self.get("diplotype").split('/')) == sorted(result["genotype"]["genotype"]))
+            result["effect_allele"] = None
         if self.has("effect_size") and self.has("effect_allele"):
 
             ### CHECK effect_size
