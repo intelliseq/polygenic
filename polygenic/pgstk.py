@@ -12,7 +12,7 @@ import polygenic.tools as tools
 from polygenic.version import __version__ as version
 from polygenic.error.polygenic_exception import PolygenicException
 
-def main(args):
+def main(args=None):
     """
     pgstk argument parser
     """
@@ -62,7 +62,8 @@ def main(args):
     # plot-manhattan
     plot_manhattan_parser = subparsers.add_parser('plot-manhattan',
         description='plot-manhattan draws manhattan plot')
-    plot_manhattan_parser.add_argument('-i', '--tsv', required=True, help='tsv or tsv.gz file with gwas data')
+    plot_manhattan_parser.add_argument('-i', '--tsv', 
+        required=True, help='tsv or tsv.gz file with gwas data')
     plot_manhattan_parser.add_argument('-d', '--delimiter', default='\t', help="tsv delimiter (default: '\\t')")
     plot_manhattan_parser.add_argument('-g', '--genome-version', default="GRCh38", choices=['GRCh37', 'GRCh38'], help="genome version GRCh37 or GRCh38 (default: GRCh38)")
     plot_manhattan_parser.add_argument('-c', '--chromosome-column', default="chr", help="column name for chromosome (default: chr)")
