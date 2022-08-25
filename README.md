@@ -453,6 +453,15 @@ pgstk pgs-compute --vcf [PATH_TO_VCF_GZ] --model cyp2d6-pharmvar.yml --print | j
 Proprietary (contact@intelliseq.pl)
 
 ## Updates
+### 2.2.13
+- BUG: resolved bug with missing score in haplotype model
+- DEV: cleaned up test resources
+### 2.2.12
+- BUG: resolved bug with empty argument in executable
+### 2.2.11
+- BUG: resolved bug with naming of multiple models in one file
+### 2.2.10
+- DOC: improved diploty model documentation
 ### 2.2.9
 - BUG: missing effect allele in diplotyp models
 ### 2.2.8

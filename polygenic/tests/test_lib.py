@@ -16,24 +16,24 @@ import polygenic.tools.utils as utils
 class VcfAccessorTest(TestCase):
 
     def testGetRecordByPosition(self):
-        vcf = VcfAccessor("polygenic/tests/resources/vcf/test.af.vcf.gz")
+        vcf = VcfAccessor("polygenic/tests/resources/vcf/test-af.vcf.gz")
         record = vcf.get_record_by_position("chr1", "10147")
         self.assertEqual('C', record.get_ref())
     
     def testGetRecordByIdPositon(self):
-        vcf = VcfAccessor("polygenic/tests/resources/vcf/test.af.vcf.gz")
+        vcf = VcfAccessor("polygenic/tests/resources/vcf/test-af.vcf.gz")
         record = vcf.get_record_by_rsid("chr1:10147_C_A")
         self.assertEqual('C', record.get_ref())
 
     def testMultiallelicByPosition(self):
-        vcf = VcfAccessor("polygenic/tests/resources/vcf/test.dbsnp.vcf.gz")
+        vcf = VcfAccessor("polygenic/tests/resources/vcf/test-dbsnp.vcf.gz")
         record = vcf.get_record_by_rsid("1:164507787_A_AC")
         self.assertEqual('A', record.get_ref())
 
 class DataAccessorTest(TestCase):
 
     def testGetGenotypeByRsid(self):
-        vcf = VcfAccessor("polygenic/tests/resources/vcf/test.sample.vcf.gz")
+        vcf = VcfAccessor("polygenic/tests/resources/vcf/test-vcf-general.vcf.gz")
         data_accessor = DataAccessor(vcf)
         genotype = data_accessor.get_genotype_by_rsid("rs201694901")
         self.assertEqual(True, genotype["phased"])

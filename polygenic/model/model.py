@@ -264,13 +264,13 @@ class HaplotypeModel(SeqqlOperator):
         haplotypes = self._entries["haplotypes"].compute_haplotypes(genotypes)
         result["haplotypes"] = haplotypes
         result["genotypes"] = genotypes
-        if self.has("categories"):
-            for category_name in self.get("categories").get_entries():
-                category = self.get("categories").get_entries()[category_name]
-                category_result = category.compute(haplotypes["score"])
-                if category_result["match"]:
-                    result["category"] = category_name
-                    result["value"] = category_result["value"]
+        # if self.has("categories"):
+        #    for category_name, category in self.get("categories").items():
+        #        print(str(haplotypes))
+        #        category_result = category.compute(haplotypes["score"])
+        #        if category_result["match"]:
+        #            result["category"] = category_name
+        #            result["value"] = category_result["value"]
         result["qc"] = self.compute_qc(result["genotypes"])
         return result
 

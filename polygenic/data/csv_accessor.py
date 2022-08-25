@@ -49,7 +49,13 @@ class CsvAccessor(object):
         self.__column_name_mapping.update({'effect': self.__find_name_of_column_by_list_of_synonyms([column_names.get('effect_allele_column_name'), 'effect', 'effect_allele'])})
         self.__column_name_mapping.update({'pvalue': self.__find_name_of_column_by_list_of_synonyms([column_names.get('pvalue_column_name'), 'pvalue', 'p'])})
         self.__column_name_mapping.update({'beta': self.__find_name_of_column_by_list_of_synonyms([column_names.get('beta_column_name'), 'beta', 'beta_coefficient'])})
-        
+
+    def get_column_names(self):
+        """
+        return the column names
+        """
+        return self.__data.columns
+
     def standardize_column_names(self, column_names: dict):
         """
         standardize the column names

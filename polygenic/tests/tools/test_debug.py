@@ -12,7 +12,7 @@ class DebugTest(TestCase):
         pgstk.main([
             'pgs-compute',
             '--vcf', '/home/marpiech/data/vcf/sportsmen-control.vcf.gz',
-            '--model', 'polygenic/tests/resources/model/biobankuk-23121-both_sexes--arm_fat_free_mass_right_-EUR-1e-08.yml',
+            '--model', 'polygenic/tests/resources/model/test-model-biobankuk.yml',
             '--sample-name', 'B539',
             '--output-name-appendix', appendix,
             '--af', '/home/marpiech/data/vcf/gnomad.3.1.vcf.gz',

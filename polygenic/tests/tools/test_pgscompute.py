@@ -1,11 +1,12 @@
-from unittest import TestCase
-from polygenic.tools import pgscompute
-from polygenic import pgstk
+"""
+Test PgsCompute
+"""
+import json
 
+from unittest import TestCase
 from pathlib import Path as path
 
-import os
-import json
+from polygenic import pgstk
 
 class PgsComputeTest(TestCase):
 
@@ -19,12 +20,12 @@ class PgsComputeTest(TestCase):
         appendix = "directly"
         pgstk.main([
             'pgs-compute',
-            '--vcf', 'polygenic/tests/resources/vcf/test.sample.vcf.gz',
-            '--model', 'polygenic/tests/resources/model/test.model.yml',
+            '--vcf', 'polygenic/tests/resources/vcf/test-vcf-general.vcf.gz',
+            '--model', 'polygenic/tests/resources/model/test-model-score.yml',
             '--output-name-appendix', appendix,
             '--output-directory', self.output_directory])
 
-        with open(self.output_directory + "/testsample-test.model-" + appendix + "-result.json", 'r') as output:
+        with open(self.output_directory + "/testsample-test-model-score-" + appendix + "-result.json", 'r') as output:
             results = json.load(output)
             self.assertTrue("score_model" in results)
             self.assertTrue("description" in results)
@@ -35,12 +36,12 @@ class PgsComputeTest(TestCase):
         appendix = "pgstk"
         pgstk.main([
             'pgs-compute',
-            '--vcf', 'polygenic/tests/resources/vcf/test.sample.vcf.gz',
-            '--model', 'polygenic/tests/resources/model/test.model.yml', "polygenic/tests/resources/model/test.model.yml",
+            '--vcf', 'polygenic/tests/resources/vcf/test-vcf-general.vcf.gz',
+            '--model', 'polygenic/tests/resources/model/test-model-score.yml', "polygenic/tests/resources/model/test-model-score.yml",
             '--output-name-appendix', appendix,
             '--output-directory', self.output_directory])
 
-        with open(self.output_directory + "/testsample-test.model-" + appendix + "-result.json", 'r') as output:
+        with open(self.output_directory + "/testsample-test-model-score-" + appendix + "-result.json", 'r') as output:
             results = json.load(output)
             self.assertTrue("score_model" in results)
             self.assertTrue("description" in results)
@@ -53,14 +54,14 @@ class PgsComputeTest(TestCase):
         appendix = "af"
         pgstk.main([
             'pgs-compute',
-            '--vcf', 'polygenic/tests/resources/vcf/test.sample.vcf.gz',
-            '--model', 'polygenic/tests/resources/model/test.model.yml',
+            '--vcf', 'polygenic/tests/resources/vcf/test-vcf-general.vcf.gz',
+            '--model', 'polygenic/tests/resources/model/test-model-score.yml',
             '--output-name-appendix', appendix,
-            '--af', 'polygenic/tests/resources/vcf/test.af.vcf.gz',
+            '--af', 'polygenic/tests/resources/vcf/test-af.vcf.gz',
             '--af-field', 'AF_nfe',
             '--output-directory', self.output_directory])
 
-        with open(self.output_directory + "/testsample-test.model-" + appendix + "-result.json", 'r') as output:
+        with open(self.output_directory + "/testsample-test-model-score-" + appendix + "-result.json", 'r') as output:
             results = json.load(output)
             self.assertTrue("score_model" in results)
             self.assertEquals("af", results["genotypes"]["rs1570391830"]["genotype"]["source"])
@@ -72,7 +73,7 @@ class PgsComputeTest(TestCase):
         appendix = "unphased.haplotype"
         pgstk.main([
             'pgs-compute',
-            '--vcf', 'polygenic/tests/resources/vcf/unphased.haplotype.test.vcf.gz',
+            '--vcf', 'polygenic/tests/resources/vcf/test-vcf-haplotype-unphased.vcf.gz',
             '--model', 'models/pgx/cyp26a1-pharmvar-5.1.8.yml',
             '--output-name-appendix', appendix,
             '--output-directory', self.output_directory,
@@ -82,8 +83,8 @@ class PgsComputeTest(TestCase):
         appendix = "phased.haplotype"
         pgstk.main([
             'pgs-compute',
-            '--vcf', 'polygenic/tests/resources/vcf/14-28-sorted.vcf.gz',
-            '--model', 'polygenic/tests/resources/model/cyp2d6-short.yml',
+            '--vcf', 'polygenic/tests/resources/vcf/test-vcf-cyp2d6-14-28.vcf.gz',
+            '--model', 'polygenic/tests/resources/model/test-model-cyp2d6.yml',
             '--output-name-appendix', appendix,
             '--output-directory', self.output_directory,
             '--print'])
@@ -92,13 +93,13 @@ class PgsComputeTest(TestCase):
         appendix = "diplotype"
         pgstk.main([
             'pgs-compute',
-            '--vcf', 'polygenic/tests/resources/vcf/test.sample.vcf.gz',
-            '--model', 'polygenic/tests/resources/model/diplotype_model.yml',
+            '--vcf', 'polygenic/tests/resources/vcf/test-vcf-general.vcf.gz',
+            '--model', 'polygenic/tests/resources/model/test-model-diplotype.yml',
             '--output-name-appendix', appendix,
-            '--af', 'polygenic/tests/resources/vcf/test.af.vcf.gz',
+            '--af', 'polygenic/tests/resources/vcf/test-af.vcf.gz',
             '--output-directory', self.output_directory])
 
-        with open(self.output_directory + "/testsample-diplotype_model-" + appendix + "-result.json", 'r') as output:
+        with open(self.output_directory + "/testsample-test-model-diplotype-" + appendix + "-result.json", 'r') as output:
             results = json.load(output)
             self.assertTrue("diplotype_model" in results)
             self.assertTrue("genotypes" in results)
@@ -112,8 +113,8 @@ class PgsComputeTest(TestCase):
         appendix = "merge"
         pgstk.main([
             'pgs-compute',
-            '--vcf', 'polygenic/tests/resources/vcf/test.sample.vcf.gz',
-            '--model', 'polygenic/tests/resources/model/test.model.yml',
+            '--vcf', 'polygenic/tests/resources/vcf/test-vcf-general.vcf.gz',
+            '--model', 'polygenic/tests/resources/model/test-model-score.yml',
             '--output-name-appendix', appendix,
             '--merge-outputs',
             '--output-directory', self.output_directory])
@@ -121,7 +122,7 @@ class PgsComputeTest(TestCase):
         output_file_name = "testsample-" + appendix + "-result.json"
         with open(self.output_directory + "/" + output_file_name, mode='r', encoding="utf-8") as output:
             results = json.load(output)
-            self.assertTrue("test.model" in results)
+            self.assertTrue("test-model-score" in results)
 
     def test_pgs_compute_genotype_effect_allele(self):
         """
@@ -130,8 +131,8 @@ class PgsComputeTest(TestCase):
         appendix = "effect_allele"
         pgstk.main([
             'pgs-compute',
-            '--vcf', 'polygenic/tests/resources/vcf/test.sample.vcf.gz',
-            '--model', 'polygenic/tests/resources/model/noeff.yml',
+            '--vcf', 'polygenic/tests/resources/vcf/test-vcf-general.vcf.gz',
+            '--model', 'polygenic/tests/resources/model/test-model-noeff.yml',
             '--output-name-appendix', appendix,
             '--merge-outputs',
             '--output-directory', self.output_directory])
@@ -139,7 +140,7 @@ class PgsComputeTest(TestCase):
         output_file_name = "testsample-" + appendix + "-result.json"
         with open(self.output_directory + "/" + output_file_name, mode='r', encoding="utf-8") as output:
             results = json.load(output)
-            self.assertTrue("genotypes" in results["noeff"])
+            self.assertTrue("genotypes" in results["test-model-noeff"])
 
     # # test diplotype model categories
     # def testPgsComputeDiplotype(self):
