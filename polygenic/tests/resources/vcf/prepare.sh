@@ -1,4 +1,4 @@
 #!/bin/bash
-rm test.sample.vcf.*
-cat test.sample.vcf | bgzip -c > test.sample.vcf.gz
-tabix -p vcf test.sample.vcf.gz
+rm test-vcf-general.vcf.*
+cat test-vcf-general.vcf | bgzip -c > test-vcf-general.vcf.gz
+tabix -p vcf test-vcf-general.vcf.gz
