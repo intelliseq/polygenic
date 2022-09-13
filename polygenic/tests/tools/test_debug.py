@@ -8,14 +8,15 @@ class DebugTest(TestCase):
         super(DebugTest, self).__init__(*args, **kwargs)
 
     def test_debug(self):
-        appendix = "debug"
-        pgstk.main([
-            'pgs-compute',
-            '--vcf', '/home/marpiech/data/vcf/sportsmen-control.vcf.gz',
-            '--model', 'polygenic/tests/resources/model/test-model-biobankuk.yml',
-            '--sample-name', 'B539',
-            '--output-name-appendix', appendix,
-            '--af', '/home/marpiech/data/vcf/gnomad.3.1.vcf.gz',
-            '--af-field', 'AF_nfe',
-            '--output-directory', '/tmp/polygenic/test'])
+        pass
+        # appendix = "debug"
+        # pgstk.main([
+        #     'pgs-compute',
+        #     '--vcf', '/home/marpiech/data/vcf/sportsmen-control.vcf.gz',
+        #     '--model', 'polygenic/tests/resources/model/test-model-biobankuk.yml',
+        #     '--sample-name', 'B539',
+        #     '--output-name-appendix', appendix,
+        #     '--af', '/home/marpiech/data/vcf/gnomad.3.1.vcf.gz',
+        #     '--af-field', 'AF_nfe',
+        #     '--output-directory', '/tmp/polygenic/test'])
             
