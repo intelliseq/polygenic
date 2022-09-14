@@ -29,6 +29,7 @@ class VcfImputeTest(TestCase):
         args.window = 60
         args.missing_only = True
         args.ld_threshold = 0.98
+        args.output = "/tmp/pgstk-tests/test-impute-out.vcf.gz"
         
         vcfimpute.run(args)
 
