@@ -2,20 +2,25 @@
 vcf-impute
 """
 
-import pysam
-import numpy
+
 from pathlib import Path
 from collections import deque as Deque
 
+import numpy
+from pysam import VariantFile
+
 def read_vcf(vcf_file, region):
-    vcf = pysam.VariantFile(vcf_file, "r")
+    """
+    vcf file path to record iterator
+    """
+    vcf = VariantFile(vcf_file, "r")
     if not region:
         return None
     vcf_iterator = vcf.fetch(region=region)
     return vcf_iterator
 
 def get_header(vcf_file):
-    with pysam.VariantFile(vcf_file, "r") as vcf:
+    with VariantFile(vcf_file, "r") as vcf:
         return vcf.header
 
 def get_target_genotypes_as_dictionary(target_vcf, region):
@@ -26,10 +31,10 @@ def get_target_genotypes_as_dictionary(target_vcf, region):
     return target_dict
 
 def get_samples_count_in_vcf(vcf_file):
-    with pysam.VariantFile(vcf_file, "r") as vcf:
+    with VariantFile(vcf_file, "r") as vcf:
         return len(vcf.header.samples)
 
-def impute(index: int, ld_threshold: float, ref_row_array: list, target_row_array: list):
+def __impute(index: int, ld_threshold: float, ref_row_array: list, target_row_array: list):
     nrow = len(ref_row_array)
     ncol = len(ref_row_array[0])
     index_row = numpy.array(ref_row_array[index]).astype(int)
@@ -54,6 +59,18 @@ def impute(index: int, ld_threshold: float, ref_row_array: list, target_row_arra
         return [target_row_array[ldproxy_index][0] * proxy_invert, target_row_array[ldproxy_index][0] * proxy_invert, abs(ldproxy[ldproxy_index])]
     return [None, None, None]
 
+def __update_record(target_result, position, genotype, probability):
+    target_result[position].samples.values()[0]['GT'] = (genotype[0],genotype[1])
+    target_result[position].info['IMP_PROB'] = probability
+
+def impute(index: int, ld_threshold: float, ref_pos_array: list, ref_row_array: list, target_row_array: list, target_result: dict):
+    if not target_row_array[index] == [None, None]:
+        return
+    result = __impute(index, ld_threshold, ref_row_array, target_row_array)
+    print("result: " + str(result))
+    if result[0] is not None:
+        __update_record(target_result, ref_pos_array[index], result[0:2], result[2])
+
 def run(args):
 
     # set comments
@@ -74,7 +91,8 @@ def run(args):
     counter = 0
     middle_index = int(args.window / 2)
 
-    with pysam.VariantFile(args.vcf, "r") as target_vcf:
+    with VariantFile(args.vcf, "r") as target_vcf:
+        target_vcf.header.info.add("IMP_PROB","1","Float","Imputation correctness probability")
         for record in target_vcf.fetch(region=args.region):
             target_result[record.pos] = record
 
@@ -104,20 +122,20 @@ def run(args):
 
         if counter < args.window:
             continue
+
         if counter == args.window:
             for i in range(middle_index):
-                pass
+                impute(i, args.ld_threshold, ref_pos_array, ref_row_array, target_row_array, target_result)
+
         if counter >= args.window:
-            # impute if enough data
-            if target_row_array[middle_index] == [None, None]:
-                imputed = impute(middle_index, args.ld_threshold, ref_row_array, target_row_array)
-            
-    target_vcf = pysam.VariantFile(args.vcf, "r")
+            impute(middle_index, args.ld_threshold, ref_pos_array, ref_row_array, target_row_array, target_result)
+
+    for i in range(middle_index + 1, args.window):
+        impute(i, args.ld_threshold, ref_pos_array, ref_row_array, target_row_array, target_result)
+
+    target_vcf = VariantFile(args.vcf, "r")
     Path(args.output).parent.absolute().mkdir(parents=True, exist_ok=True)
-    output_vcf = pysam.VariantFile(args.output, "w", header=target_vcf.header)
+    output_vcf = VariantFile(args.output, "w", header=target_vcf.header)
     output_vcf.header.info.add("IMP_PROB","1","Float","Imputation correctness probability")
     for record in target_result.values():
         output_vcf.write(record)
-    
-
-        
