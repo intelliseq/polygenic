@@ -40,7 +40,11 @@ def run(args):
             parameters = json_load(parameters_json)
 
     for sample_name in sample_names:
-        results_representations = {}
+        if args.merge_outputs:
+            if args.merge_as_array:
+                results_representations = []
+            else:
+                results_representations = {}
         for model_path, model_desc in models.items():
             if ".yml" in model_path:
                 data_accessor = DataAccessor(
@@ -60,7 +64,13 @@ def run(args):
             appendix = "-" + args.output_name_appendix if args.output_name_appendix else ""
             output_path = os.path.join(expand_path(args.output_directory), f'{sample_name}-{model_desc["name"]}{appendix}-result.json').replace('.yml', '')
             if args.merge_outputs:
-                results_representations[model_desc["name"].replace('.yml', '')] = model.refine_results()
+                if args.merge_as_array:
+                    results_representations.append({
+                        "file_name": model_desc["name"],
+                        "result": model.refine_results()
+                    })
+                else:
+                    results_representations[model_desc["name"]] = model.refine_results()
             else:
                 with open(output_path, 'w') as f:
                     json_dump(model.refine_results(), f, indent=2)

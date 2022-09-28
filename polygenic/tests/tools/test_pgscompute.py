@@ -114,15 +114,30 @@ class PgsComputeTest(TestCase):
         pgstk.main([
             'pgs-compute',
             '--vcf', 'polygenic/tests/resources/vcf/test-vcf-general.vcf.gz',
-            '--model', 'polygenic/tests/resources/model/test-model-score.yml',
+            '--model', 'polygenic/tests/resources/model/test-model-score.yml', 'polygenic/tests/resources/model/test-model-diplotype.yml',
             '--output-name-appendix', appendix,
             '--merge-outputs',
             '--output-directory', self.output_directory])
 
         output_file_name = "testsample-" + appendix + "-result.json"
-        with open(self.output_directory + "/" + output_file_name, mode='r', encoding="utf-8") as output:
-            results = json.load(output)
-            self.assertTrue("test-model-score" in results)
+
+
+        #with open(self.output_directory + "/" + output_file_name, mode='r', encoding="utf-8") as output:
+        #    results = json.load(output)
+        #    self.assertTrue("test-model-score" in results)
+
+        appendix = "merge-array"
+        pgstk.main([
+            'pgs-compute',
+            '--vcf', 'polygenic/tests/resources/vcf/test-vcf-general.vcf.gz',
+            '--model', 'polygenic/tests/resources/model/test-model-score.yml', 'polygenic/tests/resources/model/test-model-diplotype.yml',
+            '--output-name-appendix', appendix,
+            '--merge-outputs',
+            '--merge-as-array',
+            '--output-directory', self.output_directory])
+
+        output_file_name = "testsample-" + appendix + "-result.json"
+
 
     def test_pgs_compute_genotype_effect_allele(self):
         """

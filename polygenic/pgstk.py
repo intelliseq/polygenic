@@ -30,6 +30,7 @@ def main(args=None):
     pgs_compute_parser.add_argument('-i', '--vcf', required=True, help='vcf.gz file with genotypes')
     pgs_compute_parser.add_argument('-m', '--model', nargs='+', help='path to .yml model (can be specified multiple times with space as separator)')
     pgs_compute_parser.add_argument('--merge-outputs', default=False, action='store_true', help='combine outputs for multiple models into one file (default: False)')
+    pgs_compute_parser.add_argument('--merge-as-array', default=False, action='store_true', help='combine outputs for multiple models into one array (default: False). Works only with --merge-outputs')
     pgs_compute_parser.add_argument('-p', '--parameters', type=str, help="parameters json (to be used in formula models)")
     pgs_compute_parser.add_argument('-s', '--sample-name', type=str, help='sample name in vcf.gz to calculate')
     pgs_compute_parser.add_argument('-o', '--output-directory', type=str, default='.', help='output directory (default: .)')
