@@ -22,13 +22,9 @@ class VcfImputeTest(TestCase):
         """
 
         args = argparse.Namespace()
-        #args.reference = "polygenic/tests/resources/vcf/test-impute-ref-eas.vcf.gz"
-        args.reference = "/tmp/chr18.38.vcf.gz"
-        #args.vcf = "polygenic/tests/resources/vcf/test-impute-target.vcf.gz"
-        args.vcf = "/tmp/18_phased.reheader.vcf.gz"
-        #args.region = "chr16:53553311-53841786"
-        args.region = "18:15000001-16000001"
-        args.out = "polygenic/tests/resources/vcf/test-impute-out.vcf.gz"
+        args.reference = "polygenic/tests/resources/vcf/test-impute-ref-eas.vcf.gz"
+        args.vcf = "polygenic/tests/resources/vcf/test-impute-target.vcf.gz"
+        args.region = "chr16:53553311-53841786"
         args.window = 60
         args.missing_only = True
         args.ld_threshold = 0.95
