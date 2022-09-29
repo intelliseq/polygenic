@@ -453,6 +453,9 @@ pgstk pgs-compute --vcf [PATH_TO_VCF_GZ] --model cyp2d6-pharmvar.yml --print | j
 Proprietary (contact@intelliseq.pl)
 
 ## Updates
+### 2.2.14
+- FEATURE: added module for ldproxy imputing
+- FEATURE: added option for merging output as an array instead of dictionary in pgs-compute
 ### 2.2.13
 - BUG: resolved bug with missing score in haplotype model
 - DEV: cleaned up test resources
