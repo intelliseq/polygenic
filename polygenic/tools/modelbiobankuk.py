@@ -1,39 +1,15 @@
-import argparse
-import sys
+"""
+pgstk model-biobankuk prepares polygenic score model based on p value data from pab biobankuk study
+"""
+
 import os
 import re
+import logging
+import math
 from tqdm import tqdm
 
 import polygenic.tools.utils as utils
 from polygenic.data.vcf_accessor import VcfAccessor
-from polygenic.error.polygenic_exception import PolygenicException
-
-def parse_args(args):
-    parser = argparse.ArgumentParser(description='pgstk model-biobankuk prepares polygenic score model based on p value data')
-    parser.add_argument('--code', '--phenocode', type=str, required=True, help='phenocode of phenotype form Uk Biobank')
-    parser.add_argument('--sex', '--pheno_sex', type=str, default="both_sexes", help='pheno_sex of phenotype form Uk Biobank')
-    parser.add_argument('--coding', type=str, default="", help='additional coding of phenotype form Uk Biobank')
-    parser.add_argument('--output-directory', type=str, default='.', help='output directory')
-    parser.add_argument('--index-file', type=str, help='path to Index file from PAN UKBiobank. It can be downloaded using gbe-get')
-    parser.add_argument('--variant-metrics-file', type=str, help='path to annotation file. It can be downloaded from https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_release/full_variant_qc_metrics.txt.bgz')
-    parser.add_argument('--index-url', type=str, default='https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_release/phenotype_manifest.tsv.bgz', help='url of index file for PAN UKBiobank.')
-    parser.add_argument('--variant-metrics-url', type=str, default='https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_release/full_variant_qc_metrics.txt.bgz', help='url for variant summary metrics')
-    parser.add_argument('--pvalue-threshold', type=float, default=1e-08, help='significance cut-off threshold. e.g. 1e-08')
-    parser.add_argument('--clump-r2', type=float, default=0.25, help='clumping r2 threshold')
-    parser.add_argument('--clump-kb', type=float, default=1000, help='clumping kb threshold')
-    parser.add_argument('--population', type=str, default='EUR', help='population: meta, AFR, AMR, CSA, EUR, EAS, EUR, MID')
-    parser.add_argument('--clumping-vcf', type=str, default='eur.phase3.biobank.set.vcf.gz', help='')
-    parser.add_argument('--source-ref-vcf', type=str, default='dbsnp155.grch37.norm.vcf.gz', help='')
-    parser.add_argument('--target-ref-vcf', type=str, default='dbsnp155.grch38.norm.vcf.gz', help='')
-    parser.add_argument('--gene-positions', type=str, default='ensembl-genes.104.tsv', help='table with ensembl genes')
-    parser.add_argument('--ignore-warnings', type=bool, default='False', help='')
-    parser.add_argument('--test', type=bool, default='False', help='')
-    parser.add_argument('-l', '--log-file', type=str, help='path to log file')
-    parsed_args = parser.parse_args(args)
-    parsed_args.pvalue_threshold = float(parsed_args.pvalue_threshold)
-    parsed_args.index_file = parsed_args.index_file if parsed_args.index_file else parsed_args.output_directory + "/biobankuk_phenotype_manifest.tsv"
-    parsed_args.variant_metrics_file = parsed_args.variant_metrics_file if parsed_args.variant_metrics_file else parsed_args.output_directory + "/full_variant_qc_metrics.txt"
-    return parsed_args
 
 def get_index(args):
     utils.download(args.index_url, os.path.abspath(args.index_file))
@@ -46,7 +22,7 @@ def get_data(args):
         phenocode_colnumber = firstline.split('\t').index("phenocode")
         pheno_sex_colnumber = firstline.split('\t').index("pheno_sex")
         coding_colnumber = firstline.split('\t').index("coding")
-        aws_link_colnumber = firstline.split('\t').index("aws_link")
+        aws_path_colnumber = firstline.split('\t').index("aws_path")
         while True:
             line = indexfile.readline()
             if not line:
@@ -57,7 +33,9 @@ def get_data(args):
                 continue
             if line.split('\t')[coding_colnumber] != args.coding:
                 continue
-            url = line.split('\t')[aws_link_colnumber]
+            path = line.split('\t')[aws_path_colnumber]
+            # replace s3 directory with https directory
+            url = re.sub(r"s3://pan-ukb-us-east-1", "https://pan-ukb-us-east-1.s3.amazonaws.com", path)
             break
     if not url is None:
         output_directory = os.path.abspath(os.path.expanduser(args.output_directory))
@@ -106,12 +84,13 @@ def filter_pval(args):
         output.write('\t'.join(data_header + anno_header) + "\n")
         pbar = tqdm(total = 28987535)
         snp_count = 0
+        threshold = math.log(args.pvalue_threshold)
         while True:
             pbar.update(1)
             try:
                 data_line = data.readline().rstrip().split('\t')
                 anno_line = anno.readline().rstrip().split('\t')
-                if float(data_line[data_header.index('pval_' + args.population)].replace('NA', '1', 1)) <= args.pvalue_threshold:
+                if float(data_line[data_header.index('pval_' + args.population)].replace('NA', '1', 1)) <= threshold:
                     output.write('\t'.join(data_line + anno_line) + "\n")
             except:
                 break
@@ -140,7 +119,19 @@ def read_clumped_variants(args):
     return data
 
 def run(args):
-    
+    """
+    pan biobankuk to polygenic model
+    """
+
+    logger = logging.getLogger()
+
+    # suplement missing args
+    args.pvalue_threshold = float(args.pvalue_threshold)
+    if args.index_file is None:
+        args.index_file = args.output_directory + "/biobankuk_phenotype_manifest.tsv"
+    if args.variant_metrics_file is None:
+        args.variant_metrics_file = args.output_directory + "/full_variant_qc_metrics.txt"
+
     # download index file
     get_index(args)
 
@@ -154,24 +145,44 @@ def run(args):
     trait_name = re.sub("[^0-9a-zA-Z]+", "_", description["info"]["description"].lower())
 
     # define output filename and output path
-    filename = "-".join(["biobankuk", re.sub("[^0-9a-zA-Z]+", "_", args.code.lower()), args.sex, args.coding, trait_name, args.population, str(args.pvalue_threshold)]) + ".yml"
+    filename = "-".join([
+        "biobankuk",
+        re.sub("[^0-9a-zA-Z]+", "_", args.code.lower()),
+        args.sex,
+        args.coding,
+        trait_name,
+        args.population,
+        str(args.pvalue_threshold)]) + ".yml"
     model_path = "/".join([args.output_directory, filename])
     gwas_file = get_data(args) # download gwas results
     validate_paths(args) # check if vcf files are correct
-    args.logger.info("Filtering variants by p value")
+    logger.info("Filtering variants by p value")
     filter_pval(args) # filter results by pvalue
     data = read_filtered_variants(args) # read filtered variants
-    if not data: print("No variants passing p value found threshold. No model was produced"); return
-    args.logger.info("Validating variants with GRCh37")
-    data = utils.validate_with_source(data, args.source_ref_vcf, ignore_warnings = args.ignore_warnings) # validate if variants are present in hg19
-    args.logger.info("Validating variants with GRCh38")
-    data = utils.validate_with_source(data, args.target_ref_vcf, ignore_warnings = args.ignore_warnings, use_gnomadid = False) # validate if variants are present in hg38
-    if not data: print("No passing p value threshold and GRCh38 validation found. No model was produced"); return
+    if not data:
+        print("No variants passing p value found threshold. No model was produced")
+        return
+    logger.info("Validating variants with GRCh37")
+    data = utils.validate_with_source(
+        data,
+        args.source_ref_vcf,
+        ignore_warnings = args.ignore_warnings) # validate if variants are present in hg19
+    logger.info("Validating variants with GRCh38")
+    data = utils.validate_with_source(
+        data,
+        args.target_ref_vcf,
+        ignore_warnings = args.ignore_warnings,
+        use_gnomadid = False) # validate if variants are present in hg38
+    if not data:
+        print("No passing p value threshold and GRCh38 validation found. No model was produced")
+        return
     utils.write_data(data, gwas_file + ".validated") # write validated snps to file
     clump_variants(args) # clump variants
     data = read_clumped_variants(args) # read clumped variants
-    if not data: print("No variants were obtained from clumping. No model was produced"); return
-    args.logger.info("Annotating with symbols")
+    if not data:
+        print("No variants were obtained from clumping. No model was produced")
+        return
+    logger.info("Annotating with symbols")
     data = utils.annotate_with_symbols(data, args.gene_positions)
     genes = utils.get_gene_symbols(data)
     description["arguments"] = utils.args_to_dict(args)
@@ -181,16 +192,3 @@ def run(args):
     
     utils.write_model(data, description, model_path, included_fields_list = ['ref', 'gnomadid']) # writing model
     return
-
-def main(args = sys.argv[1:]):
-
-    args = parse_args(args) 
-    args.logger = utils.setup_logger(args.log_file) if args.log_file else utils.setup_logger(args.output_directory + "/pgstk.log")
-
-    try:
-        run(args)
-    except PolygenicException as e:
-        utils.error_exit(e)
-
-if __name__ == '__main__':
-    main(sys.argv[1:])

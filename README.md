@@ -453,6 +453,8 @@ pgstk pgs-compute --vcf [PATH_TO_VCF_GZ] --model cyp2d6-pharmvar.yml --print | j
 Proprietary (contact@intelliseq.pl)
 
 ## Updates
+### 2.2.15
+- UPDATE: updated parsing for new version of pan biobankuk
 ### 2.2.14
 - FEATURE: added module for ldproxy imputing
 - FEATURE: added option for merging output as an array instead of dictionary in pgs-compute

@@ -54,6 +54,27 @@ def main(args=None):
     model_gwas_file_parser.add_argument('-o', '--output', required=True, help='output file')
     model_gwas_file_parser.add_argument('--print', default=False, action='store_true', help='print output to stdout')
 
+    # model-biobankuk
+    model_biobankuk_parser = subparsers.add_parser('model-biobankuk', description='model-biobankuk builds a model from a biobankuk results')
+    model_biobankuk_parser.add_argument('--code', '--phenocode', type=str, required=True, help='phenocode of phenotype form Uk Biobank')
+    model_biobankuk_parser.add_argument('--sex', '--pheno_sex', type=str, default="both_sexes", help='pheno_sex of phenotype form Uk Biobank')
+    model_biobankuk_parser.add_argument('--coding', type=str, default="", help='additional coding of phenotype form Uk Biobank')
+    model_biobankuk_parser.add_argument('--output-directory', type=str, default='.', help='output directory')
+    model_biobankuk_parser.add_argument('--index-file', type=str, help='path to Index file from PAN UKBiobank. It can be downloaded using gbe-get')
+    model_biobankuk_parser.add_argument('--variant-metrics-file', type=str, help='path to annotation file. It can be downloaded from https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_release/full_variant_qc_metrics.txt.bgz')
+    model_biobankuk_parser.add_argument('--index-url', type=str, default='https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_release/phenotype_manifest.tsv.bgz', help='url of index file for PAN UKBiobank.')
+    model_biobankuk_parser.add_argument('--variant-metrics-url', type=str, default='https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_release/full_variant_qc_metrics.txt.bgz', help='url for variant summary metrics')
+    model_biobankuk_parser.add_argument('--pvalue-threshold', type=float, default=1e-08, help='significance cut-off threshold. e.g. 1e-08')
+    model_biobankuk_parser.add_argument('--clump-r2', type=float, default=0.25, help='clumping r2 threshold')
+    model_biobankuk_parser.add_argument('--clump-kb', type=float, default=1000, help='clumping kb threshold')
+    model_biobankuk_parser.add_argument('--population', type=str, default='EUR', help='population: meta, AFR, AMR, CSA, EUR, EAS, EUR, MID')
+    model_biobankuk_parser.add_argument('--clumping-vcf', type=str, default='eur.phase3.biobank.set.vcf.gz', help='')
+    model_biobankuk_parser.add_argument('--source-ref-vcf', type=str, default='dbsnp155.grch37.norm.vcf.gz', help='')
+    model_biobankuk_parser.add_argument('--target-ref-vcf', type=str, default='dbsnp155.grch38.norm.vcf.gz', help='')
+    model_biobankuk_parser.add_argument('--gene-positions', type=str, default='ensembl-genes.104.tsv', help='table with ensembl genes')
+    model_biobankuk_parser.add_argument('--ignore-warnings', type=bool, default='False', help='')
+    model_biobankuk_parser.add_argument('--test', default=False, action='store_true', help='print output to stdout')
+
     ### utils ###
     # vcf-index
     vcf_index_parser = subparsers.add_parser('vcf-index', description='vcf-index creates index for vcf file')
@@ -108,6 +129,8 @@ def main(args=None):
             tools.pgscompute.run(parsed_args)
         elif parsed_args.tool == 'model-gwas-file':
             tools.modelgwasfile.run(parsed_args)
+        elif parsed_args.tool == 'model-biobankuk':
+            tools.modelbiobankuk.run(parsed_args)            
         elif parsed_args.tool == 'vcf-index':
             tools.vcfindex.run(parsed_args)
         elif parsed_args.tool == 'plot-manhattan':

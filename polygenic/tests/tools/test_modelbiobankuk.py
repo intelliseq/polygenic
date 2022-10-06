@@ -17,16 +17,18 @@ class ModelBiobankukTest(TestCase):
 
     def testModelBiobankukPgstk(self):
         pgstk.main([
+            "--log-stdout",
+            "--log-level", "DEBUG",
             "model-biobankuk",
             "--code", "2395",
             "--sex", "both_sexes",
             "--coding", "4", 
             "--output-directory", self.output_directory,
-            "--pvalue-threshold", "1e-08",
-            "--clumping-vcf", "polygenic/tests/resources/largefiles/eur.phase3.biobank.set.vcf.gz",
-            "--source-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch37.norm.vcf.gz",
-            "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch38.norm.vcf.gz",
-            "--gene-positions", "polygenic/tests/resources/largefiles/ensembl-genes.104.tsv",
+            "--pvalue-threshold", "1e-07",
+            "--clumping-vcf", "polygenic/tests/resources/largefiles/vcf/eur.phase3.biobank.set.vcf.gz",
+            "--source-ref-vcf", "polygenic/tests/resources/largefiles/vcf/dbsnp155.grch37.norm.vcf.gz",
+            "--target-ref-vcf", "polygenic/tests/resources/largefiles/vcf/dbsnp155.grch38.norm.vcf.gz",
+            "--gene-positions", "polygenic/tests/resources/largefiles/tsv/ensembl-genes.104.tsv",
             "--test"
         ])
 
@@ -39,15 +41,17 @@ class ModelBiobankukTest(TestCase):
 
     def testModelBiobankukCode(self):
         pgstk.main([
+            "--log-stdout",
+            "--log-level", "DEBUG",
             "model-biobankuk",
             "--code", "thiazolidinedione|diabetes",
             "--sex", "both_sexes",
             "--output-directory", self.output_directory,
             "--pvalue-threshold", "1e-05",
-            "--clumping-vcf", "polygenic/tests/resources/largefiles/eur.phase3.biobank.set.vcf.gz",
-            "--source-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch37.norm.vcf.gz",
-            "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch38.norm.vcf.gz",
-            "--gene-positions", "polygenic/tests/resources/largefiles/ensembl-genes.104.tsv",
+            "--clumping-vcf", "polygenic/tests/resources/largefiles/vcf/eur.phase3.biobank.set.vcf.gz",
+            "--source-ref-vcf", "polygenic/tests/resources/largefiles/vcf/dbsnp155.grch37.norm.vcf.gz",
+            "--target-ref-vcf", "polygenic/tests/resources/largefiles/vcf/dbsnp155.grch38.norm.vcf.gz",
+            "--gene-positions", "polygenic/tests/resources/largefiles/tsv/ensembl-genes.104.tsv",
             "--test", "true"
         ])
 
@@ -60,29 +64,33 @@ class ModelBiobankukTest(TestCase):
 
     def testModel22046Bug(self):
         pgstk.main([
+            "--log-stdout",
+            "--log-level", "DEBUG",
             "model-biobankuk",
             "--code", "22406",
             "--sex", "both_sexes",
             "--output-directory", self.output_directory,
             "--pvalue-threshold", "1e-12",
-            "--clumping-vcf", "polygenic/tests/resources/largefiles/eur.phase3.biobank.set.vcf.gz",
-            "--source-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch37.norm.vcf.gz",
-            "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch38.norm.vcf.gz",
-            "--gene-positions", "polygenic/tests/resources/largefiles/ensembl-genes.104.tsv",
+            "--clumping-vcf", "polygenic/tests/resources/largefiles/vcf/eur.phase3.biobank.set.vcf.gz",
+            "--source-ref-vcf", "polygenic/tests/resources/largefiles/vcf/dbsnp155.grch37.norm.vcf.gz",
+            "--target-ref-vcf", "polygenic/tests/resources/largefiles/vcf/dbsnp155.grch38.norm.vcf.gz",
+            "--gene-positions", "polygenic/tests/resources/largefiles/tsv/ensembl-genes.104.tsv",
             "--test", "true"
         ])
 
     def testModelWhitespaceBug(self):
         pgstk.main([
+            "--log-stdout",
+            "--log-level", "DEBUG",
             "model-biobankuk",
             "--code", "vitamin D derivative",
             "--sex", "both_sexes",
             "--output-directory", self.output_directory,
             "--pvalue-threshold", "1e-12",
-            "--clumping-vcf", "polygenic/tests/resources/largefiles/eur.phase3.biobank.set.vcf.gz",
-            "--source-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch37.norm.vcf.gz",
-            "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch38.norm.vcf.gz",
-            "--gene-positions", "polygenic/tests/resources/largefiles/ensembl-genes.104.tsv",
+            "--clumping-vcf", "polygenic/tests/resources/largefiles/vcf/eur.phase3.biobank.set.vcf.gz",
+            "--source-ref-vcf", "polygenic/tests/resources/largefiles/vcf/dbsnp155.grch37.norm.vcf.gz",
+            "--target-ref-vcf", "polygenic/tests/resources/largefiles/vcf/dbsnp155.grch38.norm.vcf.gz",
+            "--gene-positions", "polygenic/tests/resources/largefiles/tsv/ensembl-genes.104.tsv",
             "--test", "true"
         ])
 
@@ -93,15 +101,17 @@ class ModelBiobankukTest(TestCase):
 
     def testModelApostropheBug(self):
         pgstk.main([
+            "--log-stdout",
+            "--log-level", "DEBUG",
             "model-biobankuk",
             "--code", "acetylcholinesterase inhibitor|Alzheimer's",
             "--sex", "both_sexes",
             "--output-directory", self.output_directory,
             "--pvalue-threshold", "1e-12",
-            "--clumping-vcf", "polygenic/tests/resources/largefiles/eur.phase3.biobank.set.vcf.gz",
-            "--source-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch37.norm.vcf.gz",
-            "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch38.norm.vcf.gz",
-            "--gene-positions", "polygenic/tests/resources/largefiles/ensembl-genes.104.tsv",
+            "--clumping-vcf", "polygenic/tests/resources/largefiles/vcf/eur.phase3.biobank.set.vcf.gz",
+            "--source-ref-vcf", "polygenic/tests/resources/largefiles/vcf/dbsnp155.grch37.norm.vcf.gz",
+            "--target-ref-vcf", "polygenic/tests/resources/largefiles/vcf/dbsnp155.grch38.norm.vcf.gz",
+            "--gene-positions", "polygenic/tests/resources/largefiles/tsv/ensembl-genes.104.tsv",
             "--test", "true"
         ])
 
@@ -112,16 +122,18 @@ class ModelBiobankukTest(TestCase):
 
     def testFilteringByPBug(self):
         pgstk.main([
+            "--log-stdout",
+            "--log-level", "DEBUG",
             "model-biobankuk",
             "--code", "20115",
             "--sex", "both_sexes",
             "--coding", "605",
             "--output-directory", self.output_directory,
             "--pvalue-threshold", "1e-8",
-            "--clumping-vcf", "polygenic/tests/resources/largefiles/eur.phase3.biobank.set.vcf.gz",
-            "--source-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch37.norm.vcf.gz",
-            "--target-ref-vcf", "polygenic/tests/resources/largefiles/dbsnp155.grch38.norm.vcf.gz",
-            "--gene-positions", "polygenic/tests/resources/largefiles/ensembl-genes.104.tsv"
+            "--clumping-vcf", "polygenic/tests/resources/largefiles/vcf/eur.phase3.biobank.set.vcf.gz",
+            "--source-ref-vcf", "polygenic/tests/resources/largefiles/vcf/dbsnp155.grch37.norm.vcf.gz",
+            "--target-ref-vcf", "polygenic/tests/resources/largefiles/vcf/dbsnp155.grch38.norm.vcf.gz",
+            "--gene-positions", "polygenic/tests/resources/largefiles/tsv/ensembl-genes.104.tsv"
         ])
 
         result_path = self.output_directory + "/acetylcholinesterase_inhibitor_alzheimer_s-both_sexes--na-EUR-1e-12.yml"
