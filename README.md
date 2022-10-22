@@ -1,8 +1,8 @@
 # polygenic - the polygenic scores toolkit
 
 ## Basic info
-[![PyPI pyversions](https://img.shields.io/pypi/pyversions/polygenic.svg)](https://pypi.python.org/pypi/polygenic/) 
-[![PyPI](https://img.shields.io/pypi/v/polygenic.svg)](https://pypi.python.org/pypi/polygenic) 
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/polygenic.svg)](https://pypi.python.org/pypi/polygenic/)  
+[![PyPI](https://img.shields.io/pypi/v/polygenic.svg)](https://pypi.python.org/pypi/polygenic)  
 [![Maintainer]](https://img.shields.io/badge/maintainer-marpiech-blue)  
 
 ## Downloads
