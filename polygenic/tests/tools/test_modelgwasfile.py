@@ -8,15 +8,15 @@ class ModelGwasFileTest(TestCase):
         super(ModelGwasFileTest, self).__init__(*args, **kwargs)
 
     def test_vcf_index(self):
-
+        pass
         ### run vcf-index
-        pgstk.main([
-            "--log-stdout",
-            "--log-level", "DEBUG",
-            "model-gwas-file",
-            "--gwas-file", "/home/marpiech/downloads/EA4_additive_excl_23andMe_2.txt.gz",
-            "--output", "/home/marpiech/downloads/EA4_additive_excl_23andMe.yml"
-        ])
+        # pgstk.main([
+        #     "--log-stdout",
+        #     "--log-level", "DEBUG",
+        #     "model-gwas-file",
+        #     "--gwas-file", "/home/marpiech/downloads/EA4_additive_excl_23andMe_2.txt.gz",
+        #     "--output", "/home/marpiech/downloads/EA4_additive_excl_23andMe.yml"
+        # ])
 
         ### define output path
         #result_path = "polygenic/tests/resources/vcf/test.vcf.gz.idx.db"

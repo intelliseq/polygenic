@@ -5,7 +5,7 @@ import setuptools
 from typing import List
 from setuptools import setup, find_packages
 
-PACKAGE_VERSION = '2.2.14'
+PACKAGE_VERSION = '2.2.15'
 
 def write_version_py(filename='polygenic/version.py'):
     cnt = """
@@ -41,7 +41,7 @@ setuptools.setup(
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
     install_requires=[
-        'numpy==1.22.3',
+        'numpy==1.23.4',
         'progressbar2==3.53.1',
         'python-utils==2.5.6',
         'pysam==0.19',
@@ -51,8 +51,8 @@ setuptools.setup(
         'kaleido==0.2.1',
         'DotMap==1.3.24',
         'pyyaml==6.0',
-        'tqdm',
-        'plotnine'
+        'tqdm==4.64.1',
+        'plotnine=0.10.1'
     ],
     python_requires='>=3.8',
     entry_points={

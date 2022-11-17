@@ -57,7 +57,7 @@ class CsvAccessorTest(TestCase):
 class UtilsTest(TestCase):
 
     def testDownloadGzip(self):
-        url = "https://github.com/marpiech/scalable-genomics/raw/main/test/resources/archive/gzip.gz"
+        url = "https://github.com/intelliseq/polygenic/raw/master/polygenic/tests/resources/tsv/biobankuk-test.tsv.gz"
         path = "/tmp/gzip"
         return_path = utils.download(url, path)
         self.assertEqual(return_path, path)
