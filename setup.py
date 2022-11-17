@@ -52,7 +52,7 @@ setuptools.setup(
         'DotMap==1.3.24',
         'pyyaml==6.0',
         'tqdm==4.64.1',
-        'plotnine=0.10.1'
+        'plotnine==0.10.1'
     ],
     python_requires='>=3.8',
     entry_points={
