@@ -155,7 +155,7 @@ class PgsComputeTest(TestCase):
         output_file_name = "testsample-" + appendix + "-result.json"
         with open(self.output_directory + "/" + output_file_name, mode='r', encoding="utf-8") as output:
             results = json.load(output)
-            self.assertTrue("genotypes" in results["test-model-noeff"])
+            self.assertTrue("genotypes" in results["test-model-noeff.yml"])
 
     # # test diplotype model categories
     # def testPgsComputeDiplotype(self):

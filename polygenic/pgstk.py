@@ -1,5 +1,5 @@
 """
-toolkit for polygenic trait analysis
+pgstk command line tool for polygenic trait analysis
 """
 
 import argparse
@@ -12,9 +12,14 @@ import polygenic.tools as tools
 from polygenic.version import __version__ as version
 from polygenic.error.polygenic_exception import PolygenicException
 
-def main(args=None):
-    """
-    pgstk argument parser
+def main(args: list[str] = None) -> int:
+    """pgstk command line tool wrapper
+
+    Args:
+        args (list[str], optional): Arguments list. Defaults to None.
+
+    Returns:
+        int: exit code
     """
 
     parser = argparse.ArgumentParser(description='pgstk - the polygenic score toolkit')
@@ -39,18 +44,37 @@ def main(args=None):
     pgs_compute_parser.add_argument('--af-field', type=str, default='AF',help='name of the INFO field to be used as allele frequency')
     pgs_compute_parser.add_argument('--print', default=False, action='store_true', help='print output to stdout')
 
-    ### build model ###
-    # model-gwas-file
-    model_gwas_file_parser = subparsers.add_parser('model-gwas-file', description='model-gwas-file builds a model from a gwas results')
-    model_gwas_file_parser.add_argument('-i', '--gwas-file', required=True, help='gwas results file')
-    model_gwas_file_parser.add_argument('-p', '--pvalue-column-name', type=str, default='PVALUE', help='name of the column containing p-values')
+    ### gwas file ###
+    # gwas-file-create
+    model_gwas_file_parser = subparsers.add_parser('gwas-file-create', description='model-gwas-file builds a model from a gwas results')
+    model_gwas_file_parser.add_argument('-i', '--input', required=True, help='gwas results file')
     model_gwas_file_parser.add_argument('-c', '--chromosome-column-name', type=str, default='CHROM', help='name of the column containing chromosome')
     model_gwas_file_parser.add_argument('-s', '--position-column-name', type=str, default='POS', help='name of the column containing position')
     model_gwas_file_parser.add_argument('-r', '--ref-allele-column-name', type=str, default='REF', help='name of the column containing reference allele')
     model_gwas_file_parser.add_argument('-a', '--alt-allele-column-name', type=str, default='ALT', help='name of the column containing alternate allele')
     model_gwas_file_parser.add_argument('-e', '--effect-allele-column-name', type=str, default='EFFECT', help='name of the column containing effect allele')
+    model_gwas_file_parser.add_argument('-p', '--pvalue-column-name', type=str, default='PVALUE', help='name of the column containing p-values')
     model_gwas_file_parser.add_argument('-b', '--beta-column-name', type=str, default='BETA', help='name of the column containing beta')
     model_gwas_file_parser.add_argument('-d', '--rsid-column-name', type=str, default='RSID', help='name of the column containing rsid')
+    model_gwas_file_parser.add_argument('--af-column-name', type=str, help='name of the column containing alele frequencies')
+    model_gwas_file_parser.add_argument('--header', type=str, help='header file')
+    model_gwas_file_parser.add_argument('-o', '--output', required=True, help='output file')
+    model_gwas_file_parser.add_argument('--print', default=False, action='store_true', help='print output to stdout')
+
+
+    ### build model ###
+    # model-gwas-file
+    model_gwas_file_parser = subparsers.add_parser('model-gwas-file', description='model-gwas-file builds a model from a gwas results')
+    model_gwas_file_parser.add_argument('-i', '--gwas-file', required=True, help='gwas results file')
+    model_gwas_file_parser.add_argument('-c', '--chromosome-column-name', type=str, default='CHROM', help='name of the column containing chromosome')
+    model_gwas_file_parser.add_argument('-s', '--position-column-name', type=str, default='POS', help='name of the column containing position')
+    model_gwas_file_parser.add_argument('-r', '--ref-allele-column-name', type=str, default='REF', help='name of the column containing reference allele')
+    model_gwas_file_parser.add_argument('-a', '--alt-allele-column-name', type=str, default='ALT', help='name of the column containing alternate allele')
+    model_gwas_file_parser.add_argument('-e', '--effect-allele-column-name', type=str, default='EFFECT', help='name of the column containing effect allele')
+    model_gwas_file_parser.add_argument('-p', '--pvalue-column-name', type=str, default='PVALUE', help='name of the column containing p-values')
+    model_gwas_file_parser.add_argument('-b', '--beta-column-name', type=str, default='BETA', help='name of the column containing beta')
+    model_gwas_file_parser.add_argument('-d', '--rsid-column-name', type=str, default='RSID', help='name of the column containing rsid')
+    model_gwas_file_parser.add_argument('--header', type=str, help='header file')
     model_gwas_file_parser.add_argument('-o', '--output', required=True, help='output file')
     model_gwas_file_parser.add_argument('--print', default=False, action='store_true', help='print output to stdout')
 
@@ -80,6 +104,16 @@ def main(args=None):
     vcf_index_parser = subparsers.add_parser('vcf-index', description='vcf-index creates index for vcf file')
     vcf_index_parser.add_argument('-i', '--vcf', required=True, help='path to vcf.gz')
 
+    # vcf-stat-baf
+    vcf_stat_baf_parser = subparsers.add_parser('vcf-stat-baf', description='vcf-stat creates index for vcf file')
+    vcf_stat_baf_parser.add_argument('-i', '--vcf', required=True, help='path to vcf.gz')
+    vcf_stat_baf_parser.add_argument('-o', '--output-directory', type=str, default='.', help='output directory (default: .)')
+
+    # vcf-stat-zygosity
+    vcf_stat_zygosity_parser = subparsers.add_parser('vcf-stat-zygosity', description='vcf-stat creates index for vcf zygosity')
+    vcf_stat_zygosity_parser.add_argument('-i', '--vcf', required=True, help='path to vcf.gz')
+    vcf_stat_zygosity_parser.add_argument('-o', '--output', type=str, default='./zygosity.json', help='output directory (default: .)')
+    
     ### plots ###
     # plot-manhattan
     plot_manhattan_parser = subparsers.add_parser('plot-manhattan',
@@ -125,16 +159,8 @@ def main(args=None):
     logging.debug("running %s", parsed_args.tool)
 
     try:
-        if parsed_args.tool == 'pgs-compute':
-            tools.pgscompute.run(parsed_args)
-        elif parsed_args.tool == 'model-gwas-file':
-            tools.modelgwasfile.run(parsed_args)
-        elif parsed_args.tool == 'model-biobankuk':
-            tools.modelbiobankuk.run(parsed_args)            
-        elif parsed_args.tool == 'vcf-index':
-            tools.vcfindex.run(parsed_args)
-        elif parsed_args.tool == 'plot-manhattan':
-            tools.plotmanhattan.run(parsed_args)
+        tool = getattr(tools, parsed_args.tool.replace('-',''))
+        tool.run(parsed_args)
     except PolygenicException as exception:
         error_exit(exception)
     except RuntimeError as exception:

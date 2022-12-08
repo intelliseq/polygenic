@@ -453,6 +453,11 @@ pgstk pgs-compute --vcf [PATH_TO_VCF_GZ] --model cyp2d6-pharmvar.yml --print | j
 Proprietary (contact@intelliseq.pl)
 
 ## Updates
+### 2.3.1
+- BUG: resolved bug with missing importlib-resources package after installation
+### 2.3.0
+- FEATURE: added vcf stat tool for zygosities
+- FEATURE: added vcf stat tool for baf computation
 ### 2.2.15
 - UPDATE: updated parsing for new version of pan biobankuk
 - DEV: updated numpy version to 1.23.4

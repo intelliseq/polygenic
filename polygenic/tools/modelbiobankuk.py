@@ -41,6 +41,8 @@ def get_data(args):
         output_directory = os.path.abspath(os.path.expanduser(args.output_directory))
         output_file_name = os.path.splitext(os.path.basename(url))[0]
         output_path = output_directory + "/" + output_file_name
+        print(url)
+        print(output_path)
         output_path = utils.download(url=url, output_path=output_path, force=False, progress=True)
         args.gwas_file = output_path
         return output_path

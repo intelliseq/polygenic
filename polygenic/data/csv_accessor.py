@@ -16,6 +16,7 @@ class CsvAccessor(object):
     """
     class for reading csv files
     """
+
     def __init__(self, csv_path: str):
         super().__init__()
         self.__path = csv_path
@@ -29,12 +30,13 @@ class CsvAccessor(object):
     def __find_name_of_column_by_list_of_synonyms(self, names: list, equals_instead_of_contains: bool = True):
         for column_name in self.__data.columns:
             for name in names:
-                if equals_instead_of_contains:
-                    if name.lower() == column_name.lower():
-                        return column_name
-                else:
-                    if name.lower() in column_name.lower():
-                        return column_name
+                if name is not None:
+                    if equals_instead_of_contains:
+                        if name.lower() == column_name.lower():
+                            return column_name
+                    else:
+                        if name.lower() in column_name.lower():
+                            return column_name
         return None
 
     def __map_column_names(self, column_names: dict):
@@ -43,12 +45,14 @@ class CsvAccessor(object):
         """
         self.__column_name_mapping.update({'rsid': self.__find_name_of_column_by_list_of_synonyms([column_names.get('rsid_column_name'), 'rsid'])})
         self.__column_name_mapping.update({'chromosome': self.__find_name_of_column_by_list_of_synonyms([column_names.get('chromosome_column_name'), 'chromosome', 'chrom', 'chr'])})
+        self.__column_name_mapping.update({'chromosome': self.__find_name_of_column_by_list_of_synonyms([column_names.get('gnomadid_column_name'), 'gnomadid', 'gnomad'])})
         self.__column_name_mapping.update({'position': self.__find_name_of_column_by_list_of_synonyms([column_names.get('position_column_name'), 'position', 'pos', 'bp'])})
-        self.__column_name_mapping.update({'ref': self.__find_name_of_column_by_list_of_synonyms([column_names.get('ref_allele_column_name'), 'ref', 'reference', 'ref_allele', 'effect_allele'])})
-        self.__column_name_mapping.update({'alt': self.__find_name_of_column_by_list_of_synonyms([column_names.get('alt_allele_column_name'), 'alt', 'alt_allele', 'other_allele'])})
-        self.__column_name_mapping.update({'effect': self.__find_name_of_column_by_list_of_synonyms([column_names.get('effect_allele_column_name'), 'effect', 'effect_allele'])})
+        self.__column_name_mapping.update({'ref': self.__find_name_of_column_by_list_of_synonyms([column_names.get('ref_allele_column_name'), 'ref', 'reference', 'ref_allele'])})
+        self.__column_name_mapping.update({'alt': self.__find_name_of_column_by_list_of_synonyms([column_names.get('alt_allele_column_name'), 'alt', 'alt_allele', 'other_allele', 'effect', 'effect_allele'])})
+        self.__column_name_mapping.update({'effect': self.__find_name_of_column_by_list_of_synonyms([column_names.get('effect_allele_column_name'), 'effect', 'effect_allele', 'alt'])})
         self.__column_name_mapping.update({'pvalue': self.__find_name_of_column_by_list_of_synonyms([column_names.get('pvalue_column_name'), 'pvalue', 'p'])})
         self.__column_name_mapping.update({'beta': self.__find_name_of_column_by_list_of_synonyms([column_names.get('beta_column_name'), 'beta', 'beta_coefficient'])})
+        self.__column_name_mapping.update({'af': self.__find_name_of_column_by_list_of_synonyms([column_names.get('af_column_name'), 'af'])})
 
     def get_column_names(self):
         """
@@ -69,6 +73,8 @@ class CsvAccessor(object):
             
         # print(str(renaming_dict))
         # print(str(self.__data.columns))
+        print("RENAMING DICT")
+        print(renaming_dict)
         self.__data.rename(columns=renaming_dict, inplace=True)
         ### if effect and reference are the same, the we should add additional reference column
         if self.__column_name_mapping.get("ref") == self.__column_name_mapping.get("effect"):
