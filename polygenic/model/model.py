@@ -128,10 +128,12 @@ class SeqqlOperator:
                 "variant_count_imputing": 0,
                 "variant_count_af": 0,
                 "variant_count_missing": 0,
+                "variant_count_ldproxy": 0,
                 "variant_fraction_genotyping": 0,
                 "variant_fraction_imputing": 0,
                 "variant_fraction_af": 0,
                 "variant_fraction_missing": 0,
+                "variant_fraction_ldproxy": 0,
               }
         for variant_id in genotypes:
             variant = genotypes[variant_id]
@@ -145,6 +147,8 @@ class SeqqlOperator:
                     qc["variant_count_af"] += 1
                 elif variant["source"] == "missing":
                     qc["variant_count_missing"] += 1
+                elif variant["source"] == "ldproxy":
+                    qc["variant_count_ldproxy"] += 1    
                 else:
                     raise PolygenicException("Unknown genotype source for " + variant_id)
             else:
@@ -154,6 +158,7 @@ class SeqqlOperator:
                 qc["variant_fraction_imputing"] = qc["variant_count_imputing"] / qc["variant_count"]
                 qc["variant_fraction_af"] = qc["variant_count_af"] / qc["variant_count"]
                 qc["variant_fraction_missing"] = qc["variant_count_missing"] / qc["variant_count"]
+                qc["variant_fraction_ldproxy"] = qc["variant_count_ldproxy"] / qc["variant_count"]
         return qc
 class Description(SeqqlOperator):
     pass

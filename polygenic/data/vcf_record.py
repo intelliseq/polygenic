@@ -112,7 +112,10 @@ class VcfRecord(object):
         return (self.get_info().find("IMP") != -1) or (self.get_format().find("GT:DS") != -1)
 
     def is_ldproxy(self) -> bool:
-        return self.get_info().find("IMP_PROB") != -1
+        try:
+            return self.get_info().find("IMP_PROB") != -1 and self.get_format()["PMG"] == "mis"
+        except:
+            return False    
 
     def get_info_field(self, name) -> str:
         for field in self.get_info().split(";"):
