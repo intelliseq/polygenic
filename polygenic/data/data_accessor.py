@@ -35,8 +35,13 @@ class DataAccessor(object):
                 genotype["phased"] = record.is_phased(self.__sample_name)
                 if genotype["genotype"][0] == None:
                     record = None
-                else:    
-                    genotype["source"] = "genotyping" if not record.is_imputed() else "imputing"
+                else:
+                    if record.is_ldproxy():
+                        genotype["source"] = "ldproxy"
+                    elif record.is_imputed():
+                        genotype["source"] = "imputing"
+                    else:   
+                        genotype["source"] = "genotyping"
                     genotype["ref"] = record.get_ref()
                     self.__cache[rsid] = genotype
                     return genotype

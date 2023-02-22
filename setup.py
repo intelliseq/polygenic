@@ -5,7 +5,7 @@ import setuptools
 from typing import List
 from setuptools import setup, find_packages
 
-PACKAGE_VERSION = '2.3.1'
+PACKAGE_VERSION = '2.3.7'
 
 def write_version_py(filename='polygenic/version.py'):
     cnt = """
@@ -58,7 +58,7 @@ setuptools.setup(
         'polars==0.15.2',
         'importlib-resources==5.10.0',
         'logdecorator==2.4',
-        'pyarrow-10.0.1'
+        'pyarrow==10.0.1'
     ],
     python_requires='>=3.8',
     entry_points={

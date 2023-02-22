@@ -11,7 +11,11 @@ from logdecorator import log_on_start, log_on_end, log_on_error
 
 class GwasSchema(Enum):
 
-      """GwasSchema v0.1.0"""
+      """
+      GwasSchema v0.1.0
+      This enum can be used to ensure that a GWAS dataset 
+        conforms to a specific, predefined schema.
+      """
 
       def __new__(cls, *args, **kwds):
           value = len(cls.__members__) + 1
@@ -45,7 +49,7 @@ class GwasSchema(Enum):
 class PolarsFrame:
 
   @log_on_start(logging.DEBUG, "Initializing PolarsFrame from {csv}")
-  def __init__(self, csv, delimiter='\t'):
+  def __init__(self, csv=sys.stdin, delimiter='\t'):
     self.df = self.readcsv(csv, delimiter)
 
   @log_on_start(logging.DEBUG, "Getting dataframe")
@@ -80,13 +84,33 @@ class PolarsFrame:
     return 'empty'
 
   def get_col_by_alias(self, alias, keyword = None):
+
+    # quit if alias was not provided
     if alias is None:
       return None
+
+    # create a list of case sensitive possible aliases
     alias_variants = [alias, alias.lower(), alias.upper(), alias.capitalize()]
+
+    # prepare list of prioritized column names based on keyword
+    # first choose columns that end with keyword
+    # then choose columns that contain keyword
+    # then choose columns that do not contain keyword
+    column_names = []
     if keyword is not None:
-      column_names = [column for column in self.df.columns if keyword in column] + [column for column in self.df.columns if keyword not in column]
+      keyword = keyword.lower()
+      for col in self.df.columns:
+        if col.endswith(keyword):
+          column_names.append(col)
+      for col in self.df.columns:
+        if keyword in col:
+          column_names.append(col)
+      for col in self.df.columns:
+        if keyword not in col:
+          column_names.append(col)
     else:
       column_names = self.df.columns
+
     for alias_variant in alias_variants:
       if alias_variant in column_names:
         return alias_variant

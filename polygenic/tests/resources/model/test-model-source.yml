@@ -1,0 +1,9 @@
+score_model:
+  variants:
+    chr1-16053748-A-G: {effect_allele: G, effect_size: 0.25, symbol: MISSING}
+    chr1-152311201-C-T: {effect_allele: T, effect_size: 0.25, symbol: AF}
+    chr1-7452965-C-T: {effect_allele: T, effect_size: 0.25, symbol: BEAGLE}
+    chr1-29216125-A-G: {effect_allele: G, effect_size: 0.25, symbol: LDPROXY}
+    chr1-29958713-G-A: {effect_allele: A, effect_size: 0.25, symbol: GENOTYPING}
+description:
+  name: Test model

@@ -453,6 +453,18 @@ pgstk pgs-compute --vcf [PATH_TO_VCF_GZ] --model cyp2d6-pharmvar.yml --print | j
 Proprietary (contact@intelliseq.pl)
 
 ## Updates
+### 2.3.7
+- FEATURE: added ldproxy imputation source
+### 2.3.6
+- BUG: resolved bug with missing polars package after installation
+### 2.3.5
+- BUG: resolved bug with 'type' object is not subscriptable running pgstk
+### 2.3.4
+- BUG: resolved bug with where model does not provide to or from category fields
+### 2.3.3
+- BUG: resolved bug with missing pyarrow package after installation
+### 2.3.2
+- BUG: renamed jpg to jpeg outputs from vcfstat
 ### 2.3.1
 - BUG: resolved bug with missing importlib-resources package after installation
 ### 2.3.0

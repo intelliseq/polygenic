@@ -157,6 +157,33 @@ class PgsComputeTest(TestCase):
             results = json.load(output)
             self.assertTrue("genotypes" in results["test-model-noeff.yml"])
 
+    # test if varinat sources are used properly
+    def test_variants_sources(self):
+        """
+        Test if variant source is used properly
+        """
+        appendix = "variant-source"
+        pgstk.main([
+            'pgs-compute',
+            '--vcf', 'polygenic/tests/resources/vcf/test-source.vcf.gz',
+            '--model', 'polygenic/tests/resources/model/test-model-source.yml',
+            '--output-name-appendix', appendix,
+            '--merge-outputs',
+            '--af', 'polygenic/tests/resources/vcf/test-af2.vcf.gz',
+            '--output-directory', self.output_directory])
+
+        output_file_name = "clustered_204800980122-" + appendix + "-result.json"
+        with open(self.output_directory + "/" + output_file_name, mode='r', encoding="utf-8") as output:
+            results = json.load(output)
+            print(results)
+            self.assertTrue("genotypes" in results["test-model-source.yml"])
+            self.assertTrue("chr1-16053748-A-G" in results["test-model-source.yml"]["genotypes"])
+            self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-16053748-A-G"]["genotype"]["source"] == "missing")
+            self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-152311201-C-T"]["genotype"]["source"] == "af")
+            self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-7452965-C-T"]["genotype"]["source"] == "imputing")
+            self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-29216125-A-G"]["genotype"]["source"] == "ldproxy")
+            self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-29958713-G-A"]["genotype"]["source"] == "genotyping")
+
     # # test diplotype model categories
     # def testPgsComputeDiplotype(self):
     #     appendix = "diplotype"

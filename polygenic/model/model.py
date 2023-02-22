@@ -177,8 +177,15 @@ class Category(SeqqlOperator):
 
     def compute(self, score: float):
         result = {"id": self.id, "match": False, "value": score}
-        if score >= self.get("from") and score <= self.get("to"):
-            result["match"] = True
+        if self.has("from") and not self.has("to"):
+            if score > self.get("from"):
+                result["match"] = True
+        if not self.has("from") and self.has("to"):
+            if score <= self.get("to"):
+                result["match"] = True
+        if self.has("from") and self.has("to"):
+            if score > self.get("from") and score <= self.get("to"):
+                result["match"] = True
         if self.has("scale_from") and self.has("scale_to"):
             result["value"] = self.get("scale_from") + (score - self.get("from")) / (self.get("to") - self.get("from")) * (self.get("scale_to") - self.get("scale_from"))
         return result
@@ -471,7 +478,7 @@ class ScoreModel(SeqqlOperator):
             "min": 0,
             "genotypes": {}
         }
-        for source in ["genotyping", "imputing", "af", "missing"]:
+        for source in ["genotyping", "ldproxy", "imputing", "af", "missing"]:
             result[source + "_score"] = 0
             result[source + "_score_max"] = 0
             result[source + "_score_min"] = 0

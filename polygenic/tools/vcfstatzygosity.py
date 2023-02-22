@@ -61,7 +61,7 @@ def run(parsed_args):
             out[sample_index]["qc"][chrom + "heterozygosity"] = {}
             out[sample_index]["qc"][chrom + "heterozygosity"]["value"] = het / count
             out[sample_index]["qc"][chrom + "heterozygosity"]["pass"] = "passed"
-            out[sample_index]["qc"][chrom + "heterozygosity"]["plot"] = sample_name + "-" + chrom + ".jpg"
+            out[sample_index]["qc"][chrom + "heterozygosity"]["plot"] = sample_name + "-" + chrom + ".jpeg"
 
         out[sample_index]["qc"]["baflrr"] = {}
         out[sample_index]["qc"]["baflrr"]["value"] = "Click to view plots"

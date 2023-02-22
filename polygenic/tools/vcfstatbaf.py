@@ -93,6 +93,6 @@ def run(parsed_args):
                 range = [-1, 1]
             )
 
-            fig.write_image(parsed_args.output_directory + "/" + sample_name + "-" + chrom + ".jpg")
+            fig.write_image(parsed_args.output_directory + "/" + sample_name + "-" + chrom + ".jpeg")
 
     return
