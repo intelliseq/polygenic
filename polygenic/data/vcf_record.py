@@ -76,11 +76,11 @@ class VcfRecord(object):
             return alleles
         return None
 
-    def get_pmg_field(self, sample_name) -> str:
+    def get_fmt_field(self, sample_name, name) -> str:
         samples = self.__dict["SAMPLES"]
         fmt = self.__dict["FORMAT"]
         try:
-            pmg_idx = fmt.split(":").index("PMG")
+            pmg_idx = fmt.split(":").index(name)
         except:
             pmg_idx = None
         if not self.__sample_names is None:
@@ -88,7 +88,7 @@ class VcfRecord(object):
         else:
             idx = None
 
-        if not samples is None and samples and not idx is None and not pmg_idx is None:
+        if not samples is None and samples and not idx is None and not pmg_idx is None and pmg_idx != -1:
             sample = samples[idx]
             pmg = sample.split(":")[pmg_idx]
             return pmg
@@ -131,7 +131,7 @@ class VcfRecord(object):
 
     def is_ldproxy(self, sample_name) -> bool: ## changed because IMP_PROB field is given if any of the samples is from ld_proxy
         try:
-            return self.get_info().find("IMP_PROB") != -1 and self.get_pmg_field(sample_name) == "mis"
+            return self.get_info().find("IMP_PROB") != -1 and self.get_fmt_field(sample_name, "PMG") == "mis"
         except:
             return False    
 
