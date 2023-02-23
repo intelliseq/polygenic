@@ -76,6 +76,24 @@ class VcfRecord(object):
             return alleles
         return None
 
+    def get_pmg_field(self, sample_name) -> str:
+        samples = self.__dict["SAMPLES"]
+        fmt = self.__dict["FORMAT"]
+        try:
+            pmg_idx = fmt.split(":").index("PMG")
+        except:
+            pmg_idx = None
+        if not self.__sample_names is None:
+            idx = self.__sample_names.index(sample_name)
+        else:
+            idx = None
+
+        if not samples is None and samples and not idx is None and not pmg_idx is None:
+            sample = samples[idx]
+            pmg = sample.split(":")[pmg_idx]
+            return pmg
+        return None   
+
     def recode_allele(self, allele) -> str:
         if allele == ".":
             return None
@@ -111,9 +129,9 @@ class VcfRecord(object):
     def is_imputed(self) -> bool:
         return (self.get_info().find("IMP") != -1) or (self.get_format().find("GT:DS") != -1)
 
-    def is_ldproxy(self) -> bool:
+    def is_ldproxy(self, sample_name) -> bool: ## changed because IMP_PROB field is given if any of the samples is from ld_proxy
         try:
-            return self.get_info().find("IMP_PROB") != -1 and self.get_format()["PMG"] == "mis"
+            return self.get_info().find("IMP_PROB") != -1 and self.get_pmg_field(sample_name) == "mis"
         except:
             return False    
 

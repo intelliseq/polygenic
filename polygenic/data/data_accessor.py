@@ -36,7 +36,7 @@ class DataAccessor(object):
                 if genotype["genotype"][0] == None:
                     record = None
                 else:
-                    if record.is_ldproxy():
+                    if record.is_ldproxy(self.__sample_name):
                         genotype["source"] = "ldproxy"
                     elif record.is_imputed():
                         genotype["source"] = "imputing"
