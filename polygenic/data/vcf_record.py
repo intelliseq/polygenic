@@ -76,22 +76,22 @@ class VcfRecord(object):
             return alleles
         return None
 
-    def get_fmt_field(self, sample_name, name) -> str:
+    def get_fmt_field(self, sample_name, field_name) -> str:
         samples = self.__dict["SAMPLES"]
         fmt = self.__dict["FORMAT"]
         try:
-            pmg_idx = fmt.split(":").index(name)
+            field_idx = fmt.split(":").index(field_name)
         except:
-            pmg_idx = None
+            field_idx = None
         if not self.__sample_names is None:
             idx = self.__sample_names.index(sample_name)
         else:
             idx = None
 
-        if not samples is None and samples and not idx is None and not pmg_idx is None and pmg_idx != -1:
+        if not samples is None and samples and not idx is None and not field_idx is None and field_idx != -1:
             sample = samples[idx]
-            pmg = sample.split(":")[pmg_idx]
-            return pmg
+            field_value = sample.split(":")[field_idx]
+            return field_value
         return None   
 
     def recode_allele(self, allele) -> str:
