@@ -7,12 +7,12 @@ from dotmap import DotMap
 from polygenic.data.data_accessor import DataAccessor
 from polygenic.model.utils import merge
 from polygenic.error.polygenic_exception import PolygenicException
-
-#tmp
-import json
+from enum import Enum
 
 logger = logging.getLogger('description_language.' + __name__)
 
+class VariantSource():
+    entries = ["genotyping", "ldproxy", "imputing", "af", "reference", "missing"]
 class SeqqlOperator:
 
     def __init__(self, entries):
@@ -123,42 +123,24 @@ class SeqqlOperator:
         return refined_result
 
     def compute_qc(self, genotypes):
-        qc = {"variant_count": 0,
-              "variant_count_genotyping": 0,
-                "variant_count_imputing": 0,
-                "variant_count_af": 0,
-                "variant_count_missing": 0,
-                "variant_count_ldproxy": 0,
-                "variant_fraction_genotyping": 0,
-                "variant_fraction_imputing": 0,
-                "variant_fraction_af": 0,
-                "variant_fraction_missing": 0,
-                "variant_fraction_ldproxy": 0,
-              }
+        qc = {}
+        for source in VariantSource.entries:
+            qc["variant_count"] = 0
+            qc["variant_count_" + source] = 0
+            qc["variant_fraction_" + source] = 0
         for variant_id in genotypes:
-            variant = genotypes[variant_id]
+            variant = genotypes[variant_id]["genotype"]
             qc["variant_count"] += 1
             if variant is not None and "source" in variant:
-                if variant["source"] == "genotyping":
-                    qc["variant_count_genotyping"] += 1
-                elif variant["source"] == "imputing":
-                    qc["variant_count_imputing"] += 1
-                elif variant["source"] == "af":
-                    qc["variant_count_af"] += 1
-                elif variant["source"] == "missing":
-                    qc["variant_count_missing"] += 1
-                elif variant["source"] == "ldproxy":
-                    qc["variant_count_ldproxy"] += 1    
+                if variant["source"] in VariantSource.entries:
+                    qc["variant_count_" + variant["source"]] += 1
                 else:
                     raise PolygenicException("Unknown genotype source for " + variant_id)
             else:
                 qc["variant_count_missing"] += 1
             if qc["variant_count"] > 0:
-                qc["variant_fraction_genotyping"] = qc["variant_count_genotyping"] / qc["variant_count"]
-                qc["variant_fraction_imputing"] = qc["variant_count_imputing"] / qc["variant_count"]
-                qc["variant_fraction_af"] = qc["variant_count_af"] / qc["variant_count"]
-                qc["variant_fraction_missing"] = qc["variant_count_missing"] / qc["variant_count"]
-                qc["variant_fraction_ldproxy"] = qc["variant_count_ldproxy"] / qc["variant_count"]
+                for source in VariantSource.entries:
+                    qc["variant_fraction_" + source] = round(qc["variant_count_" + source] / qc["variant_count"], 4)
         return qc
 class Description(SeqqlOperator):
     pass
@@ -483,7 +465,7 @@ class ScoreModel(SeqqlOperator):
             "min": 0,
             "genotypes": {}
         }
-        for source in ["genotyping", "ldproxy", "imputing", "af", "missing"]:
+        for source in VariantSource.entries:
             result[source + "_score"] = 0
             result[source + "_score_max"] = 0
             result[source + "_score_min"] = 0

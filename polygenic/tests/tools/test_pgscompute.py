@@ -183,6 +183,7 @@ class PgsComputeTest(TestCase):
             self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-7452965-C-T"]["genotype"]["source"] == "imputing")
             self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-29216125-A-G"]["genotype"]["source"] == "ldproxy")
             self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-29958713-G-A"]["genotype"]["source"] == "genotyping")
+            self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-29958714-G-A"]["genotype"]["source"] == "reference")
 
     # # test diplotype model categories
     # def testPgsComputeDiplotype(self):

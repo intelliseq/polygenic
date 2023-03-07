@@ -20,10 +20,10 @@ class VcfRecord(object):
         parsed_line = {
              "CHROM": splitted_line[0],
              "POS": splitted_line[1],
-             "ID": splitted_line[2],
-             "REF": splitted_line[3],
-             "ALT": splitted_line[4],
-             "QUAL": splitted_line[5],
+             "ID": splitted_line[2] if splitted_line[2] != "." else None,
+             "REF": splitted_line[3] if splitted_line[3] != "." else None,
+             "ALT": splitted_line[4] if splitted_line[4] != "." else None,
+             "QUAL": splitted_line[5] if splitted_line[5] != "." else None,
              "FILTER": splitted_line[6],
              "INFO": splitted_line[7]
         }

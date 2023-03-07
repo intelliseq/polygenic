@@ -453,6 +453,12 @@ pgstk pgs-compute --vcf [PATH_TO_VCF_GZ] --model cyp2d6-pharmvar.yml --print | j
 Proprietary (contact@intelliseq.pl)
 
 ## Updates
+### 2.3.10
+- BUG: resolved bug with missing genotype sources counts
+### 2.3.9
+- FEATURE: add reference as a genotyping source
+### 2.3.8
+- BUG: resolved bugs inside mobigen wdl task
 ### 2.3.7
 - FEATURE: added ldproxy imputation source
 ### 2.3.6

@@ -5,5 +5,6 @@ score_model:
     chr1-7452965-C-T: {effect_allele: T, effect_size: 0.25, symbol: BEAGLE}
     chr1-29216125-A-G: {effect_allele: G, effect_size: 0.25, symbol: LDPROXY}
     chr1-29958713-G-A: {effect_allele: A, effect_size: 0.25, symbol: GENOTYPING}
+    chr1-29958714-G-A: {effect_allele: A, effect_size: 0.25, symbol: REFERENCE}
 description:
   name: Test model

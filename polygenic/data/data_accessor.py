@@ -30,11 +30,28 @@ class DataAccessor(object):
         genotype = {"rsid": rsid}
         if not self.__genotypes is None:
             record = self.__genotypes.get_record_by_rsid(rsid)
+            #print("====================>" + str(rsid) + " " + " " + str(record.get_ref()))
             if not record is None:
                 genotype["genotype"] = record.get_genotype(self.__sample_name)
                 genotype["phased"] = record.is_phased(self.__sample_name)
-                if genotype["genotype"][0] == None:
-                    record = None
+                if genotype["genotype"][0] is None:
+                    if not self.__allele_frequencies is None:
+                        af_record = self.__allele_frequencies.get_record_by_rsid(rsid)
+                        if af_record is not None:
+                            genotype["genotype"] = af_record.get_genotype_by_af(self.__af_field_name)
+                            genotype["phased"] = False
+                            genotype["source"] = "af"
+                            genotype["ref"] = af_record.get_ref()
+                            self.__cache[rsid] = genotype
+                            return genotype
+                    if record.get_ref() is not None:
+                        genotype["genotype"] = [record.get_ref(), record.get_ref()]
+                        genotype["phased"] = False
+                        genotype["source"] = "reference"
+                        genotype["ref"] = record.get_ref()
+                        self.__cache[rsid] = genotype
+                        return genotype
+                    record is None
                 else:
                     if record.is_ldproxy(self.__sample_name):
                         genotype["source"] = "ldproxy"
@@ -45,15 +62,6 @@ class DataAccessor(object):
                     genotype["ref"] = record.get_ref()
                     self.__cache[rsid] = genotype
                     return genotype
-        if record is None and not self.__allele_frequencies is None:
-            record = self.__allele_frequencies.get_record_by_rsid(rsid)
-            if not record is None:
-                genotype["genotype"] = record.get_genotype_by_af(self.__af_field_name)
-                genotype["phased"] = False
-                genotype["source"] = "af"
-                genotype["ref"] = record.get_ref()
-                self.__cache[rsid] = genotype
-                return genotype
         genotype["genotype"] = [None, None]
         genotype["phased"] = None
         genotype["source"] = "missing"
