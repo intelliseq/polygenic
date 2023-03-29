@@ -129,7 +129,7 @@ class SeqqlOperator:
             qc["variant_count_" + source] = 0
             qc["variant_fraction_" + source] = 0
         for variant_id in genotypes:
-            variant = genotypes[variant_id]["genotype"]
+            variant = genotypes[variant_id]
             qc["variant_count"] += 1
             if variant is not None and "source" in variant:
                 if variant["source"] in VariantSource.entries:
@@ -475,7 +475,7 @@ class ScoreModel(SeqqlOperator):
             effect_size = variant_result["effect_size"]
             result["max"] += 2 * effect_size if effect_size > 0 else 0
             result["min"] += 2 * effect_size if effect_size < 0 else 0
-            result["genotypes"][variant] = variant_result
+            result["genotypes"][variant] = variant_result["genotype"]
             source = variant_result["genotype"]["source"]
             result["score"] += variant_result["score"]
             result[source + "_score"] += variant_result["score"]
