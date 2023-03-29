@@ -185,6 +185,7 @@ class DiplotypeModel(SeqqlOperator):
         diplotype = self._entries["diplotypes"].compute(data_accessor)
         result["diplotype"] = diplotype["diplotype"]
         result["genotypes"] = diplotype["genotypes"]
+        result["frequency"] = diplotype["frequency"]
         if self.has("categories"):
             for category_name in self.get("categories").get_entries():
                 category = self.get("categories").get_entries()[category_name]
@@ -201,13 +202,14 @@ class Diplotypes(SeqqlOperator):
             self._entries[diplotype] = Diplotype(diplotype, entries[diplotype])
 
     def compute(self, data_accessor: DataAccessor):
-        result = {"diplotype": None, "category": None}
+        result = {"diplotype": None, "category": None, "frequency": None}
         diplotypes_results = super(Diplotypes, self).compute(data_accessor)
         result["genotypes"] = diplotypes_results.pop("genotypes")
         for diplotype in diplotypes_results:
             if diplotypes_results[diplotype]["diplotype_match"]:
                 result["diplotype"] = diplotype
                 result["category"] = diplotype
+                result["frequency"] = diplotype
         return result
 
 class Diplotype(SeqqlOperator):
