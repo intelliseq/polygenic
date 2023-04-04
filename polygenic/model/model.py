@@ -231,6 +231,7 @@ class Diplotype(SeqqlOperator):
         for variant in variants_results:
             variant_result = variants_results[variant]
             result["genotypes"][variant_result["genotype"]["rsid"]] = variant_result["genotype"]
+            #result["genotypes"][variant_result["genotype"]["rsid"]]["gene"] = variant_result
             if not variant_result["diplotype_match"]:
                 result["diplotype_match"] = False
         return result
@@ -520,10 +521,13 @@ class Variant(SeqqlOperator):
     def compute(self, data_accessor: DataAccessor):
         result = {}
         if not self._entries:
-            result["genotype"] = {'rsid': self.id, 'genotype': [None, None], 'phased': None, 'source': 'invalidmodelentry', 'ref': None}
+            result["genotype"] = {'rsid': self.id, 'genotype': [None, None], 'phased': None, 'source': 'invalidmodelentry', 'ref': None, 'gene': None}
             result["effect_allele"] = None
             return result
         result["genotype"] = data_accessor.get_genotype_by_rsid(self.id)
+        if self.has("gene"):
+            result["genotype"]["gene"] = self.get("gene")
+
         if self.has("diplotype"):
             if result["genotype"]["genotype"][0] is None:
                 result["diplotype_match"] = False

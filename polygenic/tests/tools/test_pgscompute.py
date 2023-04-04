@@ -206,6 +206,7 @@ class PgsComputeTest(TestCase):
             results = json.load(output)
             print(results)
             self.assertTrue(results["test-model-cheated-diplotype.yml"]["genotypes"]["rs58108140"]["genotype"][0] == "G")
+            self.assertTrue(results["test-model-cheated-diplotype.yml"]["genotypes"]["rs371194064"]["gene"] == "UCP1")
             self.assertTrue(results["test-model-cheated-diplotype.yml"]["diplotype_model"]["diplotype"] == "GG/GG/TC")
             self.assertTrue(results["test-model-cheated-diplotype.yml"]["diplotype_model"]["frequency"] == "3 in 5")
             self.assertTrue(results["test-model-cheated-diplotype.yml"]["diplotype_model"]["category"] == "moderate")
