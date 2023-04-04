@@ -129,7 +129,7 @@ class SeqqlOperator:
             qc["variant_count_" + source] = 0
             qc["variant_fraction_" + source] = 0
         for variant_id in genotypes:
-            variant = genotypes[variant_id]["genotype"]
+            variant = genotypes[variant_id]
             qc["variant_count"] += 1
             if variant is not None and "source" in variant:
                 if variant["source"] in VariantSource.entries:
@@ -185,6 +185,7 @@ class DiplotypeModel(SeqqlOperator):
         diplotype = self._entries["diplotypes"].compute(data_accessor)
         result["diplotype"] = diplotype["diplotype"]
         result["genotypes"] = diplotype["genotypes"]
+        result["frequency"] = diplotype["frequency"]
         if self.has("categories"):
             for category_name in self.get("categories").get_entries():
                 category = self.get("categories").get_entries()[category_name]
@@ -201,13 +202,14 @@ class Diplotypes(SeqqlOperator):
             self._entries[diplotype] = Diplotype(diplotype, entries[diplotype])
 
     def compute(self, data_accessor: DataAccessor):
-        result = {"diplotype": None, "category": None}
+        result = {"diplotype": None, "category": None, "frequency": None}
         diplotypes_results = super(Diplotypes, self).compute(data_accessor)
         result["genotypes"] = diplotypes_results.pop("genotypes")
         for diplotype in diplotypes_results:
             if diplotypes_results[diplotype]["diplotype_match"]:
                 result["diplotype"] = diplotype
                 result["category"] = diplotype
+                result["frequency"] = diplotype
         return result
 
 class Diplotype(SeqqlOperator):
@@ -475,7 +477,7 @@ class ScoreModel(SeqqlOperator):
             effect_size = variant_result["effect_size"]
             result["max"] += 2 * effect_size if effect_size > 0 else 0
             result["min"] += 2 * effect_size if effect_size < 0 else 0
-            result["genotypes"][variant] = variant_result
+            result["genotypes"][variant] = variant_result["genotype"]
             source = variant_result["genotype"]["source"]
             result["score"] += variant_result["score"]
             result[source + "_score"] += variant_result["score"]
