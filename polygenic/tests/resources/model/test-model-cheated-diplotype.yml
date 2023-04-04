@@ -1,0 +1,1121 @@
+description:
+  chapter: Nutrition
+  criteria: energy expenditure
+  general_information: Bla bla
+  genes:
+    ADRB2: "This gene is very important"
+    ADRB3: This gene is even more important
+    UCP1: This one is the most important
+  group: Weight Management and Body Composition
+  interpretation_choice:
+    high: You will be thin
+    low: You will be really fat
+    moderate: You will be a bit fat.
+  notes: nan
+  recommendation_choice:
+    high: 'Eat more'
+    low: Eat less
+    moderate: Eat less or more
+  references:
+  - first paper
+  - second paper
+  result_icon_choice:
+    high: activity_high
+    low: activity_low
+    moderate: activity_average
+  sub_group: Energy Balance
+  tendency_choice:
+    high: Less likely to gain weight overtime
+    low: Great chance to gain weight overtime
+    moderate: More likely to gain weight overtime
+diplotype_model:
+  categories:
+    AA/AA/CC: low
+    AA/AA/CT: moderate
+    AA/AA/TC: moderate
+    AA/AA/TT: high
+    AA/AG/CC: low
+    AA/AG/CT: moderate
+    AA/AG/TC: moderate
+    AA/AG/TT: moderate
+    AA/GA/CC: low
+    AA/GA/CT: moderate
+    AA/GA/TC: moderate
+    AA/GA/TT: moderate
+    AA/GG/CC: low
+    AA/GG/CT: low
+    AA/GG/TC: low
+    AA/GG/TT: low
+    AG/AA/CC: moderate
+    AG/AA/CT: moderate
+    AG/AA/TC: moderate
+    AG/AA/TT: high
+    AG/AG/CC: moderate
+    AG/AG/CT: moderate
+    AG/AG/TC: moderate
+    AG/AG/TT: moderate
+    AG/GA/CC: moderate
+    AG/GA/CT: moderate
+    AG/GA/TC: moderate
+    AG/GA/TT: moderate
+    AG/GG/CC: low
+    AG/GG/CT: moderate
+    AG/GG/TC: moderate
+    AG/GG/TT: moderate
+    GA/AA/CC: moderate
+    GA/AA/CT: moderate
+    GA/AA/TC: moderate
+    GA/AA/TT: high
+    GA/AG/CC: moderate
+    GA/AG/CT: moderate
+    GA/AG/TC: moderate
+    GA/AG/TT: moderate
+    GA/GA/CC: moderate
+    GA/GA/CT: moderate
+    GA/GA/TC: moderate
+    GA/GA/TT: moderate
+    GA/GG/CC: low
+    GA/GG/CT: moderate
+    GA/GG/TC: moderate
+    GA/GG/TT: moderate
+    GG/AA/CC: high
+    GG/AA/CT: high
+    GG/AA/TC: high
+    GG/AA/TT: high
+    GG/AG/CC: moderate
+    GG/AG/CT: moderate
+    GG/AG/TC: moderate
+    GG/AG/TT: high
+    GG/GA/CC: moderate
+    GG/GA/CT: moderate
+    GG/GA/TC: moderate
+    GG/GA/TT: high
+    GG/GG/CC: low
+    GG/GG/CT: moderate
+    GG/GG/TC: moderate
+    GG/GG/TT: high
+  diplotypes:
+    AA/AA/CC:
+      category: low
+      frequency: 1 in 25
+      variants:
+        rs58108140:
+          diplotype: A/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/A
+          gene: ADRB3
+          risk_allele: G
+    AA/AA/CT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/A
+          gene: ADRB3
+          risk_allele: G
+    AA/AA/TC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/A
+          gene: ADRB3
+          risk_allele: G
+    AA/AA/TT:
+      category: high
+      frequency: 2 in 5
+      variants:
+        rs58108140:
+          diplotype: A/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/A
+          gene: ADRB3
+          risk_allele: G
+    AA/AG/CC:
+      category: low
+      frequency: 1 in 25
+      variants:
+        rs58108140:
+          diplotype: A/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/G
+          gene: ADRB3
+          risk_allele: G
+    AA/AG/CT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/G
+          gene: ADRB3
+          risk_allele: G
+    AA/AG/TC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/G
+          gene: ADRB3
+          risk_allele: G
+    AA/AG/TT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/G
+          gene: ADRB3
+          risk_allele: G
+    AA/GA/CC:
+      category: low
+      frequency: 1 in 25
+      variants:
+        rs58108140:
+          diplotype: A/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/A
+          gene: ADRB3
+          risk_allele: G
+    AA/GA/CT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/A
+          gene: ADRB3
+          risk_allele: G
+    AA/GA/TC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/A
+          gene: ADRB3
+          risk_allele: G
+    AA/GA/TT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/A
+          gene: ADRB3
+          risk_allele: G
+    AA/GG/CC:
+      category: low
+      frequency: 1 in 25
+      variants:
+        rs58108140:
+          diplotype: A/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/G
+          gene: ADRB3
+          risk_allele: G
+    AA/GG/CT:
+      category: low
+      frequency: 1 in 25
+      variants:
+        rs58108140:
+          diplotype: A/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/G
+          gene: ADRB3
+          risk_allele: G
+    AA/GG/TC:
+      category: low
+      frequency: 1 in 25
+      variants:
+        rs58108140:
+          diplotype: A/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/G
+          gene: ADRB3
+          risk_allele: G
+    AA/GG/TT:
+      category: low
+      frequency: 1 in 25
+      variants:
+        rs58108140:
+          diplotype: A/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/G
+          gene: ADRB3
+          risk_allele: G
+    AG/AA/CC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/A
+          gene: ADRB3
+          risk_allele: G
+    AG/AA/CT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/A
+          gene: ADRB3
+          risk_allele: G
+    AG/AA/TC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/A
+          gene: ADRB3
+          risk_allele: G
+    AG/AA/TT:
+      category: high
+      frequency: 2 in 5
+      variants:
+        rs58108140:
+          diplotype: A/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/A
+          gene: ADRB3
+          risk_allele: G
+    AG/AG/CC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/G
+          gene: ADRB3
+          risk_allele: G
+    AG/AG/CT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/G
+          gene: ADRB3
+          risk_allele: G
+    AG/AG/TC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/G
+          gene: ADRB3
+          risk_allele: G
+    AG/AG/TT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/G
+          gene: ADRB3
+          risk_allele: G
+    AG/GA/CC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/A
+          gene: ADRB3
+          risk_allele: G
+    AG/GA/CT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/A
+          gene: ADRB3
+          risk_allele: G
+    AG/GA/TC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/A
+          gene: ADRB3
+          risk_allele: G
+    AG/GA/TT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/A
+          gene: ADRB3
+          risk_allele: G
+    AG/GG/CC:
+      category: low
+      frequency: 1 in 25
+      variants:
+        rs58108140:
+          diplotype: A/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/G
+          gene: ADRB3
+          risk_allele: G
+    AG/GG/CT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/G
+          gene: ADRB3
+          risk_allele: G
+    AG/GG/TC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/G
+          gene: ADRB3
+          risk_allele: G
+    AG/GG/TT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: A/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/G
+          gene: ADRB3
+          risk_allele: G
+    GA/AA/CC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/A
+          gene: ADRB3
+          risk_allele: G
+    GA/AA/CT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/A
+          gene: ADRB3
+          risk_allele: G
+    GA/AA/TC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/A
+          gene: ADRB3
+          risk_allele: G
+    GA/AA/TT:
+      category: high
+      frequency: 2 in 5
+      variants:
+        rs58108140:
+          diplotype: G/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/A
+          gene: ADRB3
+          risk_allele: G
+    GA/AG/CC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/G
+          gene: ADRB3
+          risk_allele: G
+    GA/AG/CT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/G
+          gene: ADRB3
+          risk_allele: G
+    GA/AG/TC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/G
+          gene: ADRB3
+          risk_allele: G
+    GA/AG/TT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/G
+          gene: ADRB3
+          risk_allele: G
+    GA/GA/CC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/A
+          gene: ADRB3
+          risk_allele: G
+    GA/GA/CT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/A
+          gene: ADRB3
+          risk_allele: G
+    GA/GA/TC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/A
+          gene: ADRB3
+          risk_allele: G
+    GA/GA/TT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/A
+          gene: ADRB3
+          risk_allele: G
+    GA/GG/CC:
+      category: low
+      frequency: 1 in 25
+      variants:
+        rs58108140:
+          diplotype: G/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/G
+          gene: ADRB3
+          risk_allele: G
+    GA/GG/CT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/G
+          gene: ADRB3
+          risk_allele: G
+    GA/GG/TC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/G
+          gene: ADRB3
+          risk_allele: G
+    GA/GG/TT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/A
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/G
+          gene: ADRB3
+          risk_allele: G
+    GG/AA/CC:
+      category: high
+      frequency: 2 in 5
+      variants:
+        rs58108140:
+          diplotype: G/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/A
+          gene: ADRB3
+          risk_allele: G
+    GG/AA/CT:
+      category: high
+      frequency: 2 in 5
+      variants:
+        rs58108140:
+          diplotype: G/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/A
+          gene: ADRB3
+          risk_allele: G
+    GG/AA/TC:
+      category: high
+      frequency: 2 in 5
+      variants:
+        rs58108140:
+          diplotype: G/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/A
+          gene: ADRB3
+          risk_allele: G
+    GG/AA/TT:
+      category: high
+      frequency: 2 in 5
+      variants:
+        rs58108140:
+          diplotype: G/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/A
+          gene: ADRB3
+          risk_allele: G
+    GG/AG/CC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/G
+          gene: ADRB3
+          risk_allele: G
+    GG/AG/CT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/G
+          gene: ADRB3
+          risk_allele: G
+    GG/AG/TC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/G
+          gene: ADRB3
+          risk_allele: G
+    GG/AG/TT:
+      category: high
+      frequency: 2 in 5
+      variants:
+        rs58108140:
+          diplotype: G/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: A/G
+          gene: ADRB3
+          risk_allele: G
+    GG/GA/CC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/A
+          gene: ADRB3
+          risk_allele: G
+    GG/GA/CT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/A
+          gene: ADRB3
+          risk_allele: G
+    GG/GA/TC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/A
+          gene: ADRB3
+          risk_allele: G
+    GG/GA/TT:
+      category: high
+      frequency: 2 in 5
+      variants:
+        rs58108140:
+          diplotype: G/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/A
+          gene: ADRB3
+          risk_allele: G
+    GG/GG/CC:
+      category: low
+      frequency: 1 in 25
+      variants:
+        rs58108140:
+          diplotype: G/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/G
+          gene: ADRB3
+          risk_allele: G
+    GG/GG/CT:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: C/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/G
+          gene: ADRB3
+          risk_allele: G
+    GG/GG/TC:
+      category: moderate
+      frequency: 3 in 5
+      variants:
+        rs58108140:
+          diplotype: G/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/C
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/G
+          gene: ADRB3
+          risk_allele: G
+    GG/GG/TT:
+      category: high
+      frequency: 2 in 5
+      variants:
+        rs58108140:
+          diplotype: G/G
+          gene: ADRB2
+          risk_allele: G
+        rs371194064:
+          diplotype: T/T
+          gene: UCP1
+          risk_allele: C
+        rs10218493:
+          diplotype: G/G
+          gene: ADRB3
+          risk_allele: G

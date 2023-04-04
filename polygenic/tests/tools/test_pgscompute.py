@@ -184,6 +184,33 @@ class PgsComputeTest(TestCase):
             self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-29216125-A-G"]["source"] == "ldproxy")
             self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-29958713-G-A"]["source"] == "genotyping")
             self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-29958714-G-A"]["source"] == "reference")
+            self.assertTrue(results["test-model-source.yml"]["score_model"]["qc"]["variant_count_genotyping"] == 1)
+
+    ## test diplotype model
+    def test_diplotype_model(self):
+        """
+        Tests diplotype models
+        """
+        appendix = "diplotype"
+        pgstk.main([
+            'pgs-compute',
+            '--vcf', 'polygenic/tests/resources/vcf/test-vcf-general.vcf.gz',
+            '--model', 'polygenic/tests/resources/model/test-model-cheated-diplotype.yml',
+            '--output-name-appendix', appendix,
+            '--merge-outputs',
+            '--af', 'polygenic/tests/resources/vcf/test-af2.vcf.gz',
+            '--output-directory', self.output_directory])
+
+        output_file_name = "testsample-" + appendix + "-result.json"
+        with open(self.output_directory + "/" + output_file_name, mode='r', encoding="utf-8") as output:
+            results = json.load(output)
+            print(results)
+            self.assertTrue(results["test-model-cheated-diplotype.yml"]["genotypes"]["rs58108140"]["genotype"][0] == "G")
+            self.assertTrue(results["test-model-cheated-diplotype.yml"]["diplotype_model"]["diplotype"] == "GG/GG/TC")
+            self.assertTrue(results["test-model-cheated-diplotype.yml"]["diplotype_model"]["frequency"] == "3 in 5")
+            self.assertTrue(results["test-model-cheated-diplotype.yml"]["diplotype_model"]["category"] == "moderate")
+            self.assertTrue(results["test-model-cheated-diplotype.yml"]["diplotype_model"]["qc"]["variant_fraction_genotyping"] == 1)
+                     
 
     # # test diplotype model categories
     # def testPgsComputeDiplotype(self):
