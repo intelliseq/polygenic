@@ -64,7 +64,7 @@ class PgsComputeTest(TestCase):
         with open(self.output_directory + "/testsample-test-model-score-" + appendix + "-result.json", 'r') as output:
             results = json.load(output)
             self.assertTrue("score_model" in results)
-            self.assertEquals("af", results["genotypes"]["rs1570391830"]["genotype"]["source"])
+            self.assertEquals("af", results["genotypes"]["rs1570391830"]["source"])
             self.assertTrue("description" in results)
             self.assertTrue("randomentry" not in results)
 
@@ -178,12 +178,12 @@ class PgsComputeTest(TestCase):
             print(results)
             self.assertTrue("genotypes" in results["test-model-source.yml"])
             self.assertTrue("chr1-16053748-A-G" in results["test-model-source.yml"]["genotypes"])
-            self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-16053748-A-G"]["genotype"]["source"] == "missing")
-            self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-152311201-C-T"]["genotype"]["source"] == "af")
-            self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-7452965-C-T"]["genotype"]["source"] == "imputing")
-            self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-29216125-A-G"]["genotype"]["source"] == "ldproxy")
-            self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-29958713-G-A"]["genotype"]["source"] == "genotyping")
-            self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-29958714-G-A"]["genotype"]["source"] == "reference")
+            self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-16053748-A-G"]["source"] == "missing")
+            self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-152311201-C-T"]["source"] == "af")
+            self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-7452965-C-T"]["source"] == "imputing")
+            self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-29216125-A-G"]["source"] == "ldproxy")
+            self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-29958713-G-A"]["source"] == "genotyping")
+            self.assertTrue(results["test-model-source.yml"]["genotypes"]["chr1-29958714-G-A"]["source"] == "reference")
 
     # # test diplotype model categories
     # def testPgsComputeDiplotype(self):
