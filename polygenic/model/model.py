@@ -231,7 +231,6 @@ class Diplotype(SeqqlOperator):
         for variant in variants_results:
             variant_result = variants_results[variant]
             result["genotypes"][variant_result["genotype"]["rsid"]] = variant_result["genotype"]
-            #result["genotypes"][variant_result["genotype"]["rsid"]]["gene"] = variant_result
             if not variant_result["diplotype_match"]:
                 result["diplotype_match"] = False
         return result
