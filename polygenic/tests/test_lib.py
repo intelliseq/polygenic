@@ -42,8 +42,8 @@ class DataAccessorTest(TestCase):
         self.assertEqual(False, genotype["phased"])
         self.assertEqual('A', genotype["genotype"][0])
         genotype = data_accessor.get_genotype_by_rsid("rs1570391830")
-        self.assertEqual(None, genotype["phased"])
-        self.assertEqual(None, genotype["genotype"][0])
+        self.assertEqual(False, genotype["phased"])
+        self.assertEqual('T', genotype["genotype"][0]) ## REF/REF from missing
 
 class CsvAccessorTest(TestCase):
 

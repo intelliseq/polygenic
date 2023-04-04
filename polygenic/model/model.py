@@ -192,6 +192,7 @@ class DiplotypeModel(SeqqlOperator):
                 category_result = category.assign_category(result["diplotype"])
                 if category_result["match"]:
                     result["category"] = category_result["category"]
+
         result["qc"] = self.compute_qc(result["genotypes"])
         return result
 
@@ -209,7 +210,8 @@ class Diplotypes(SeqqlOperator):
             if diplotypes_results[diplotype]["diplotype_match"]:
                 result["diplotype"] = diplotype
                 result["category"] = diplotype
-                result["frequency"] = diplotype
+                result["frequency"] = diplotypes_results[diplotype]["frequency"]
+                    
         return result
 
 class Diplotype(SeqqlOperator):
@@ -221,6 +223,10 @@ class Diplotype(SeqqlOperator):
         result = {}
         result["genotypes"] = {}
         result["diplotype_match"] = True
+        try:
+            result["frequency"] = super(Diplotype, self).compute(data_accessor)["frequency"]
+        except KeyError:
+            result["frequency"] = None    
         variants_results = super(Diplotype, self).compute(data_accessor)["variants"]
         for variant in variants_results:
             variant_result = variants_results[variant]
