@@ -453,6 +453,8 @@ pgstk pgs-compute --vcf [PATH_TO_VCF_GZ] --model cyp2d6-pharmvar.yml --print | j
 Proprietary (contact@intelliseq.pl)
 
 ## Updates
+### 2.3.12
+- FEATURE: added gene names to genotypes if available
 ### 2.3.11
 - BUG: resolved bug with wrong genotype sources counts
 ### 2.3.10
