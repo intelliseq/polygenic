@@ -272,6 +272,10 @@ description:
 ```
 
 ### Example haplotype model
+
+Haplotype model can be used for HLA and PGx.  
+To define haplotype models a list of alleles is required (called `variants` in this case, to be consistent with othe rypes of models). Each allele has associated list of defining mutations (alternative SNV alles) defined by Gnomad ID along with `ref`, `alt` and `effect_allele` properties. One star allele should be empty (containing only reference SNV alleles). The algorithm will utilised any phasing information in the vcf.
+
 ```
 haplotype_model:
   variants:
