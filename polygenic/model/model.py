@@ -311,7 +311,8 @@ class Haplotypes(SeqqlOperator):
         for first_haplotype_id in best_matching_haplotypes:
             computed_haplotypes = {}
             for second_haplotype_id in best_matching_haplotypes:
-                leftover_genotypes = best_matching_haplotypes[first_haplotype_id]['leftover_genotypes'][0]
+                leftover_genotypes = best_matching_haplotypes[first_haplotype_id]['leftover_genotypes']
+                #print(f"COMPUTING 2: {second_haplotype_id} {leftover_genotypes}")
                 computed_haplotypes[second_haplotype_id] = self._entries[second_haplotype_id].compute_haplotype(leftover_genotypes)
                 #print("COMPUTING 2: " + first_haplotype_id + "_" + second_haplotype_id + " " + str(computed_haplotypes[second_haplotype_id]['max_percent_match']))
             sorted_haplotypes = sorted(computed_haplotypes.items(), key = lambda x: x[1]['max_percent_match'], reverse = True)
@@ -385,6 +386,7 @@ class Haplotype(SeqqlOperator):
         return genotypes
 
     def compute_haplotype(self, genotypes: dict):
+        #print(f"CALCULATING HAPLOTYPE {self.id}")
         haplotype = {'id': self.id}
         required_matches = [0, 0] # total matches required
         matched_variants = [0, 0] # total variants matched
@@ -412,14 +414,15 @@ class Haplotype(SeqqlOperator):
 
             # boolean allele match
             alleles = genotype["genotype"]["genotype"]
+            #print(f"GENOTYPE {genotype_id} ALLELES: {alleles} {genotype['effect_allele']}")
             if genotype_id in self._entries:
                 alleles_match = [allele is not None and allele == genotype["effect_allele"] for allele in alleles]
             else:
                 alleles_match = [allele is not None and allele != genotype["effect_allele"] for allele in alleles]
             if genotype["genotype"]["phased"]:
                 matched_variants = [matched_variants[0] + alleles_match[0], matched_variants[1] + alleles_match[1]]
-                leftover_genotypes[0][genotype_id]["genotype"]["genotype"] = [alleles[0], None]
-                leftover_genotypes[1][genotype_id]["genotype"]["genotype"] = [alleles[1], None]
+                leftover_genotypes[0][genotype_id]["genotype"]["genotype"] = [alleles[1], None]
+                leftover_genotypes[1][genotype_id]["genotype"]["genotype"] = [alleles[0], None]
             else:
                 if alleles_match[0]:
                     matched_variants = [matched_variants[0] + 1, matched_variants[1] + 1]
@@ -439,23 +442,27 @@ class Haplotype(SeqqlOperator):
         if (required_matches[1] - missing_genotypes[1]) > 0:
             percent_match[1] = matched_variants[1] / (required_matches[1] - missing_genotypes[1])
         percent_match_order = sorted(range(len(percent_match)), key=lambda k: percent_match[k])
+        #print(f"ORDER: {percent_match_order} {percent_match}")
         percent_genotypes_missing[0] = missing_genotypes[0] / required_matches[0]
         percent_genotypes_missing[1] = missing_genotypes[1] / required_matches[1]
         percent_variants_missing[0] = missing_variants[0] / required_matches[0]
         percent_variants_missing[1] = missing_variants[1] / required_matches[1]
-        haplotype["percent_match"] = percent_match
-        haplotype["percent_genotypes_missing"] = percent_genotypes_missing
-        haplotype["percent_variants_missing"] = percent_variants_missing
+
+        haplotype["percent_match"] = percent_match[percent_match_order[1]]
+        haplotype["percent_genotypes_missing"] = percent_genotypes_missing[percent_match_order[1]]
+        haplotype["percent_variants_missing"] = percent_variants_missing[percent_match_order[1]]
         haplotype["max_percent_match"] = percent_match[percent_match_order[1]]
         haplotype["min_percent_genotypes_missing"] = percent_genotypes_missing[percent_match_order[1]]
         haplotype["min_percent_variants_missing"] = percent_variants_missing[percent_match_order[1]]
-        haplotype["required_matches"] = required_matches
-        haplotype["matched_variants"] = matched_variants
-        haplotype["missing_genotypes"] = missing_genotypes
-        haplotype["missing_variants"] = missing_variants
-        haplotype["leftover_genotypes"] = leftover_genotypes
+        haplotype["required_matches"] = required_matches[percent_match_order[1]]
+        haplotype["matched_variants"] = matched_variants[percent_match_order[1]]
+        haplotype["missing_genotypes"] = missing_genotypes[percent_match_order[1]]
+        haplotype["missing_variants"] = missing_variants[percent_match_order[1]]
+        haplotype["leftover_genotypes"] = leftover_genotypes[percent_match_order[1]]
         haplotype["af"] = self._entries["af"] if "af" in self._entries else 0
         haplotype["score"] = self._entries["score"] if "score" in self._entries else 0
+        
+        #print(f"HAPLOTYPE {haplotype}")
         return haplotype
 
 
@@ -520,13 +527,29 @@ class Variant(SeqqlOperator):
     def compute(self, data_accessor: DataAccessor):
         result = {}
         if not self._entries:
-            result["genotype"] = {'rsid': self.id, 'genotype': [None, None], 'phased': None, 'source': 'invalidmodelentry', 'ref': None, 'gene': None}
+            result["genotype"] = {
+                'rsid': self.id, 
+                'genotype': [None, None], 
+                'phased': None, 
+                'source': 'invalidmodelentry',
+                'af': None,
+                'beta': None,
+                'ref': None, 
+                'gene': None
+                }
             result["effect_allele"] = None
             return result
         result["genotype"] = data_accessor.get_genotype_by_rsid(self.id)
         if self.has("gene"):
             result["genotype"]["gene"] = self.get("gene")
-
+        if self.has("af"):
+            result["genotype"]["af"] = self.get("af")
+        if self.has("effect_size"):
+            result["genotype"]["effect_size"] = self.get("effect_size")
+        if self.has("gnomad"):
+            result["genotype"]["gnomad"] = self.get("gnomad")
+        if self.has("effect_allele"):
+            result["genotype"]["effect_allele"] = self.get("effect_allele")
         if self.has("diplotype"):
             if result["genotype"]["genotype"][0] is None:
                 result["diplotype_match"] = False
@@ -541,6 +564,7 @@ class Variant(SeqqlOperator):
             self.set("effect_size", effect_size)
 
             result["score"] = self.get("effect_size") * result["genotype"]["genotype"].count(self.get("effect_allele"))
+            result["genotype"]["score"] = result["score"]
             result["effect_size"] = self.get("effect_size")
         if self.has("symbol"):
             result["symbol"] = self.get("symbol")
